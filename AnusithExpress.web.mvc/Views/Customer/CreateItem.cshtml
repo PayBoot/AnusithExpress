@@ -1,0 +1,50 @@
+﻿
+@{
+    ViewBag.Title = "CreateItem";
+    Layout = "~/Views/Shared/_LayoutCustomer.cshtml";
+}
+@model AnousithExpress.Data.SingleViewModels.ItemSingleModel
+<h2>CreateItem</h2>
+<div>
+    @ViewBag.Message
+</div>
+<div>
+    @using (Html.BeginForm("CreateItem", "Customer", FormMethod.Post))
+    {
+        <div class="form-group">
+            @Html.Label("ປະເພດສີນຄ້າ")
+            @Html.TextBoxFor(m => m.ItemName)
+            @Html.ValidationMessageFor(m => m.ItemName)
+        </div>
+        <div class="form-group">
+            @Html.Label("ຊື່ຜູ້ຮັບ")
+            @Html.TextBoxFor(m => m.ReceiverName)
+            @Html.ValidationMessageFor(m => m.ReceiverName)
+        </div>
+        <div class="form-group">
+            @Html.Label("ເບີໂທຜູ້ຮັບ")
+            @Html.TextBoxFor(m => m.ReceipverPhone)
+            @Html.ValidationMessageFor(m => m.ReceipverPhone)
+        </div>
+        <div class="form-group">
+            @Html.Label("ທີ່ຢູ່ຜູ້ຮັບ")
+            @Html.TextBoxFor(m => m.ReceiverAddress)
+            @Html.ValidationMessageFor(m => m.ReceiverAddress)
+        </div>
+        <div class="form-control">
+            @Html.Label("ເກັບເງີນປາຍທາງ ສະກຸນເງີນກີບ")
+            @Html.TextBoxFor(m => m.ItemValue_Kip)
+        </div>
+        <div class="form-control">
+            @Html.Label("ເກັບເງີນປາຍທາງ ສະກຸນເງີນບາດ")
+            @Html.TextBoxFor(m => m.ItemValue_Baht)
+        </div>
+        <div class="form-control">
+            @Html.Label("ເກັບເງີນປາຍທາງ ສະກຸນເງີນໂດລ້າ")
+            @Html.TextBoxFor(m => m.ItemValue_Dollar)
+        </div>
+        <input type="submit" name="submit" value="ເພີ່ມລາຍການສີນຄ້າ" />
+
+    }
+
+</div>

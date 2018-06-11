@@ -1,0 +1,58 @@
+﻿
+@{
+    ViewBag.Title = "ViewItems";
+    Layout = "~/Views/Shared/_LayoutCustomer.cshtml";
+}
+@model List<AnousithExpress.Data.SingleViewModels.ItemSingleModel>
+<h2>ViewItems</h2>
+<div>
+    @ViewBag.Message
+</div>
+<div>
+    <table>
+        <thead>
+            <tr>
+                <th>ເລກຕິດຕາມ</th>
+                <th>ປະເພດສີນຄ້າ</th>
+                <th>ສະຖານະ</th>
+                <th>ລືບ ຫລື ປ່ຽນແປງ</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.TrackingNumber</td>
+                    <td>@item.ItemName</td>
+                    <td>@item.Status</td>
+                    <td><a class="btn btn-danger" onclick="DeleteConfirm(@item.Id)">ລືບ</a> <a class="btn btn-danger">ປ່ຽນແປງ</a></td>
+                </tr>
+            }
+        </tbody>
+      
+
+    </table>
+</div>
+<div class="modal" id="ConfirmModal">
+    <div class="modal-dialog">
+        <div class="modal-body">
+            <div class="modal-content">
+                <div id="content">
+                
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function DeleteConfirm(id) {
+        let htmlMakeup = "";
+        htmlMakeup += '<lable>ທ່ານແນ່ໃຈທີ່ຈະລຶບແລ້ວບໍ</lable>';
+        htmlMakeup += '<a href="/Customer/DeleteItem?id=' + id + '">ຢືນຢັນ</a>';
+        htmlMakeup += '<input type="button" data-dismiss = "modal" value="ປະຕິເສດ" />';
+        $("#content").html("");
+        $("#content").html(htmlMakeup);
+        $("#ConfirmModal").modal("show");
+    }
+</script>

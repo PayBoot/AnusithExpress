@@ -1,0 +1,30 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title></title>
+</head>
+<body>
+    <div>
+        <div>
+            @using (Html.BeginForm("CLogin", "Account", FormMethod.Post, new { @class = "form-control" }))
+            {
+                @Html.Label("ເບີໂທລະສັບ", new { @class = "" })
+                @Html.TextBox("phonenumber", "", new { @clas = "", @name = "phonenumber" })
+                @Html.Label("ລະຫັດຜ່ານ", new { @class = "" })
+                @Html.Password("password", "", new { @clas = "", @name = "password" })
+                <input type="submit" name="submit" value="ເຂົ້າສູ່ລະບົບ" />
+                <a href="@Url.Action("CRegister","Account", null)">ສະຫມັກສະມາຊິກ</a>
+            }
+        </div>
+        <div>
+            <a href="@Url.Action("ULogin","Account", null)">ລ໋ອກອີນໃນສະຖານະຜູ້ໃຊ້ລະບົບ</a>
+        </div>
+    </div>
+</body>
+</html>
