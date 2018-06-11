@@ -1,5 +1,6 @@
 ﻿using AnousithExpress.Data.Implementation;
 using AnousithExpress.Data.SingleViewModels;
+using System.Web;
 using System.Web.Mvc;
 
 namespace AnusithExpress.web.mvc.Controllers
@@ -102,6 +103,21 @@ namespace AnusithExpress.web.mvc.Controllers
                 return View();
             }
 
+        }
+
+        public ActionResult CLogout()
+        {
+            Session.Clear();
+            Session.Abandon();
+            Response.Cookies.Add(new HttpCookie("ASP.NET_SessionId", ""));
+            return RedirectToAction("CLogin");
+        }
+        public ActionResult ULogout()
+        {
+            Session.Clear();
+            Session.Abandon();
+            Response.Cookies.Add(new HttpCookie("ASP.NET_SessionId", ""));
+            return RedirectToAction("ULogin");
         }
     }
 }

@@ -13,7 +13,17 @@ namespace AnousithExpress.Data.Implementation
             throw new NotImplementedException();
         }
 
+        public bool CheckDuplicateNumber(int id, string number)
+        {
+            throw new NotImplementedException();
+        }
+
         public bool Create(CustomerSingleModel model)
+        {
+            throw new NotImplementedException();
+        }
+
+        public CustomerProfileModel CustomerProfile(int CustId)
         {
             throw new NotImplementedException();
         }
@@ -29,6 +39,11 @@ namespace AnousithExpress.Data.Implementation
         }
 
         public List<CustomerSingleModel> GetAll()
+        {
+            throw new NotImplementedException();
+        }
+
+        public TbCustomer GetSingle(int id)
         {
             throw new NotImplementedException();
         }

@@ -1,0 +1,43 @@
+﻿
+@{
+    ViewBag.Title = "CUpdateProfile";
+    Layout = "~/Views/Shared/_LayoutCustomer.cshtml";
+}
+@model AnousithExpress.Data.SingleViewModels.CustomerSingleModel
+<h2>CUpdateProfile</h2>
+
+<div>
+    @using (Html.BeginForm("CUpdateProfile", "Account", FormMethod.Post))
+    {
+        <div class="form-group">
+            @Html.Label("ເບີໂທ", new { @class = "control-label col-md-2" })
+            @Html.TextBoxFor(m => m.Phonenumber, new { @class = "form-control col-md-10" })
+            @Html.ValidationMessageFor(m => m.Phonenumber)
+            @ViewBag.DuplicateMessage
+        </div>
+        <div class="form-group">
+            @Html.Label("ລະຫັດ", new { @class = "control-label col-md-2" })
+            @Html.PasswordFor(m => m.Password, new { @class = "form-control col-md-10" })
+            @Html.ValidationMessageFor(m => m.Password)
+        </div>
+        <div class="form-group">
+            @Html.Label("ທີ່ຢູ່", new { @class = "control-label col-md-2" })
+            @Html.TextBoxFor(m => m.Address, new { @class = "form-control col-md-10" })
+            @Html.ValidationMessageFor(m => m.Address)
+        </div>
+        <div class="form-group">
+            @Html.Label("ເລກບັນຊີ BCEL ສະກຸນເງີນກີບ", new { @class = "control-label col-md-2" })
+            @Html.TextBoxFor(m => m.BCEL_Kip, new { @class = "form-control col-md-10" })
+        </div>
+        <div class="form-group">
+            @Html.Label("ເລກບັນຊີ BCEL ສະກຸນເງີນບາດ", new { @class = "control-label col-md-2" })
+            @Html.TextBoxFor(m => m.BCEL_Baht, new { @class = "form-control col-md-10" })
+        </div>
+        <div class="form-group">
+            @Html.Label("ເລກບັນຊີ BCEL ສະກຸນເງີນໂດລາ", new { @class = "control-label col-md-2" })
+            @Html.TextBoxFor(m => m.BCEL_Dollar, new { @class = "form-control col-md-10" })
+        </div>
+        <input type="submit" name="register" value="ບັນທຶກ" />
+
+    }
+</div>

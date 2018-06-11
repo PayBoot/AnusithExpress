@@ -4,7 +4,7 @@ namespace AnousithExpress.Data.SingleViewModels
 {
     public class ItemSingleModel
     {
-        public int Id { get; set; }
+        public int? Id { get; set; }
         public string TrackingNumber { get; set; }
 
         [Required(ErrorMessage = "ກະລຸນາຕື່ມປະເພດສີນຄ້າ")]

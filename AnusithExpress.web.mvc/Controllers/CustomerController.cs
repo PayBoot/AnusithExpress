@@ -7,28 +7,59 @@ namespace AnusithExpress.web.mvc.Controllers
     public class CustomerController : Controller
     {
         private ItemService _itemServ;
-        public CustomerController(ItemService itemService)
+        private CustService _custService;
+        public CustomerController(ItemService itemService, CustService custService)
         {
             _itemServ = itemService;
+            _custService = custService;
         }
         public ActionResult Index()
         {
             return View();
         }
 
-        public ActionResult CreateItem()
+        public ActionResult CreateUpdateItem()
         {
             return View();
         }
 
         [HttpPost]
-        public ActionResult CreateItem(ItemSingleModel model)
+        public ActionResult CreateUpdateItem(ItemSingleModel model)
         {
             if (ModelState.IsValid)
             {
-                _itemServ.Create(model);
-                ViewBag.Message = "ເພີ່ມລາຍການສະເລັດ";
-                return View();
+                if (model.Id > 0)
+                {
+                    bool result = _itemServ.Update(model);
+                    if (result == true)
+                    {
+                        ViewBag.Message = "ປ່ຽນແປງຂໍ້ມູນສີນຄ້າສຳເລັດ";
+                        int id = model.Id ?? default(int);
+                        var postModel = _itemServ.GetSingle(id);
+                        return View(postModel);
+                    }
+                    else
+                    {
+                        ViewBag.Message = "ປ່ຽນແປງຂໍ້ມູນສີນຄ້າບໍ່ສຳເລັດ";
+                        return View(model);
+                    }
+                }
+                else
+                {
+                    bool result = _itemServ.Create(model);
+                    if (result == true)
+                    {
+                        ViewBag.Message = "ເພີ່ມລາຍການສຳເລັດ";
+                        return View();
+                    }
+                    else
+                    {
+                        ViewBag.Message = "ເພີ່ມລາຍການບໍ່ສຳເລັດ";
+                        return View(model);
+                    }
+
+                }
+
             }
             else
             {
@@ -36,7 +67,6 @@ namespace AnusithExpress.web.mvc.Controllers
             }
 
         }
-
         public ActionResult ViewItems()
         {
             int CustId = (int)Session["UserId"];
@@ -45,8 +75,73 @@ namespace AnusithExpress.web.mvc.Controllers
         }
         public ActionResult DeleteItem(int id)
         {
-            ViewBag.Message = "ລືບລາຍການສຳເລັດ";
-            return RedirectToAction("ViewItems");
+            bool result = false;
+            result = _itemServ.Delete(id);
+            if (result == true)
+            {
+                ViewBag.Message = "ລືບລາຍການສຳເລັດ";
+                return RedirectToAction("ViewItems");
+            }
+            else
+            {
+                ViewBag.Message = "ລືບລາຍການບໍ່ສຳເລັດ ກະລຸນາກວດໃຫມ່ອີກຄັ້ງ";
+                return RedirectToAction("ViewItems");
+            }
+        }
+
+        public ActionResult CProfile()
+        {
+            if (Session["UserId"] == null)
+            {
+                return RedirectToAction("CLogin", "Account");
+            }
+            else
+            {
+                int Id = (int)Session["UserId"];
+                var model = _custService.CustomerProfile(Id);
+                return View(model);
+            }
+
+        }
+
+        public ActionResult CUpdateProfile()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult CUpdateProfile(CustomerSingleModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                int id = model.Id ?? default(int);
+                bool checkDuplicate = _custService.CheckDuplicateNumber(id, model.Phonenumber);
+                if (checkDuplicate == true)
+                {
+                    ViewBag.Duplicate = "ເບີດັ່ງກ່າວໄດ້ຖືກນຳໃຊ້ແລ້ວ ກະລຸນາເລືອກເບີໃຫມ່";
+                    return View();
+                }
+                else
+                {
+                    bool result = _custService.Edit(model);
+                    if (result == true)
+                    {
+                        var postModel = _custService.GetSingle(id);
+                        ViewBag.Message = "ປ່ຽນແປງສຳເລັດ";
+                        return View(postModel);
+                    }
+                    else
+                    {
+                        ViewBag.Message = "ປ່ຽນແປງບໍ່ສຳເລັດ";
+                        return View(model);
+                    }
+                }
+
+            }
+            else
+            {
+                return View();
+            }
         }
     }
 }

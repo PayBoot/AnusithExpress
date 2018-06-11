@@ -41,5 +41,10 @@ namespace AnousithExpress.Data.Implementation
         {
             throw new NotImplementedException();
         }
+
+        public ItemSingleModel GetSingle(int id)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

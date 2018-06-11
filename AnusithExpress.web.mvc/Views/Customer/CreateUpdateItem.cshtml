@@ -9,8 +9,9 @@
     @ViewBag.Message
 </div>
 <div>
-    @using (Html.BeginForm("CreateItem", "Customer", FormMethod.Post))
+    @using (Html.BeginForm("CreateUpdateItem", "Customer", FormMethod.Post))
     {
+        @Html.HiddenFor(m => m.Id)
         <div class="form-group">
             @Html.Label("ປະເພດສີນຄ້າ")
             @Html.TextBoxFor(m => m.ItemName)
@@ -43,7 +44,7 @@
             @Html.Label("ເກັບເງີນປາຍທາງ ສະກຸນເງີນໂດລ້າ")
             @Html.TextBoxFor(m => m.ItemValue_Dollar)
         </div>
-        <input type="submit" name="submit" value="ເພີ່ມລາຍການສີນຄ້າ" />
+        <input type="submit" name="submit" value="ບັນທຶກລາຍການ" />
 
     }
 

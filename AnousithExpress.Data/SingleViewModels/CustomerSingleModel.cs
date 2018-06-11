@@ -4,7 +4,7 @@ namespace AnousithExpress.Data.SingleViewModels
 {
     public class CustomerSingleModel
     {
-        public int Id { get; set; }
+        public int? Id { get; set; }
 
         [Required(ErrorMessage = "ກະລຸນາຕື່ມເບີໂທ")]
         public string Phonenumber { get; set; }

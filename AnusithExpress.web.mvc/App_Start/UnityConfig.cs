@@ -47,6 +47,7 @@ namespace AnusithExpress.web.mvc
             container.RegisterType<ICustomer, CustService>();
             container.RegisterType<ISystemUser, SystemUserService>();
             container.RegisterType<IItems, ItemService>();
+            container.RegisterType<IDBInitiate, InitiatingService>();
         }
     }
 }

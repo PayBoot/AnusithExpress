@@ -47,12 +47,20 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="EntityContext.cs" />
     <Compile Include="Implementation\CustService.cs" />
+    <Compile Include="Implementation\InitiatingService.cs" />
     <Compile Include="Implementation\ItemService.cs" />
     <Compile Include="Implementation\SystemUserService.cs" />
     <Compile Include="Interfaces\ICustomer.cs" />
+    <Compile Include="Interfaces\IDBInitiate.cs" />
     <Compile Include="Interfaces\IItems.cs" />
     <Compile Include="Interfaces\ISystemUser.cs" />
+    <Compile Include="Migrations\201806111638003_initial.cs" />
+    <Compile Include="Migrations\201806111638003_initial.Designer.cs">
+      <DependentUpon>201806111638003_initial.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\TbConsolidatedItems.cs" />
     <Compile Include="Models\TbConsolidateList.cs" />
     <Compile Include="Models\TbCustomer.cs" />
@@ -67,6 +75,7 @@
     <Compile Include="Models\TbUser.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SingleViewModels\CustomerItemModel.cs" />
+    <Compile Include="SingleViewModels\CustomerProfileModel.cs" />
     <Compile Include="SingleViewModels\CustomerSingleModel.cs" />
     <Compile Include="SingleViewModels\ItemSingleModel.cs" />
     <Compile Include="SingleViewModels\UserSingleModel.cs" />
@@ -78,6 +87,11 @@
   <ItemGroup>
     <Folder Include="TableViewModels\" />
     <Folder Include="UtilityClasses\" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201806111638003_initial.resx">
+      <DependentUpon>201806111638003_initial.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
