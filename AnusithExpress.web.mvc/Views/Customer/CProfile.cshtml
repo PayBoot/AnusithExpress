@@ -10,11 +10,11 @@
 
         <div class="form-group">
             @Html.Label("ເບີໂທ", new { @class = "control-label col-md-2" })
-            @Html.LabelFor(m => m.customerModel.Phonenumber, new { @class = "control-label col-md-10" })
+           @Model.customerModel.Phonenumber
         </div>
         <div class="form-group">
             @Html.Label("ລະຫັດ", new { @class = "control-label col-md-2" })
-            @Html.LabelFor(m => m.customerModel.Password, new { @class = "control-label col-md-10" })
+            @Model.customerModel.Password
 
         </div>
         <div class="form-group">
@@ -34,6 +34,7 @@
             @Html.Label("ເລກບັນຊີ BCEL ສະກຸນເງີນໂດລາ", new { @class = "control-label col-md-2" })
             @Html.LabelFor(m => m.customerModel.BCEL_Dollar, new { @class = "control-label col-md-10" })
         </div>
+        <a href="@Url.Action("CUpdateProfile","Customer",new { id = Model.customerModel.Id})">ປ່ຽນແປງຂໍ່ມູນສ່ວນໂຕ</a>
     </div>
     <div>
         <table>

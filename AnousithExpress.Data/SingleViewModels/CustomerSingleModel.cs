@@ -6,7 +6,7 @@ namespace AnousithExpress.Data.SingleViewModels
     {
         public int? Id { get; set; }
 
-        [Required(ErrorMessage = "ກະລຸນາຕື່ມເບີໂທ")]
+        [Required(ErrorMessage = "ກະລຸນາຕື່ມເບີໂທ"), MinLength(8, ErrorMessage = "ກະລຸນາຕື່ມເບີໂທ 8 ໂຕເລກ"), MaxLength(8, ErrorMessage = "ກະລຸນາຕື່ມເບີໂທ 8 ໂຕເລກ")]
         public string Phonenumber { get; set; }
         [Required(ErrorMessage = "ກະລຸນາໄສ່ລະຫັດຢ່າງໜ້ອຍ 6 ໂຕເລກ"), MinLength(6)]
         public string Password { get; set; }
@@ -15,8 +15,6 @@ namespace AnousithExpress.Data.SingleViewModels
         public string BCEL_Kip { get; set; }
         public string BCEL_Baht { get; set; }
         public string BCEL_Dollar { get; set; }
-
-
         public string Status { get; set; }
         public bool isDeleted { get; set; }
     }

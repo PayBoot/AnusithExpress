@@ -193,6 +193,11 @@
     <Content Include="Views\InitData\Database.cshtml" />
     <Content Include="Views\Customer\CProfile.cshtml" />
     <Content Include="Views\Customer\CUpdateProfile.cshtml" />
+    <Content Include="Views\Delivery\Index.cshtml" />
+    <Content Include="Views\Delivery\ViewItemToGet.cshtml" />
+    <Content Include="Views\Delivery\ViewItemToGetTable.cshtml" />
+    <Content Include="Views\Delivery\ViewItemToSend.cshtml" />
+    <Content Include="Views\Delivery\ViewItemToSendTable.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -204,7 +209,6 @@
     <Folder Include="App_Data\" />
     <Folder Include="Models\" />
     <Folder Include="Views\Admin\" />
-    <Folder Include="Views\Delivery\" />
   </ItemGroup>
   <ItemGroup>
     <TypeScriptCompile Include="Scripts\index.d.ts" />

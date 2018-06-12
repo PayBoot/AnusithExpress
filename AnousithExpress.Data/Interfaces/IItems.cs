@@ -11,9 +11,9 @@ namespace AnousithExpress.Data.Interfaces
         bool Update(ItemSingleModel model);
         bool Delete(int id);
 
-        List<ItemSingleModel> GetForCustomer(int CusId);
-        double GetItemsAmoutPerCustomer(int CusId);
+        List<ItemSingleModel> GetForCustomer(int CustId);
+        double GetItemsAmoutPerCustomer(int CustId);
 
-        List<ItemSingleModel> GetConfirmItems();
+        List<ItemSingleModel> GetConfirmItems(int CustId);
     }
 }

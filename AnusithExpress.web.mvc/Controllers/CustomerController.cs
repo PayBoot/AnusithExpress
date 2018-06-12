@@ -18,9 +18,10 @@ namespace AnusithExpress.web.mvc.Controllers
             return View();
         }
 
-        public ActionResult CreateUpdateItem()
+        public ActionResult CreateUpdateItem(int id = 0)
         {
-            return View();
+            var model = _itemServ.GetSingle(id);
+            return View(model);
         }
 
         [HttpPost]
@@ -28,6 +29,8 @@ namespace AnusithExpress.web.mvc.Controllers
         {
             if (ModelState.IsValid)
             {
+                int userId = (int)Session["UserId"];
+                model.CustomerId = userId;
                 if (model.Id > 0)
                 {
                     bool result = _itemServ.Update(model);
@@ -46,6 +49,7 @@ namespace AnusithExpress.web.mvc.Controllers
                 }
                 else
                 {
+
                     bool result = _itemServ.Create(model);
                     if (result == true)
                     {
@@ -104,9 +108,10 @@ namespace AnusithExpress.web.mvc.Controllers
 
         }
 
-        public ActionResult CUpdateProfile()
+        public ActionResult CUpdateProfile(int id)
         {
-            return View();
+            var model = _custService.GetSingle(id);
+            return View(model);
         }
 
         [HttpPost]

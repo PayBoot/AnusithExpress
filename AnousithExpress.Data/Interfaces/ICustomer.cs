@@ -13,7 +13,7 @@ namespace AnousithExpress.Data.Interfaces
         bool Edit(CustomerSingleModel model);
         bool Delete(int id);
 
-        TbCustomer GetSingle(int id);
+        CustomerSingleModel GetSingle(int id);
         TbCustomer LogIn(string phonenumber, string password);
 
         CustomerProfileModel CustomerProfile(int CustId);

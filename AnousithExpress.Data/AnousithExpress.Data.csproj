@@ -79,6 +79,8 @@
     <Compile Include="SingleViewModels\CustomerSingleModel.cs" />
     <Compile Include="SingleViewModels\ItemSingleModel.cs" />
     <Compile Include="SingleViewModels\UserSingleModel.cs" />
+    <Compile Include="UtilityClasses\CustomerUtility.cs" />
+    <Compile Include="UtilityClasses\ItemsUtility.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -86,7 +88,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="TableViewModels\" />
-    <Folder Include="UtilityClasses\" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201806111638003_initial.resx">
