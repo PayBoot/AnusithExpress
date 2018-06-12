@@ -50,10 +50,9 @@ namespace AnusithExpress.web.mvc.Controllers
             return View();
         }
 
-        public ActionResult RecievedItem(int[] itemsId)
+        public ActionResult RecievedItem(int[] itemsId, int customerId)
         {
-
-            return RedirectToAction("ViewItemToSend");
+            return RedirectToAction("ViewItemToGet", "Delivery", new { customerId = customerId });
         }
         public ActionResult CreateItem()
         {

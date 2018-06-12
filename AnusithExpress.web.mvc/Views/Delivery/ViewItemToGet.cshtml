@@ -27,7 +27,7 @@
             @foreach (var item in Model)
             {
                 <tr>
-                    <td>@Html.CheckBox("itemsId", false) <input type="checkbox" name="itemId" value="@item.Id" /></td>
+                    <td><input type="checkbox" name="itemsId" value="@item.Id" />@Html.Hidden("customerId", item.CustomerId)</td>
                     <td>@item.TrackingNumber</td>
                     <td>@item.ItemName</td>
                     <td>@item.Status</td>
