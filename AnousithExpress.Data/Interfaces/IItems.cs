@@ -15,5 +15,7 @@ namespace AnousithExpress.Data.Interfaces
         double GetItemsAmoutPerCustomer(int CustId);
 
         List<ItemSingleModel> GetConfirmItems(int CustId);
+
+        bool ReceiveItem(int[] itemId);
     }
 }

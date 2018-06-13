@@ -52,7 +52,26 @@ namespace AnusithExpress.web.mvc.Controllers
 
         public ActionResult RecievedItem(int[] itemsId, int customerId)
         {
-            return RedirectToAction("ViewItemToGet", "Delivery", new { customerId = customerId });
+            if (itemsId != null)
+            {
+                bool result = itemService.ReceiveItem(itemsId);
+                if (result == true)
+                {
+                    TempData["Message"] = "ສຳເລັດ";
+                    return RedirectToAction("ViewItemToGet", "Delivery", new { customerId = customerId });
+                }
+                else
+                {
+                    TempData["Message"] = "ບໍ່ສຳເລັດ ກະລຸນາກວດໃຫມ່";
+                    return RedirectToAction("ViewItemToGet", "Delivery", new { customerId = customerId });
+                }
+            }
+            else
+            {
+                TempData["Message"] = "ກະລຸນາເລືອກ";
+                return RedirectToAction("ViewItemToGet", "Delivery", new { customerId = customerId });
+            }
+
         }
         public ActionResult CreateItem()
         {

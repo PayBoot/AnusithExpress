@@ -172,5 +172,38 @@ namespace AnousithExpress.Data.Implementation
                 return model;
             }
         }
+
+        public bool ReceiveItem(int[] itemId)
+        {
+            using (var db = new EntityContext())
+            {
+                using (var dbtransact = db.Database.BeginTransaction())
+                {
+                    try
+                    {
+                        foreach (var id in itemId)
+                        {
+                            var item = itemsUtility.GetItemById(id, db);
+                            if (item == null)
+                            {
+                                return false;
+                            };
+                            item.Status = db.tbItemStatuses.FirstOrDefault(s => s.Id == 3);
+                            db.SaveChanges();
+                        }
+                        dbtransact.Commit();
+                        return true;
+                    }
+                    catch
+                    {
+
+                        dbtransact.Rollback();
+                        return false;
+                    }
+
+                }
+
+            }
+        }
     }
 }
