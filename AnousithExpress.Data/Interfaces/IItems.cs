@@ -1,4 +1,5 @@
-﻿using AnousithExpress.Data.SingleViewModels;
+﻿using AnousithExpress.Data.Models;
+using AnousithExpress.Data.SingleViewModels;
 using System.Collections.Generic;
 
 namespace AnousithExpress.Data.Interfaces
@@ -15,7 +16,12 @@ namespace AnousithExpress.Data.Interfaces
         double GetItemsAmoutPerCustomer(int CustId);
 
         List<ItemSingleModel> GetConfirmItems(int CustId);
+        List<ItemSingleModel> GetToSendItems(int routeId, int timeId);
 
         bool ReceiveItem(int[] itemId);
+        bool SendItem(int itemId);
+
+        List<TbRoute> GetRoute();
+        List<TbTime> GetTime();
     }
 }

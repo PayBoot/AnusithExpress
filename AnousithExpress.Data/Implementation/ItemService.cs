@@ -186,6 +186,7 @@ namespace AnousithExpress.Data.Implementation
                             var item = itemsUtility.GetItemById(id, db);
                             if (item == null)
                             {
+                                dbtransact.Rollback();
                                 return false;
                             };
                             item.Status = db.tbItemStatuses.FirstOrDefault(s => s.Id == 3);
@@ -203,6 +204,68 @@ namespace AnousithExpress.Data.Implementation
 
                 }
 
+            }
+        }
+
+        public List<ItemSingleModel> GetToSendItems(int routeId, int timeId)
+        {
+            using (var db = new EntityContext())
+            {
+                var item = itemsUtility.GetAllItemAllocation(db)
+                    .Where(i => i.Route.Id == routeId && i.Time.Id == timeId);
+                if (item != null)
+                {
+                    var model = itemsUtility.ItemListModelProperty(item.ToList());
+                    return model;
+                }
+                else
+                {
+                    return new List<ItemSingleModel>();
+                }
+            }
+        }
+
+        public bool SendItem(int itemId)
+        {
+            using (var db = new EntityContext())
+            {
+                if (itemsUtility.GetItemById(itemId, db) != null)
+                {
+                    return true;
+                }
+                return true;
+            }
+        }
+
+        public List<TbRoute> GetRoute()
+        {
+            using (var db = new EntityContext())
+            {
+                var route = db.tbRoutes;
+                if (route != null)
+                {
+                    return route.ToList();
+                }
+                else
+                {
+                    return new List<TbRoute>();
+                }
+            }
+        }
+
+        public List<TbTime> GetTime()
+        {
+            using (var db = new EntityContext())
+            {
+                var time = db.tbTimes;
+                if (time != null)
+                {
+                    return time.ToList();
+                }
+                else
+                {
+                    return new List<TbTime>();
+                }
             }
         }
     }

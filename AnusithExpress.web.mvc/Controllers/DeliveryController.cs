@@ -28,26 +28,27 @@ namespace AnusithExpress.web.mvc.Controllers
             return View(model);
         }
 
-        [HttpGet]
-        public ActionResult ViewItemToGetTable(int customerId)
-        {
-            if (Request.IsAjaxRequest())
-            {
-                var model = itemService.GetConfirmItems(customerId);
-                return PartialView("ViewItemToGetTable", model);
-            }
-            return View();
-        }
 
         public ActionResult ViewItemToSend()
         {
+            RouteTimeDropdownlist();
             return View();
         }
 
-        [HttpGet]
-        public ActionResult ViewItemToSendTable(int routeId, int TimeId)
+        private void RouteTimeDropdownlist()
         {
-            return View();
+            var route = itemService.GetRoute();
+            var time = itemService.GetTime();
+            ViewBag.route = new SelectList(route, "Id", "Route");
+            ViewBag.time = new SelectList(time, "Id", "Time");
+        }
+
+        [HttpGet]
+        public ActionResult ViewItemToSend(int routeId = 0, int timeId = 0)
+        {
+            RouteTimeDropdownlist();
+            var model = itemService.GetToSendItems(routeId, timeId);
+            return View(model);
         }
 
         public ActionResult RecievedItem(int[] itemsId, int customerId)

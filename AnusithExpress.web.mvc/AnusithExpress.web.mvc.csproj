@@ -195,9 +195,7 @@
     <Content Include="Views\Customer\CUpdateProfile.cshtml" />
     <Content Include="Views\Delivery\Index.cshtml" />
     <Content Include="Views\Delivery\ViewItemToGet.cshtml" />
-    <Content Include="Views\Delivery\ViewItemToGetTable.cshtml" />
     <Content Include="Views\Delivery\ViewItemToSend.cshtml" />
-    <Content Include="Views\Delivery\ViewItemToSendTable.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

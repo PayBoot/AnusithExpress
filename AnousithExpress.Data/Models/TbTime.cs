@@ -1,10 +1,14 @@
-﻿using System;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace AnousithExpress.Data.Models
 {
     public class TbTime
     {
         public int Id { get; set; }
-        public DateTime Time { get; set; }
+
+        [Column(TypeName = "varchar")]
+        [StringLength(10)]
+        public string Time { get; set; }
     }
 }
