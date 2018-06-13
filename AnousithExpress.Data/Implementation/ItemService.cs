@@ -55,8 +55,8 @@ namespace AnousithExpress.Data.Implementation
         {
             using (var db = new EntityContext())
             {
-                var items = itemsUtility.GetAllItem(db).ToList();
-                var model = itemsUtility.ItemListModelProperty(items);
+                var items = itemsUtility.GetAllItem(db).ToList(); //Get data from database
+                var model = itemsUtility.ItemListModelProperty(items); //post data to model
                 return model;
             }
         }
@@ -134,6 +134,7 @@ namespace AnousithExpress.Data.Implementation
                     Status = items.Status.Status,
                     CustomerId = items.Customer.Id,
                     CustomerPhonenumber = items.Customer.Phonenumber,
+                    Description = items.Descripttion,
                     isDeleted = items.isDeleted,
                     ItemValue_Baht = items.ItemValue_Baht,
                     ItemValue_Dollar = items.ItemValue_Dollar,
@@ -290,6 +291,38 @@ namespace AnousithExpress.Data.Implementation
             db.SaveChanges();
             dbtransact.Commit();
             return item;
+        }
+
+        public bool ConfirmItem(int itemId)
+        {
+            using (var db = new EntityContext())
+            {
+                var item = itemsUtility.GetItemById(itemId, db);
+                if (item == null)
+                {
+                    return false;
+                };
+                db.Entry(item).State = EntityState.Modified;
+                item.Status = db.tbItemStatuses.FirstOrDefault(s => s.Id == 2);
+                db.SaveChanges();
+                return true;
+            }
+        }
+
+        public bool UnConfirmItem(int itemId)
+        {
+            using (var db = new EntityContext())
+            {
+                var item = itemsUtility.GetItemById(itemId, db);
+                if (item == null)
+                {
+                    return false;
+                };
+                db.Entry(item).State = EntityState.Modified;
+                item.Status = db.tbItemStatuses.FirstOrDefault(s => s.Id == 1);
+                db.SaveChanges();
+                return true;
+            }
         }
     }
 }

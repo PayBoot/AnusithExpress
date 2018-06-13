@@ -111,6 +111,48 @@ namespace AnusithExpress.web.mvc.Controllers
             }
 
         }
+        public ActionResult ConfirmItem(int id)
+        {
+            if (Session["UserId"] != null)
+            {
+                bool result = false;
+                result = _itemServ.ConfirmItem(id);
+                if (result == true)
+                {
+                    return RedirectToAction("ViewItems");
+                }
+                else
+                {
+
+                    return RedirectToAction("ViewItems");
+                }
+            }
+            else
+            {
+                return RedirectToAction("CLogin", "Account");
+            }
+        }
+        public ActionResult UnConfirmItem(int id)
+        {
+            if (Session["UserId"] != null)
+            {
+                bool result = false;
+                result = _itemServ.UnConfirmItem(id);
+                if (result == true)
+                {
+                    return RedirectToAction("ViewItems");
+                }
+                else
+                {
+
+                    return RedirectToAction("ViewItems");
+                }
+            }
+            else
+            {
+                return RedirectToAction("CLogin", "Account");
+            }
+        }
         public ActionResult DeleteItem(int id)
         {
             if (Session["UserId"] != null)
@@ -119,7 +161,7 @@ namespace AnusithExpress.web.mvc.Controllers
                 result = _itemServ.Delete(id);
                 if (result == true)
                 {
-                    ViewBag.Message = "ລືບລາຍການສຳເລັດ";
+
                     return RedirectToAction("ViewItems");
                 }
                 else

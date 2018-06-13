@@ -16,10 +16,17 @@ namespace AnusithExpress.web.mvc.Controllers
         }
         public ActionResult Index()
         {
-            int role = (int)Session["Role"];
-            if (role == 2)
+            if (Session["Role"] != null)
             {
-                return View();
+                int role = (int)Session["Role"];
+                if (role == 2)
+                {
+                    return View();
+                }
+                else
+                {
+                    return RedirectToAction("ULogin", "Account");
+                }
             }
             else
             {
@@ -29,10 +36,17 @@ namespace AnusithExpress.web.mvc.Controllers
         }
         public ActionResult ViewItemToGet()
         {
-            int role = (int)Session["Role"];
-            if (role == 2)
+            if (Session["Role"] != null)
             {
-                return View();
+                int role = (int)Session["Role"];
+                if (role == 2)
+                {
+                    return View();
+                }
+                else
+                {
+                    return RedirectToAction("ULogin", "Account");
+                }
             }
             else
             {
@@ -43,28 +57,41 @@ namespace AnusithExpress.web.mvc.Controllers
         [HttpGet]
         public ActionResult ViewItemToGet(int customerId = 0)
         {
-
-            int role = (int)Session["Role"];
-            if (role == 2)
+            if (Session["Role"] != null)
             {
-                var model = itemService.GetConfirmItems(customerId);
-                return View(model);
+                int role = (int)Session["Role"];
+                if (role == 2)
+                {
+                    var model = itemService.GetConfirmItems(customerId);
+                    return View(model);
+                }
+                else
+                {
+                    return RedirectToAction("ULogin", "Account");
+                }
             }
+
             else
             {
                 return RedirectToAction("ULogin", "Account");
             }
-
         }
 
 
         public ActionResult ViewItemToSend()
         {
-            int role = (int)Session["Role"];
-            if (role == 2)
+            if (Session["Role"] != null)
             {
-                RouteTimeDropdownlist();
-                return View();
+                int role = (int)Session["Role"];
+                if (role == 2)
+                {
+                    RouteTimeDropdownlist();
+                    return View();
+                }
+                else
+                {
+                    return RedirectToAction("ULogin", "Account");
+                }
             }
             else
             {
@@ -84,17 +111,25 @@ namespace AnusithExpress.web.mvc.Controllers
         [HttpGet]
         public ActionResult ViewItemToSend(int routeId = 0, int timeId = 0)
         {
-            int role = (int)Session["Role"];
-            if (role == 2)
+            if (Session["Role"] != null)
             {
-                RouteTimeDropdownlist();
-                var model = itemService.GetToSendItems(routeId, timeId);
-                return View(model);
+                int role = (int)Session["Role"];
+                if (role == 2)
+                {
+                    RouteTimeDropdownlist();
+                    var model = itemService.GetToSendItems(routeId, timeId);
+                    return View(model);
+                }
+                else
+                {
+                    return RedirectToAction("ULogin", "Account");
+                }
             }
             else
             {
                 return RedirectToAction("ULogin", "Account");
             }
+
 
         }
 

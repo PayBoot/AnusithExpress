@@ -25,7 +25,19 @@
                     <td>@item.TrackingNumber</td>
                     <td>@item.ItemName</td>
                     <td>@item.Status</td>
-                    <td><a class="btn btn-danger" href="@Url.Action("DeleteItem","Customer", new { id = item.Id })" onclick="return confirm('ແນ່ໃຈແລ້ວບໍ່')">ລືບ</a> <a class="btn btn-danger" href="@Url.Action("CreateUpdateItem","Customer", new { id = item.Id})" >ປ່ຽນແປງ</a></td>
+                    <td>
+                        @if (item.Status == "ຢູ່ຮ້ານ")
+                        {
+                            @:<a class="btn btn-danger" href="@Url.Action("DeleteItem","Customer", new { id = item.Id })" onclick="return confirm('ແນ່ໃຈແລ້ວບໍ່')">ລືບ</a>
+                            <a class="btn btn-danger" href="@Url.Action("CreateUpdateItem","Customer", new { id = item.Id})">ປ່ຽນແປງ</a>
+                            <a class="btn btn-danger" href="@Url.Action("ConfirmItem", "Customer", new { id = item.Id })">ຢືນຢັນ</a>
+                        }
+                        @if (item.Status == "ຢືນຢັນ")
+                        {
+                            @:<a class="btn btn-danger" href="@Url.Action("UnConfirmItem", "Customer", new { id = item.Id })">ປົດການຢືນຢັນ</a>
+                        }
+
+                    </td>
                 </tr>
             }
         </tbody>
