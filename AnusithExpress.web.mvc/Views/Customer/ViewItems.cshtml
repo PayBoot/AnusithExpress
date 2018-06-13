@@ -33,27 +33,3 @@
 
     </table>
 </div>
-<div class="modal" id="ConfirmModal">
-    <div class="modal-dialog">
-        <div class="modal-body">
-            <div class="modal-content">
-                <div id="content">
-                
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<script type="text/javascript">
-    
-    function DeleteConfirm(id) {
-        let htmlMakeup = "";
-        htmlMakeup += '<lable>ທ່ານແນ່ໃຈທີ່ຈະລຶບແລ້ວບໍ</lable>';
-        htmlMakeup += '<a href="/Customer/DeleteItem?id=' + id + '">ຢືນຢັນ</a>';
-        htmlMakeup += '<input type="button" data-dismiss = "modal" value="ປະຕິເສດ" />';
-        $("#content").html("");
-        $("#content").html(htmlMakeup);
-        $("#ConfirmModal").modal("show");
-    }
-</script>
