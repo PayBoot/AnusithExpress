@@ -196,6 +196,8 @@
     <Content Include="Views\Delivery\Index.cshtml" />
     <Content Include="Views\Delivery\ViewItemToGet.cshtml" />
     <Content Include="Views\Delivery\ViewItemToSend.cshtml" />
+    <Content Include="Views\Delivery\CreateItem.cshtml" />
+    <Content Include="Views\Delivery\ShowItem.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

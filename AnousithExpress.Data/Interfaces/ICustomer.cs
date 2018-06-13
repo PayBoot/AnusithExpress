@@ -18,5 +18,7 @@ namespace AnousithExpress.Data.Interfaces
 
         CustomerProfileModel CustomerProfile(int CustId);
         List<CustomerItemModel> ShowCustomer();
+
+        bool CheckExistingCustomer(string phonenumber);
     }
 }

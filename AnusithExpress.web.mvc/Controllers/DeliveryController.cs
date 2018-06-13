@@ -8,31 +8,69 @@ namespace AnusithExpress.web.mvc.Controllers
     {
         // GET: Delivery
         private ItemService itemService;
-        public DeliveryController(ItemService items)
+        private CustService custService;
+        public DeliveryController(ItemService items, CustService cust)
         {
             itemService = items;
+            custService = cust;
         }
         public ActionResult Index()
         {
-            return View();
+            int role = (int)Session["Role"];
+            if (role == 2)
+            {
+                return View();
+            }
+            else
+            {
+                return RedirectToAction("ULogin", "Account");
+            }
+
         }
         public ActionResult ViewItemToGet()
         {
-            return View();
+            int role = (int)Session["Role"];
+            if (role == 2)
+            {
+                return View();
+            }
+            else
+            {
+                return RedirectToAction("ULogin", "Account");
+            }
         }
 
         [HttpGet]
         public ActionResult ViewItemToGet(int customerId = 0)
         {
-            var model = itemService.GetConfirmItems(customerId);
-            return View(model);
+
+            int role = (int)Session["Role"];
+            if (role == 2)
+            {
+                var model = itemService.GetConfirmItems(customerId);
+                return View(model);
+            }
+            else
+            {
+                return RedirectToAction("ULogin", "Account");
+            }
+
         }
 
 
         public ActionResult ViewItemToSend()
         {
-            RouteTimeDropdownlist();
-            return View();
+            int role = (int)Session["Role"];
+            if (role == 2)
+            {
+                RouteTimeDropdownlist();
+                return View();
+            }
+            else
+            {
+                return RedirectToAction("ULogin", "Account");
+            }
+
         }
 
         private void RouteTimeDropdownlist()
@@ -46,9 +84,18 @@ namespace AnusithExpress.web.mvc.Controllers
         [HttpGet]
         public ActionResult ViewItemToSend(int routeId = 0, int timeId = 0)
         {
-            RouteTimeDropdownlist();
-            var model = itemService.GetToSendItems(routeId, timeId);
-            return View(model);
+            int role = (int)Session["Role"];
+            if (role == 2)
+            {
+                RouteTimeDropdownlist();
+                var model = itemService.GetToSendItems(routeId, timeId);
+                return View(model);
+            }
+            else
+            {
+                return RedirectToAction("ULogin", "Account");
+            }
+
         }
 
         public ActionResult RecievedItem(int[] itemsId, int customerId)
@@ -78,10 +125,40 @@ namespace AnusithExpress.web.mvc.Controllers
         {
             return View();
         }
+
+        [HttpPost]
         public ActionResult CreateItem(ItemSingleModel model)
         {
+            if (ModelState.IsValid)
+            {
+                if (custService.CheckExistingCustomer(model.CustomerPhonenumber))
+                {
+                    var item = itemService.CreateItemForDelivery(model);
+                    return RedirectToAction("ShowItem", "Delivery", new { id = item.Id });
+                }
+                else
+                {
+                    ViewBag.Message = "ເບີໂທດັ່ງກ່າວຍັງບໍ່ທັນໄດ້ລົງທະບຽນ";
+                    return View();
+                }
+            }
+            else
+            {
+                return View();
+            }
+        }
+        public ActionResult ShowItem(int id)
+        {
+            if (id > 0)
+            {
+                var model = itemService.GetSingle(id);
 
-            return View();
+                return View(model);
+            }
+            else
+            {
+                return View();
+            }
         }
     }
 }

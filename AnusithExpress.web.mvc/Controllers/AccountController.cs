@@ -50,7 +50,7 @@ namespace AnusithExpress.web.mvc.Controllers
             else
             {
                 Session["UserId"] = Account.Id;
-                Session["Role"] = Account.Role.Role;
+                Session["Role"] = Account.Role.Id;
                 if (Account.Role.Id == 1)
                 {
                     return RedirectToAction("Index", "Admin");

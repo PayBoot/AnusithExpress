@@ -27,31 +27,8 @@ namespace AnousithExpress.Data.Implementation
             {
                 using (var dbtransact = db.Database.BeginTransaction())
                 {
-                    TbItems item = new TbItems
-                    {
-                        ItemName = model.ItemName,
-                        ItemValue_Baht = model.ItemValue_Baht,
-                        ItemValue_Dollar = model.ItemValue_Dollar,
-                        ItemValue_Kip = model.ItemValue_Kip,
-                        isDeleted = false,
-                        Status = db.tbItemStatuses.FirstOrDefault(s => s.Id == 1),
-                        Customer = customerUtility.GetCustomerById(db, model.CustomerId),
-                        CreatedDate = DateTime.Now,
-                        ReceipverPhone = model.ReceipverPhone,
-                        ReceiverAddress = model.ReceiverAddress,
-                        ReceiverName = model.ReceiverName,
-                    };
-                    db.TbItems.Add(item);
-                    db.SaveChanges();
-                    db.Entry(item).State = EntityState.Modified;
-                    string customerId = model.CustomerId.ToString().PadLeft(4, '0');
-                    string itemId = item.Id.ToString().PadLeft(7, '0');
-                    StringBuilder sb = new StringBuilder();
-                    sb.Append("U" + customerId);
-                    sb.Append("I" + itemId);
-                    item.TrackingNumber = sb.ToString();
-                    db.SaveChanges();
-                    dbtransact.Commit();
+                    int itemstatus = 1;
+                    TbItems item = CreateItemMethod(model, db, dbtransact, itemstatus);
                     return true;
                 }
 
@@ -156,6 +133,7 @@ namespace AnousithExpress.Data.Implementation
                     ItemName = items.ItemName,
                     Status = items.Status.Status,
                     CustomerId = items.Customer.Id,
+                    CustomerPhonenumber = items.Customer.Phonenumber,
                     isDeleted = items.isDeleted,
                     ItemValue_Baht = items.ItemValue_Baht,
                     ItemValue_Dollar = items.ItemValue_Dollar,
@@ -267,6 +245,51 @@ namespace AnousithExpress.Data.Implementation
                     return new List<TbTime>();
                 }
             }
+        }
+
+        public ItemSingleModel CreateItemForDelivery(ItemSingleModel model)
+        {
+            using (var db = new EntityContext())
+            {
+                using (var dbtransact = db.Database.BeginTransaction())
+                {
+                    int itemstatus = 3;
+                    model.CustomerId = db.tbCustomers.FirstOrDefault(x => x.Phonenumber == model.CustomerPhonenumber).Id;
+                    TbItems item = CreateItemMethod(model, db, dbtransact, itemstatus);
+                    return GetSingle(item.Id);
+                }
+
+            }
+        }
+
+        private TbItems CreateItemMethod(ItemSingleModel model, EntityContext db, DbContextTransaction dbtransact, int itemstatus)
+        {
+            TbItems item = new TbItems
+            {
+                ItemName = model.ItemName,
+                ItemValue_Baht = model.ItemValue_Baht,
+                ItemValue_Dollar = model.ItemValue_Dollar,
+                ItemValue_Kip = model.ItemValue_Kip,
+                isDeleted = false,
+                Status = db.tbItemStatuses.FirstOrDefault(s => s.Id == itemstatus),
+                Customer = customerUtility.GetCustomerById(db, model.CustomerId),
+                CreatedDate = DateTime.Now,
+                ReceipverPhone = model.ReceipverPhone,
+                ReceiverAddress = model.ReceiverAddress,
+                ReceiverName = model.ReceiverName,
+            };
+            db.TbItems.Add(item);
+            db.SaveChanges();
+            db.Entry(item).State = EntityState.Modified;
+            string customerId = model.CustomerId.ToString().PadLeft(4, '0');
+            string itemId = item.Id.ToString().PadLeft(7, '0');
+            StringBuilder sb = new StringBuilder();
+            sb.Append("U" + customerId);
+            sb.Append("I" + itemId);
+            item.TrackingNumber = sb.ToString();
+            db.SaveChanges();
+            dbtransact.Commit();
+            return item;
         }
     }
 }
