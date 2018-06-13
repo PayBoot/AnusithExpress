@@ -25,7 +25,7 @@
                     <td>@item.TrackingNumber</td>
                     <td>@item.ItemName</td>
                     <td>@item.Status</td>
-                    <td><a class="btn btn-danger" href="@Url.Action("DeleteItem","Customer", item.Id)" onclick="return confirm('ແນ່ໃຈແລ້ວບໍ່')">ລືບ</a> <a class="btn btn-danger" href="@Url.Action("CreateUpdateItem","Customer", new { id = item.Id})" >ປ່ຽນແປງ</a></td>
+                    <td><a class="btn btn-danger" href="@Url.Action("DeleteItem","Customer", new { id = item.Id })" onclick="return confirm('ແນ່ໃຈແລ້ວບໍ່')">ລືບ</a> <a class="btn btn-danger" href="@Url.Action("CreateUpdateItem","Customer", new { id = item.Id})" >ປ່ຽນແປງ</a></td>
                 </tr>
             }
         </tbody>
