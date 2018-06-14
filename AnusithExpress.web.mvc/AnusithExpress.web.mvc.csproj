@@ -232,31 +232,8 @@
     <Content Include="Views\Customer\CUpdateProfile.cshtml" />
     <Content Include="Views\Delivery\Index.cshtml" />
     <Content Include="Views\Delivery\ViewItemToGet.cshtml" />
-    <Content Include="Views\Delivery\ViewItemToGetTable.cshtml" />
     <Content Include="Views\Delivery\ViewItemToSend.cshtml" />
     <Content Include="Views\Delivery\ViewItemToSendTable.cshtml" />
-    <Content Include="Styles\css\bootstrap-theme.css.map" />
-    <Content Include="Styles\css\bootstrap-theme.min.css.map" />
-    <Content Include="Styles\css\bootstrap.css.map" />
-    <Content Include="Styles\css\bootstrap.min.css.map" />
-    <Content Include="Styles\fonts\fontawesome-webfont.eot" />
-    <Content Include="Styles\fonts\fontawesome-webfont.ttf" />
-    <Content Include="Styles\fonts\fontawesome-webfont.woff" />
-    <Content Include="Styles\fonts\fontawesome-webfont.woff2" />
-    <Content Include="Styles\fonts\FontAwesome.otf" />
-    <Content Include="Styles\fonts\glyphicons-halflings-regular.eot" />
-    <Content Include="Styles\fonts\glyphicons-halflings-regular.ttf" />
-    <Content Include="Styles\fonts\glyphicons-halflings-regular.woff" />
-    <Content Include="Styles\fonts\glyphicons-halflings-regular.woff2" />
-    <Content Include="Styles\sass\.sass-cache\deff34d1f5b7167181b556002c25068d6adc024d\styles.scssc" />
-    <Content Include="Styles\sass\styles.scss" />
-    <Content Include="Styles\tables\data1.json" />
-    <Content Include="Styles\tables\data2.json" />
-    <Content Include="Views\Shared\_CreateButtonPartial.cshtml" />
-    <Content Include="Views\Shared\_LayoutAdmin.cshtml" />
-    <Content Include="Views\Shared\_Navbar.cshtml" />
-    <Content Include="Views\Shared\_NavMenu.cshtml" />
-    <Content Include="Views\Shared\_Profile.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -267,7 +244,6 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Models\" />
-    <Folder Include="Views\Admin\" />
   </ItemGroup>
   <ItemGroup>
     <TypeScriptCompile Include="Scripts\index.d.ts" />
