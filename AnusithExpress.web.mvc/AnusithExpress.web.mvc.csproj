@@ -233,7 +233,13 @@
     <Content Include="Views\Delivery\Index.cshtml" />
     <Content Include="Views\Delivery\ViewItemToGet.cshtml" />
     <Content Include="Views\Delivery\ViewItemToSend.cshtml" />
-    <Content Include="Views\Delivery\ViewItemToSendTable.cshtml" />
+    <Content Include="Views\Delivery\CreateItem.cshtml" />
+    <Content Include="Views\Delivery\ShowItem.cshtml" />
+    <Content Include="Views\Shared\_CreateButtonPartial.cshtml" />
+    <Content Include="Views\Shared\_LayoutAdmin.cshtml" />
+    <Content Include="Views\Shared\_Navbar.cshtml" />
+    <Content Include="Views\Shared\_NavMenu.cshtml" />
+    <Content Include="Views\Shared\_Profile.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

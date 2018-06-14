@@ -22,7 +22,7 @@
     <table>
         <thead>
             <tr>
-                <th><input type="checkbox" name="checkall" onclick="toggle(this)" /></th>
+                
                 <th>ເລກຕິດຕາມ</th>
                 <th>ຜຸ້ຮັບ</th>
                 <th>ເບີໂທຕິດຕໍ່</th>
@@ -32,10 +32,10 @@
         <tbody>
             @foreach (var item in Model)
             {
-           
-            <tr class="clickable-row" data-href="@Url.Action("ShowItem","Delivery",new { id = item.Id})">
+
+            <tr class="clickable-row" onclick="window.location= '@Url.Action("ShowItem","Delivery",new { id = item.Id})';">
                 
-                    <td><input type="checkbox" name="itemsId" value="@item.Id" />@Html.Hidden("customerId", item.CustomerId)</td>
+  
                     <td>@item.TrackingNumber</td>
                     <td>@item.ReceiverName</td>
                     <td>@item.ReceipverPhone</td>

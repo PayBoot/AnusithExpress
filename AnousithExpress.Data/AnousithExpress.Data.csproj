@@ -74,6 +74,10 @@
     <Compile Include="Migrations\201806140805561_initial3.Designer.cs">
       <DependentUpon>201806140805561_initial3.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201806141754212_initial4.cs" />
+    <Compile Include="Migrations\201806141754212_initial4.Designer.cs">
+      <DependentUpon>201806141754212_initial4.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\TbConsolidatedItems.cs" />
     <Compile Include="Models\TbConsolidateList.cs" />
@@ -118,6 +122,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201806140805561_initial3.resx">
       <DependentUpon>201806140805561_initial3.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201806141754212_initial4.resx">
+      <DependentUpon>201806141754212_initial4.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

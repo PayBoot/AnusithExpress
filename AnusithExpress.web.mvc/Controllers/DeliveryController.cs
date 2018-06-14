@@ -133,9 +133,9 @@ namespace AnusithExpress.web.mvc.Controllers
 
         }
 
-        public ActionResult RecievedItem(int[] itemsId, int customerId)
+        public ActionResult RecievedItem(int[] itemsId, int? customerId)
         {
-            if (itemsId != null)
+            if (itemsId != null && customerId != null)
             {
                 bool result = itemService.ReceiveItem(itemsId);
                 if (result == true)
@@ -195,5 +195,10 @@ namespace AnusithExpress.web.mvc.Controllers
                 return View();
             }
         }
+        public ActionResult BackButton()
+        {
+            return Redirect(Request.UrlReferrer.ToString());
+        }
+
     }
 }
