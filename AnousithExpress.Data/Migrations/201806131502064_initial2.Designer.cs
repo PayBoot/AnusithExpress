@@ -7,13 +7,13 @@ namespace AnousithExpress.Data.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.2.0-61023")]
-    public sealed partial class AnousithLogistic : IMigrationMetadata
+    public sealed partial class initial2 : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(AnousithLogistic));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(initial2));
         
         string IMigrationMetadata.Id
         {
-            get { return "201806120932005_AnousithLogistic"; }
+            get { return "201806131502064_initial2"; }
         }
         
         string IMigrationMetadata.Source

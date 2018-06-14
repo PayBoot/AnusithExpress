@@ -3,6 +3,8 @@ using AnousithExpress.Data.Models;
 using AnousithExpress.Data.SingleViewModels;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
+using System.Linq;
 
 namespace AnousithExpress.Data.Implementation
 {
@@ -30,7 +32,14 @@ namespace AnousithExpress.Data.Implementation
 
         public TbUser Login(string username, string password)
         {
-            throw new NotImplementedException();
+            using (var db = new EntityContext())
+            {
+                var user = db.tbUsers
+                    .Include(u => u.Role)
+                    .Include(u => u.Status)
+                    .FirstOrDefault(u => u.Username == username && u.Password == password && u.Status.Id == 1);
+                return user ?? null;
+            }
         }
     }
 }

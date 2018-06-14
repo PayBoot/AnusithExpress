@@ -15,6 +15,9 @@ namespace AnousithExpress.Data.SingleViewModels
         public string Status { get; set; }
         public int CustomerId { get; set; }
 
+        public string CustomerPhonenumber { get; set; }
+
+        public string Description { get; set; }
         [Required(ErrorMessage = "ກະລຸນາຕື່ມຊື່ຜູ້ຮັບ")]
         public string ReceiverName { get; set; }
 

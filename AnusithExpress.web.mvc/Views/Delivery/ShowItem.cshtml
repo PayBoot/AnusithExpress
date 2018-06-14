@@ -1,0 +1,32 @@
+﻿
+@{
+    ViewBag.Title = "ShowItem";
+    Layout = "~/Views/Shared/_LayoutDelivery.cshtml";
+}
+
+<h2>ShowItem</h2>
+@model AnousithExpress.Data.SingleViewModels.ItemSingleModel
+
+
+<label>ເບີໂທລູກຄ້າ</label>@Model.CustomerPhonenumber <br />
+<label>ເລກຕິດຕາມ</label>@Model.TrackingNumber <br />
+<label>ສະຖານະ</label>@Model.Status <br />
+<label>ປະເພດສີນຄ້າ</label>@Model.ItemName <br />
+<label>ເກັບເງີນປາຍທາງ</label>
+
+@if (Model.ItemValue_Kip != null)
+{
+    <label>@Model.ItemValue_Kip ກີບ</label>
+}
+@if (Model.ItemValue_Baht != null)
+{
+    <label>@Model.ItemValue_Baht  ບາດ</label>
+}
+@if (Model.ItemValue_Dollar != null)
+{
+    <label>@Model.ItemValue_Dollar  ໂດລາ</label>
+}
+@if (Model.ItemValue_Kip == null && Model.ItemValue_Baht == null && Model.ItemValue_Dollar == null)
+{
+    <label>ບໍ່ມີ</label>
+}

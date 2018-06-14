@@ -11,13 +11,13 @@
     @Html.TextBox("customerId")
     <input type="submit" name="submit" value="ຄົ້ນຫາ" />
 }
-
+    <div>@TempData["Message"]</div>
 @using (Html.BeginForm("RecievedItem", "Delivery", FormMethod.Post))
 {
     <table>
         <thead>
             <tr>
-                <th><input type="checkbox" name="checkbox" value="" /></th>
+                <th><input type="checkbox" name="checkall" onclick="toggle(this)" /></th>
                 <th>ເລກຕິດຕາມ</th>
                 <th>ປະເພດເຄື່ອງ</th>
                 <th>ສະຖານະ</th>
@@ -36,5 +36,14 @@
 
         </tbody>
     </table>
-    <input type="submit" name="name" value="ຢືນຢັນການຮັບສີນຄ້າ" />
+    <input type="submit" name="name" onclick="return confirm('ແນ່ໃຈແລ້ວບໍ່')" value="ຢືນຢັນການຮັບສີນຄ້າ" />
 }
+
+<script type="text/javascript" language="javascript">
+    function toggle(source) {
+        let checkboxes = document.getElementsByName("itemsId");
+        for (var i = 0, n = checkboxes.length; i < n; i++) {
+            checkboxes[i].checked = source.checked;
+        } 
+    }
+</script>

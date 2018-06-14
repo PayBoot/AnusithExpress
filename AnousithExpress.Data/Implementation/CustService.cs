@@ -35,6 +35,22 @@ namespace AnousithExpress.Data.Implementation
             }
         }
 
+        public bool CheckExistingCustomer(string phonenumber)
+        {
+            using (var db = new EntityContext())
+            {
+                if (phonenumber.Length == 8)
+                {
+                    return db.tbCustomers.Any(c => c.Phonenumber == phonenumber && c.isDeleted == false);
+                }
+                else
+                {
+                    return false;
+                }
+
+            }
+        }
+
         public bool Create(CustomerSingleModel model)
         {
             using (var db = new EntityContext())
@@ -178,7 +194,7 @@ namespace AnousithExpress.Data.Implementation
             using (var db = new EntityContext())
             {
                 var customer = db.tbCustomers
-                    .FirstOrDefault(c => c.Phonenumber == phonenumber && c.Password == password);
+                    .FirstOrDefault(c => c.Phonenumber == phonenumber && c.Password == password && c.isDeleted == false && c.Status.Id == 1);
                 return customer;
             }
         }

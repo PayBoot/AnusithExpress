@@ -56,9 +56,17 @@
     <Compile Include="Interfaces\IDBInitiate.cs" />
     <Compile Include="Interfaces\IItems.cs" />
     <Compile Include="Interfaces\ISystemUser.cs" />
-    <Compile Include="Migrations\201806120932005_AnousithLogistic.cs" />
-    <Compile Include="Migrations\201806120932005_AnousithLogistic.Designer.cs">
-      <DependentUpon>201806120932005_AnousithLogistic.cs</DependentUpon>
+    <Compile Include="Migrations\201806130710119_initial.cs" />
+    <Compile Include="Migrations\201806130710119_initial.Designer.cs">
+      <DependentUpon>201806130710119_initial.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201806130717045_initial1.cs" />
+    <Compile Include="Migrations\201806130717045_initial1.Designer.cs">
+      <DependentUpon>201806130717045_initial1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201806131502064_initial2.cs" />
+    <Compile Include="Migrations\201806131502064_initial2.Designer.cs">
+      <DependentUpon>201806131502064_initial2.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\TbConsolidatedItems.cs" />
@@ -74,10 +82,12 @@
     <Compile Include="Models\TbTime.cs" />
     <Compile Include="Models\TbUser.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SingleViewModels\AdminViewModel.cs" />
     <Compile Include="SingleViewModels\CustomerItemModel.cs" />
     <Compile Include="SingleViewModels\CustomerProfileModel.cs" />
     <Compile Include="SingleViewModels\CustomerSingleModel.cs" />
     <Compile Include="SingleViewModels\ItemSingleModel.cs" />
+    <Compile Include="SingleViewModels\Notification.cs" />
     <Compile Include="SingleViewModels\UserSingleModel.cs" />
     <Compile Include="UtilityClasses\CustomerUtility.cs" />
     <Compile Include="UtilityClasses\ItemsUtility.cs" />
@@ -90,8 +100,14 @@
     <Folder Include="TableViewModels\" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201806120932005_AnousithLogistic.resx">
-      <DependentUpon>201806120932005_AnousithLogistic.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201806130710119_initial.resx">
+      <DependentUpon>201806130710119_initial.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201806130717045_initial1.resx">
+      <DependentUpon>201806130717045_initial1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201806131502064_initial2.resx">
+      <DependentUpon>201806131502064_initial2.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
