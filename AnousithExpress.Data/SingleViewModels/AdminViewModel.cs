@@ -4,7 +4,7 @@ namespace AnousithExpress.Data.SingleViewModels
 {
     public class AdminViewModel
     {
-        List<Notification> notifications { get; set; }
+        List<CustomerNotification> notifications { get; set; }
         
     }
 

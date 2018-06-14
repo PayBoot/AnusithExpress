@@ -14,10 +14,22 @@
         <div>
             @using (Html.BeginForm("CLogin", "Account", FormMethod.Post, new { @class = "form-control" }))
             {
-                @Html.Label("ເບີໂທລະສັບ", new { @class = "" })
-                @Html.TextBox("phonenumber", "", new { @clas = "", @name = "phonenumber" })
-                @Html.Label("ລະຫັດຜ່ານ", new { @class = "" })
-                @Html.Password("password", "", new { @clas = "", @name = "password" })
+                <table>
+                    <tbody>
+                        <tr>
+                            <td>@Html.Label("ເບີໂທລະສັບ", new { @class = "" })</td>
+                            <td>@Html.TextBox("phonenumber", "", new { @clas = "", @name = "phonenumber" })</td>
+                        </tr>
+                        <tr>
+                            <td>@Html.Label("ລະຫັດຜ່ານ", new { @class = "" })</td>
+                            <td>@Html.Password("password", "", new { @clas = "form-control", @name = "password" })</td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                
+               
+               
                 <input type="submit" name="submit" value="ເຂົ້າສູ່ລະບົບ" />
                 <a href="@Url.Action("CRegister","Account", null)">ສະຫມັກສະມາຊິກ</a>
             }
