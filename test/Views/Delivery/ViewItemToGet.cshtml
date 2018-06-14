@@ -1,0 +1,49 @@
+﻿
+@{
+    ViewBag.Title = "ViewItemToGet";
+    Layout = "~/Views/Shared/_LayoutDelivery.cshtml";
+}
+@model List<AnousithExpress.Data.SingleViewModels.ItemSingleModel>
+<h2>ViewItemToGet</h2>
+@using (Html.BeginForm("ViewItemToGet", "Delivery", FormMethod.Get))
+{
+    <label>ລະຫັດລູກຄ້າ</label>
+    @Html.TextBox("customerId")
+    <input type="submit" name="submit" value="ຄົ້ນຫາ" />
+}
+    <div>@TempData["Message"]</div>
+@using (Html.BeginForm("RecievedItem", "Delivery", FormMethod.Post))
+{
+    <table>
+        <thead>
+            <tr>
+                <th><input type="checkbox" name="checkall" onclick="toggle(this)" /></th>
+                <th>ເລກຕິດຕາມ</th>
+                <th>ປະເພດເຄື່ອງ</th>
+                <th>ສະຖານະ</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td><input type="checkbox" name="itemsId" value="@item.Id" />@Html.Hidden("customerId", item.CustomerId)</td>
+                    <td>@item.TrackingNumber</td>
+                    <td>@item.ItemName</td>
+                    <td>@item.Status</td>
+                </tr>
+            }
+
+        </tbody>
+    </table>
+    <input type="submit" name="name" onclick="return confirm('ແນ່ໃຈແລ້ວບໍ່')" value="ຢືນຢັນການຮັບສີນຄ້າ" />
+}
+
+<script type="text/javascript" language="javascript">
+    function toggle(source) {
+        let checkboxes = document.getElementsByName("itemsId");
+        for (var i = 0, n = checkboxes.length; i < n; i++) {
+            checkboxes[i].checked = source.checked;
+        } 
+    }
+</script>

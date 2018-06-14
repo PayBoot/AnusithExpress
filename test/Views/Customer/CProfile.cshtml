@@ -1,0 +1,62 @@
+﻿@{
+    ViewBag.Title = "CProfile";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+@model AnousithExpress.Data.SingleViewModels.CustomerProfileModel
+<h2>CProfile</h2>
+
+<div>
+    <div>
+
+        <div class="form-group">
+            @Html.Label("ເບີໂທ", new { @class = "control-label col-md-2" })
+           @Model.customerModel.Phonenumber
+        </div>
+        <div class="form-group">
+            @Html.Label("ລະຫັດ", new { @class = "control-label col-md-2" })
+            @Model.customerModel.Password
+
+        </div>
+        <div class="form-group">
+            @Html.Label("ທີ່ຢູ່", new { @class = "control-label col-md-2" })
+            @Html.LabelFor(m => m.customerModel.Address, new { @class = "control-label col-md-10" })
+
+        </div>
+        <div class="form-group">
+            @Html.Label("ເລກບັນຊີ BCEL ສະກຸນເງີນກີບ", new { @class = "control-label col-md-2" })
+            @Html.LabelFor(m => m.customerModel.BCEL_Kip, new { @class = "control-label col-md-10" })
+        </div>
+        <div class="form-group">
+            @Html.Label("ເລກບັນຊີ BCEL ສະກຸນເງີນບາດ", new { @class = "control-label col-md-2" })
+            @Html.LabelFor(m => m.customerModel.BCEL_Baht, new { @class = "control-label col-md-10" })
+        </div>
+        <div class="form-group">
+            @Html.Label("ເລກບັນຊີ BCEL ສະກຸນເງີນໂດລາ", new { @class = "control-label col-md-2" })
+            @Html.LabelFor(m => m.customerModel.BCEL_Dollar, new { @class = "control-label col-md-10" })
+        </div>
+        <a href="@Url.Action("CUpdateProfile","Customer",new { id = Model.customerModel.Id})">ປ່ຽນແປງຂໍ່ມູນສ່ວນໂຕ</a>
+    </div>
+    <div>
+        <table>
+            <thead>
+                <tr>
+                    <th>ເລກຕິດຕາມ</th>
+                    <th>ປະເພດສີນຄ້າ</th>
+                    <th>ສະຖານະ</th>
+                    <th>ມື້ສົ່ງສີນຄ້າ</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.itemsModel)
+                {
+                    <tr>
+                        <td>@item.TrackingNumber</td>
+                        <td>@item.ItemName</td>
+                        <td>@item.Status</td>
+                        <td>@item.SendingDate</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

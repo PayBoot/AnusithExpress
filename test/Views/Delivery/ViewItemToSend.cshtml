@@ -1,0 +1,64 @@
+﻿
+@{
+    ViewBag.Title = "ViewItemToSend";
+    Layout = "~/Views/Shared/_LayoutDelivery.cshtml";
+}
+
+@model List<AnousithExpress.Data.SingleViewModels.ItemSingleModel>
+
+<h2>ViewItemToSend</h2>
+
+@using (Html.BeginForm("ViewItemToSend", "Delivery", FormMethod.Get))
+{
+    <label>ສາຍສົ່ງ</label>
+    @Html.DropDownList("routeId", ViewBag.route as SelectList)
+    <label>ເວລາສົ່ງ</label>
+    @Html.DropDownList("timeId", ViewBag.time as SelectList)
+    <input type="submit" name="submit" value="ຄົ້ນຫາ" />
+}
+<div>@TempData["Message"]</div>
+@using (Html.BeginForm("RecievedItem", "Delivery", FormMethod.Post))
+{
+    <table>
+        <thead>
+            <tr>
+                <th><input type="checkbox" name="checkall" onclick="toggle(this)" /></th>
+                <th>ເລກຕິດຕາມ</th>
+                <th>ຜຸ້ຮັບ</th>
+                <th>ເບີໂທຕິດຕໍ່</th>
+                <th>ລາຍລະອຽດ</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+           
+            <tr class="clickable-row" onclick="window.location = '@Url.Action("ShowItem","Delivery",new { id = item.Id})';" >
+                
+                    <td><input type="checkbox" name="itemsId" value="@item.Id" />@Html.Hidden("customerId", item.CustomerId)</td>
+                    <td>@item.TrackingNumber</td>
+                    <td>@item.ReceiverName</td>
+                    <td>@item.ReceipverPhone</td>
+                    <td>@item.Description</td>
+            </tr>
+          
+            }
+
+        </tbody>
+    </table>
+    
+}
+
+<script type="text/javascript" language="javascript">
+    $(document).ready(function () {
+        $(".clickable-row").click(function () {
+            window.location = $(this).data("href");
+        });
+    });
+    function toggle(source) {
+        let checkboxes = document.getElementsByName("itemsId");
+        for (var i = 0, n = checkboxes.length; i < n; i++) {
+            checkboxes[i].checked = source.checked;
+        }
+    }
+</script>

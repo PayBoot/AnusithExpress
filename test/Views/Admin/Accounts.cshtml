@@ -1,0 +1,36 @@
+﻿
+@{
+    ViewBag.Title = "Accounts";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<h2>Accounts</h2>
+
+@model List<AnousithExpress.Data.SingleViewModels.UserSingleModel>
+<a href="@Url.Action("CreateUpdateAccount","Admin")"> ສ້າງຜູ້ໃຊ້ງານ</a>
+<table>
+    <thead>
+        <tr>
+            <th>ຊື່ຜູ້ໃຊ້</th>
+            <th>ຫນ້າທີ່</th>
+            <th>ເບີໂທ</th>
+            <th>ສະຖານະ</th>
+            <th>ລືບ ແລະ ປ່ຽນແປງ</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+        <tr>
+            <td>@item.Username</td>
+            <td>@item.Role</td>
+            <td>@item.Phonenumber</td>
+            <td>@item.Status</td>
+            <td>
+                <a href="@Url.Action("DeleteAccount","Admin", new { id = item.Id })">ລືບ</a>
+                <a href="@Url.Action("CreateUpdateAccount","Admin", new { id = item.Id })">ປ່ຽນແປງ</a>   
+            </td>
+        </tr>
+        }
+    </tbody>
+</table>

@@ -1,0 +1,28 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>ULogin</title>
+</head>
+<body>
+    <div>
+        <div>
+            @using (Html.BeginForm("ULogin", "Account", FormMethod.Post, new { @class = "form-control" }))
+            {
+                @Html.Label("ຊື່ຜູ້ໃຊ້", new { @class = "control-label" })
+                @Html.TextBox("username", "", new { @clas = "form-control", @name = "phonenumber" })
+                @Html.Label("ລະຫັດຜ່ານ", new { @class = "control-label" })
+                @Html.Password("password", "", new { @clas = "form-control", @name = "password" })
+                @Html.Hidden("admin", "true")
+                <input type="submit" name="submit" value="ເຂົ້າສູ່ລະບົບ" />
+            }
+        </div>
+    </div>
+</body>
+</html>

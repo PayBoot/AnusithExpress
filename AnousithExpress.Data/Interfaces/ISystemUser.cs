@@ -9,8 +9,12 @@ namespace AnousithExpress.Data.Interfaces
         List<UserSingleModel> GetAll();
         bool Create(UserSingleModel model);
         bool Edit(UserSingleModel model);
-        bool Delete();
+        bool Delete(int id);
 
         TbUser Login(string username, string password);
+        UserSingleModel GetSingle(int id);
+
+        List<TbRole> GetRoles();
+        List<TbStatus> GetStatus();
     }
 }

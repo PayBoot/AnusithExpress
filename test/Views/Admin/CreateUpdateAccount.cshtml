@@ -1,0 +1,41 @@
+﻿
+@{
+    ViewBag.Title = "CreateUpdateAccount";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+@model AnousithExpress.Data.SingleViewModels.UserSingleModel
+
+<h2>CreateUpdateAccount</h2>
+<div>
+    @ViewBag.Message
+</div>
+
+@using (Html.BeginForm("CreateUpdateAccount", "Admin", FormMethod.Post))
+{
+    <div class="form-group">
+        <label>ຊື່ຜູ້ໃຊ້ງານ</label>
+        @Html.TextBoxFor(m => m.Username, new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.Username)
+    </div>
+    <div class="form-group">
+        <label>ລະຫັດ</label>
+        @Html.TextBoxFor(m => m.Password, new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.Password)
+    </div>
+    <div class="form-group">
+        <label>ເບີໂທ</label>
+        @Html.TextBoxFor(m => m.Phonenumber, new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.Phonenumber)
+    </div>
+    <div class="form-group">
+        <label>ຫນ້າທີ່</label>
+        @Html.DropDownListFor(m => m.Role, ViewBag.Roles as SelectList, "ເລືອກ", new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.Role);
+    </div>
+    <div class="form-group">
+        <label>ສະຖານະ</label>
+        @Html.DropDownListFor(m => m.Status, ViewBag.Statuses as SelectList, "ເລືອກ", new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.Status)
+    </div>
+    <input type="submit" value="ບັນທືກ" />
+}

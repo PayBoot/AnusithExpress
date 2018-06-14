@@ -1,0 +1,45 @@
+﻿
+@if (Session["UserID"] == null)
+    {
+        Response.Redirect("~/Admin/Login/Index");
+    }
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title</title>
+    
+   
+    @Styles.Render("~/Styles/css")
+    @Scripts.Render("~/bundles/modernizr")
+    <style type="text/css">
+        @@import url("../../../../LaoFont/style.css");
+             *{ 
+             font-family:Phetsarath_OT;
+                 font-size: 18px;
+             }
+    </style>
+</head>
+<body>
+ @Html.Partial("_Navbar")
+    <div id="sidebar-collapse" class="col-sm-3 col-lg-2 sidebar">
+ @Html.Partial("_Profile")
+        <div class="divider"></div>
+        <ul class="nav menu">
+        @Html.Partial("_NavMenu")
+            <li><a href="@Url.Action("Logout","Login")"><em class="fa fa-power-off">&nbsp;</em> Logout</a></li>
+        </ul>
+    </div><!--/.sidebar-->
+    <div class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-2 main">
+        @RenderBody()
+    </div><!--col-sm-9 main-->
+        <footer>
+        </footer>
+    
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @RenderSection("scripts", required: false)
+</body>
+</html>

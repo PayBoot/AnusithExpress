@@ -8,5 +8,6 @@
         public TbRole Role { get; set; }
         public string Phonenumber { get; set; }
         public TbStatus Status { get; set; }
+        public bool isDelete { get; set; }
     }
 }
