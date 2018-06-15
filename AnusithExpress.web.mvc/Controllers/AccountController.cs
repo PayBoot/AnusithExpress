@@ -120,5 +120,8 @@ namespace AnusithExpress.web.mvc.Controllers
             Response.Cookies.Add(new HttpCookie("ASP.NET_SessionId", ""));
             return RedirectToAction("ULogin");
         }
+
+
+
     }
 }
