@@ -251,6 +251,12 @@
     <Content Include="Views\Admin\Customer.cshtml" />
     <Content Include="Views\Admin\CustomerDetail.cshtml" />
     <Content Include="Views\Admin\CreateUpdateItem.cshtml" />
+<<<<<<< HEAD
+    <Content Include="Views\Consolidate\ItemAlreadySent.cshtml" />
+    <Content Include="Views\Consolidate\Index.cshtml" />
+=======
+    <Content Include="Scripts\jquery-1.10.2.min.map" />
+>>>>>>> 45d94fda939c7e361747a831288f881f79a82a5a
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

@@ -20,8 +20,8 @@ namespace ClothesStore
                         "~/Scripts/modernizr-*"));
 
             bundles.Add(new ScriptBundle("~/bundles/bootstrap").Include(
-                        "~/Scripts/bootstrap.js",
-                        "~/Scripts/respond.js"));
+                        "~/Styles/js/bootstrap.js",
+                        "~/Styles/js/respond.min.js"));
             bundles.Add(new ScriptBundle("~/bundles/js").Include(
                         "~/js/minicart.min.js",
                         "~/js/easy-responsive-tabs.js",
@@ -34,11 +34,11 @@ namespace ClothesStore
                         "~/js/jquery-2.1.4.min.js"));
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
-                      "~/Styles/bootstrap.css",
-                      "~/Styles/style.css",
-                      "~/Styles/flexslider.css",
+                      "~/Styles/css/bootstrap.css",
+                      "~/Styles/css/style.css",
+                      "~/Styles/css/flexslider.css",
                       "~/Styles/css/font-awesome.css",
-                      "~/Styles/easy-responsive-tabs.css"));
+                      "~/Styles/css/easy-responsive-tabs.css"));
             bundles.Add(new StyleBundle("~/Content/admin-css").Include(
                 "~/Styles/css/bootstrap.min.css",
                 "~/Styles/css/font-awesome.min.css",
