@@ -102,6 +102,7 @@ namespace AnousithExpress.Data.Implementation
                 };
                 db.Entry(items).State = EntityState.Modified;
                 items.ItemName = model.ItemName;
+                items.Customer = db.tbCustomers.FirstOrDefault(x => x.Id == model.CustomerId);
                 items.ItemValue_Baht = model.ItemValue_Baht;
                 items.ItemValue_Dollar = model.ItemValue_Dollar;
                 items.ItemValue_Kip = model.ItemValue_Kip;

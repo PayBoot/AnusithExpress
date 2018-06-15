@@ -10,10 +10,12 @@ namespace AnusithExpress.web.mvc.Controllers
     {
         private CustomerListService customerListService;
         private ItemService itemService;
-        public AdminController(CustomerListService _customerListService, ItemService item)
+        private CustService custService;
+        public AdminController(CustomerListService _customerListService, ItemService item, CustService _custSerivce)
         {
             customerListService = _customerListService;
             itemService = item;
+            custService = _custSerivce;
         }
         public ActionResult Index()
         {
@@ -42,6 +44,51 @@ namespace AnusithExpress.web.mvc.Controllers
             }
 
             return View(model);
+        }
+
+        public ActionResult CreateUpdateItem(int itemId = 0)
+        {
+            var itemModel = itemService.GetSingle(itemId);
+            return View(itemModel);
+        }
+
+        [HttpPost]
+        public ActionResult CreateUpdateItem(ItemSingleModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                if (model.Id > 0)
+                {
+                    if (custService.CheckExistingCustomer(model.CustomerPhonenumber))
+                    {
+                        var item = itemService.Update(model);
+                        return View();
+                    }
+                    else
+                    {
+                        ViewBag.Message = "ເບີໂທດັ່ງກ່າວຍັງບໍ່ທັນໄດ້ລົງທະບຽນ";
+                        return View();
+                    }
+                }
+                else
+                {
+                    if (custService.CheckExistingCustomer(model.CustomerPhonenumber))
+                    {
+                        var item = itemService.CreateItemForDelivery(model);
+                        return View();
+                    }
+                    else
+                    {
+                        ViewBag.Message = "ເບີໂທດັ່ງກ່າວຍັງບໍ່ທັນໄດ້ລົງທະບຽນ";
+                        return View();
+                    }
+                }
+
+            }
+            else
+            {
+                return View();
+            }
         }
 
     }
