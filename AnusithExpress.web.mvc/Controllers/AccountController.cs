@@ -31,6 +31,7 @@ namespace AnusithExpress.web.mvc.Controllers
             {
                 Session["UserId"] = Account.Id;
                 Session["Username"] = Account.Name;
+ 
                 return RedirectToAction("Index", "Customer");
             }
 
