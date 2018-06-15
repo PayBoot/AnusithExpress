@@ -244,6 +244,8 @@
     <Content Include="Views\Admin\Index.cshtml" />
     <Content Include="Views\AdminAccount\Accounts.cshtml" />
     <Content Include="Views\AdminAccount\CreateUpdateAccount.cshtml" />
+    <Content Include="Views\Admin\Customer.cshtml" />
+    <Content Include="Views\Admin\CustomerDetail.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

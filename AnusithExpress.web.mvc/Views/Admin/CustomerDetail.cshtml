@@ -1,0 +1,43 @@
+﻿
+@{
+    ViewBag.Title = "CustomerDetail";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+@model List<AnousithExpress.Data.SingleViewModels.ItemSingleModel>
+<h2>CustomerDetail</h2>
+@using (Html.BeginForm("CustomerDetail","Admin",FormMethod.Get))
+{
+    
+    <label>ສະຖານະ</label>
+    @Html.DropDownList("statusId", ViewBag.Statuses as SelectList,"ເລືອກ", new { @class="form-control"})
+    <label>ລູກຄ້າຫມາຍເລກ</label>
+
+    @Html.TextBox("customerId", ViewData["customerId"], new  { @readonly=true})
+    <input type="submit" name="search" value="ຄົ້ນຫາ" />
+}
+<table>
+    <thead>
+        <tr>
+            <th>ເລກຕິດຕາມ</th>
+            <th>ສີນຄ້າ</th>
+            <th>ສະຖານະ</th>
+            <th>ຊື່ຜູ້ຮັບ</th>
+            <th>ເບີໂທຜູ້ຮັບ</th>
+            <th>ທີ່ຢູ່ຜູ້ຮັບ</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.TrackingNumber</td>
+                <td>@item.ItemName</td>
+                <td>@item.Status</td>
+                <td>@item.ReceiverName</td>
+                <td>@item.ReceipverPhone</td>
+                <td>@item.ReceiverAddress</td>
+            </tr>
+        }
+    </tbody>
+    
+</table>

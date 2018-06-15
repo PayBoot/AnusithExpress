@@ -20,27 +20,22 @@ namespace AnousithExpress.Data.Implementation
             using (var db = new EntityContext())
             {
                 var customers = customerUtility.GetAllCustomer(db);
-                var model = customers.Select(r => new CustomerItemModel
-                {
-                    CustomerId = r.Id,
-                    CustomerName = r.Name,
-                    CustomerPhonenumber = r.Phonenumber,
-                    CountItems = itemsUtility.GetAllItem(db)
-                            .Where(x => x.Customer.Id == r.Id).Count(),
-                    CouteItemsToPickup = itemsUtility.GetAllItem(db)
-                            .Where(x => x.Customer.Id == r.Id && x.Status.Id == 2).Count(),
-                    CountItemsPickedUp = itemsUtility.GetAllItem(db)
-                            .Where(x => x.Customer.Id == r.Id && x.Status.Id == 3).Count(),
-                    CouteItemsInProcess = itemsUtility.GetAllItem(db)
-                            .Where(x => x.Customer.Id == r.Id && x.Status.Id == 4).Count(),
-                    CountItemsToSend = itemsUtility.GetAllItem(db)
-                            .Where(x => x.Customer.Id == r.Id && x.Status.Id == 5).Count(),
-                    CountItemsAlreadySend = itemsUtility.GetAllItem(db)
-                            .Where(x => x.Customer.Id == r.Id && x.Status.Id == 6).Count(),
-                    CountItemsCannotContact = itemsUtility.GetAllItem(db)
-                            .Where(x => x.Customer.Id == r.Id && x.Status.Id == 7).Count(),
 
-                });
+                List<CustomerItemModel> model = new List<CustomerItemModel>();
+                foreach (var customer in customers)
+                {
+                    CustomerItemModel ci = new CustomerItemModel();
+                    ci.CustomerId = customer.Id;
+                    ci.CustomerName = customer.Name;
+                    ci.CountItems = itemsUtility.GetAllItem(db).Count(i => i.Customer.Id == customer.Id);
+                    ci.CountItemsToPickup = itemsUtility.GetAllItem(db).Count(i => i.Customer.Id == customer.Id && i.Status.Id == 2);
+                    ci.CountItemsPickedUp = itemsUtility.GetAllItem(db).Count(i => i.Customer.Id == customer.Id && i.Status.Id == 3);
+                    ci.CountItemsInProcess = itemsUtility.GetAllItem(db).Count(i => i.Customer.Id == customer.Id && i.Status.Id == 4);
+                    ci.CountItemsToSend = itemsUtility.GetAllItem(db).Count(i => i.Customer.Id == customer.Id && i.Status.Id == 5);
+                    ci.CountItemsAlreadySend = itemsUtility.GetAllItem(db).Count(i => i.Customer.Id == customer.Id && i.Status.Id == 6);
+                    ci.CountItemsCannotContact = itemsUtility.GetAllItem(db).Count(i => i.Customer.Id == customer.Id && i.Status.Id == 7);
+                    model.Add(ci);
+                }
                 return model.ToList();
             }
         }

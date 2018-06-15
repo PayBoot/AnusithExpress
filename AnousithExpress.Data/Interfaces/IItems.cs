@@ -26,6 +26,7 @@ namespace AnousithExpress.Data.Interfaces
 
         ItemSingleModel CreateItemForDelivery(ItemSingleModel model);
 
+        List<TbItemStatus> GetItemStatus();
         List<TbRoute> GetRoute();
         List<TbTime> GetTime();
 

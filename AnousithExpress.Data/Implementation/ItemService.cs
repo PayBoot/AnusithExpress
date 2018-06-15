@@ -324,5 +324,14 @@ namespace AnousithExpress.Data.Implementation
                 return true;
             }
         }
+
+        public List<TbItemStatus> GetItemStatus()
+        {
+            using (var db = new EntityContext())
+            {
+                return db.tbItemStatuses.ToList();
+
+            }
+        }
     }
 }
