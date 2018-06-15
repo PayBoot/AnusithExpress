@@ -9,5 +9,9 @@ namespace AnousithExpress.Data.Interfaces
         List<CustomerNotification> GetNewItemsNotification();
         List<ItemSingleModel> GetItemsForCustomer(int CustId);
         List<ItemSingleModel> GetItemsByStatusForCustomer(int CustId, int statusId);
+
+        List<CustomerNotification> GetSentItemsNotConsolidateNotification();
+
+
     }
 }

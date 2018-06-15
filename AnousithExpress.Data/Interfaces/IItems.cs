@@ -18,8 +18,10 @@ namespace AnousithExpress.Data.Interfaces
         double GetItemsAmoutPerCustomer(int CustId);
 
         List<ItemSingleModel> GetConfirmItems(int CustId);
+        List<ItemSingleModel> GetSentItems(int CustId);
         List<ItemSingleModel> GetToSendItems(int routeId, int timeId);
 
+        List<ItemSingleModel> GetSentItemsToConsolidate(int CustId);
 
         bool ReceiveItem(int[] itemId);
         bool SendItem(int itemId);

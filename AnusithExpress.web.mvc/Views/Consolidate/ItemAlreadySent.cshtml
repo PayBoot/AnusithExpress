@@ -1,0 +1,36 @@
+﻿
+@{
+    ViewBag.Title = "ItemAlreadySent";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<h2>ItemAlreadySent</h2>
+
+@model List<AnousithExpress.Data.SingleViewModels.ItemSingleModel>
+
+<table>
+    <thead>
+        <tr>
+            <th>ເລກຕິດຕາມ</th>
+            <th>ສີນຄ້າ</th>
+            <th>ສະຖານະ</th>
+            <th>ຊື່ຜູ້ຮັບ</th>
+            <th>ເບີໂທຜູ້ຮັບ</th>
+            <th>ທີ່ຢູ່ຜູ້ຮັບ</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.TrackingNumber</td>
+                <td>@item.ItemName</td>
+                <td>@item.Status</td>
+                <td>@item.ReceiverName</td>
+                <td>@item.ReceipverPhone</td>
+                <td>@item.ReceiverAddress</td>
+            </tr>
+        }
+    </tbody>
+
+</table>

@@ -334,5 +334,42 @@ namespace AnousithExpress.Data.Implementation
 
             }
         }
+
+        public List<ItemSingleModel> GetSentItems(int CustId)
+        {
+            using (var db = new EntityContext())
+            {
+                var items = itemsUtility.GetAllItem(db).Where(i => i.Customer.Id == CustId && i.Status.Id == 6);
+                if (items != null)
+                {
+                    var model = itemsUtility.ItemListModelProperty(items.ToList());
+                    return model;
+                }
+                else
+                {
+                    return new List<ItemSingleModel>();
+                }
+            }
+        }
+
+        public List<ItemSingleModel> GetSentItemsToConsolidate(int CustId)
+        {
+            using (var db = new EntityContext())
+            {
+                var items = itemsUtility.GetAllItem(db)
+                    .Where(i => i.Customer.Id == CustId
+                        && i.Status.Id == 6
+                        && !db.tbConsolidatedItems.Select(c => c.Items.Id).Contains(i.Id));
+                if (items != null)
+                {
+                    var model = itemsUtility.ItemListModelProperty(items.ToList());
+                    return model;
+                }
+                else
+                {
+                    return new List<ItemSingleModel>();
+                }
+            }
+        }
     }
 }

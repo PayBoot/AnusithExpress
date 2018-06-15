@@ -206,6 +206,7 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\AdminAccountController.cs" />
     <Compile Include="Controllers\AdminController.cs" />
+    <Compile Include="Controllers\ConsolidateController.cs" />
     <Compile Include="Controllers\CustomerController.cs" />
     <Compile Include="Controllers\DeliveryController.cs" />
     <Compile Include="Controllers\InitDataController.cs" />
@@ -247,6 +248,8 @@
     <Content Include="Views\Admin\Customer.cshtml" />
     <Content Include="Views\Admin\CustomerDetail.cshtml" />
     <Content Include="Views\Admin\CreateUpdateItem.cshtml" />
+    <Content Include="Views\Consolidate\ItemAlreadySent.cshtml" />
+    <Content Include="Views\Consolidate\Index.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

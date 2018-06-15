@@ -71,5 +71,26 @@ namespace AnousithExpress.Data.Implementation
                 return new List<CustomerNotification>();
             }
         }
+
+        public List<CustomerNotification> GetSentItemsNotConsolidateNotification()
+        {
+            using (var db = new EntityContext())
+            {
+                var customers = customerUtility.GetAllCustomer(db);
+                List<CustomerNotification> model = new List<CustomerNotification>();
+                foreach (var customer in customers)
+                {
+                    var ci = new CustomerNotification();
+                    ci.CustomerId = customer.Id;
+                    ci.CustomerName = customer.Name;
+                    ci.CustomerPhonenumber = customer.Phonenumber;
+                    ci.NumberOfItem = itemsUtility.GetAllItem(db)
+                        .Where(i => i.Status.Id == 6 && i.Customer.Id == customer.Id
+                            && !db.tbConsolidatedItems.Select(c => c.Items.Id).Contains(i.Id)).Count();
+                    model.Add(ci);
+                }
+                return model;
+            }
+        }
     }
 }
