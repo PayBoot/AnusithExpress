@@ -7,30 +7,34 @@
 <h2>Accounts</h2>
 @model List<AnousithExpress.Data.SingleViewModels.UserSingleModel>
 <a href="@Url.Action("CreateUpdateAccount","AdminAccount")">ສ້າງບັນຊີຜູ້ໃຊ້ງານ</a>
-<table>
-    <thead>
-        <tr>
-            <th>ຊື່ຜູ້ໃຊ້ງານ</th>
-            <th>ຫນ້າທີ່</th>
-            <th>ເບີໂທ</th>
-            <th>ສະຖານະ</th>
-            <th>ລືບ ຫລື ປ່ຽນແປງ</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
+<div class=" table table-responsive">
+    <table class=" table table-borderless">
+        <thead>
             <tr>
-                <td>@item.Username</td>
-                <td>@item.Role</td>
-                <td>@item.Phonenumber</td>
-                <td>@item.Status</td>
-                <td>
-                    <a href="@Url.Action("DeleteAccount", "AdminAccount", new { id= item.Id })">ລືບ</a>
-                    <a href="@Url.Action("CreateUpdateAccount","AdminAccount", new { id= item.Id })">ປ່ຽນແປງ</a>
-                </td>
+                <th>ຊື່ຜູ້ໃຊ້ງານ</th>
+                <th>ຫນ້າທີ່</th>
+                <th>ເບີໂທ</th>
+                <th>ສະຖານະ</th>
+                <th>ລືບ ຫລື ປ່ຽນແປງ</th>
             </tr>
-        }
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.Username</td>
+                    <td>@item.Role</td>
+                    <td>@item.Phonenumber</td>
+                    <td>@item.Status</td>
+                    <td>
+                        <a class="btn btn-danger" href="@Url.Action("DeleteAccount", "AdminAccount", new { id= item.Id })"><span class="glyphicon glyphicon-minus"></span> ລືບ</a>
+                        <a class=" btn btn-success" href="@Url.Action("CreateUpdateAccount","AdminAccount", new { id= item.Id })"><span class="glyphicon glyphicon-edit"></span> ປ່ຽນແປງ</a>
+                    </td>
+                </tr>
+            }
 
-    </tbody>
-</table>
+        </tbody>
+    </table>
+
+</div>
+

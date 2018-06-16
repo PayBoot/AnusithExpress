@@ -52,8 +52,9 @@
             @Html.Label("ເກັບເງີນປາຍທາງ ສະກຸນເງີນໂດລ້າ")
             @Html.TextBoxFor(m => m.ItemValue_Dollar, new { @class = "form-control", @type="number" })
         </div>
-        <input type="submit" name="submit" value="ບັນທຶກລາຍການ" />
-        <a class="btn btn-primary" href="@Url.Action("Index","Customer")">ກັບໄປຫນ້າຫລັກ</a>
+        <button class="btn btn-primary" type="submit" name="submit"><span class="glyphicon glyphicon-save"></span> ບັນທຶກລາຍການ</button>
+         @*<input type="submit" name="submit" value="ບັນທຶກລາຍການ" />*@
+        @*<a class="btn btn-primary" href="@Url.Action("Index","Customer")">ກັບໄປຫນ້າຫລັກ</a>*@
     }
 
 </div>

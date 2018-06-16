@@ -30,6 +30,6 @@
         <label>Status</label>
         @Html.DropDownListFor(m => m.Status, ViewBag.Statuses as SelectList, "ເລືອກ", new { @class = "form-control" })
     </div>
-    <input type="submit" name="saveAccount" onclick="return confirm('ທ່ານແນ່ໃຈແລ້ວບໍ່ ທີ່ຈະດຳເນີນການຕໍ່')" value="ບັນທຶກ" />
+    <button class=" btn btn-primary" type="submit" name="saveAccount" onclick="return confirm('ທ່ານແນ່ໃຈແລ້ວບໍ່ ທີ່ຈະດໍາເນີນການຕໍ່')" value="ບັນທຶກ"><span class="glyphicon glyphicon-save"></span> ບັນທຶກ</button>
 }
 

@@ -1,7 +1,7 @@
 ﻿
 @{
     ViewBag.Title = "ViewItemToSend";
-    Layout = "~/Views/Shared/_LayoutDelivery.cshtml";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
 }
 
 @model List<AnousithExpress.Data.SingleViewModels.ItemSingleModel>
@@ -19,7 +19,7 @@
 <div>@TempData["Message"]</div>
 @using (Html.BeginForm("RecievedItem", "Delivery", FormMethod.Post))
 {
-    <table>
+    <table class="table-borderless">
         <thead>
             <tr>
                 
