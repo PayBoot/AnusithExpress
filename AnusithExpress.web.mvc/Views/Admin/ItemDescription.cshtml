@@ -1,0 +1,38 @@
+﻿@model AnousithExpress.Data.SingleViewModels.ItemSingleModel
+
+
+@Html.HiddenFor(m=>m.Id)
+@Html.Label("ລາຍລະອຽດ")
+@Html.TextAreaFor(m=>m.Description, new { @class = "form-control" })
+
+<input type="button" name="name" onclick="AddDescription()" value="ບັນທຶກ" />
+
+<script>
+    function AddDescription() {
+        $.ajax({
+            url: "/Admin/AddDescription",
+            data: $(".form-content").serialize(),
+            datatype: "json",
+            type: "POST",
+            success: function (result) {
+                if (result === true)
+                {
+                    if ($("#statusId").val() !== "") {
+                        window.location = "@Url.Action("CustomerDetail", "Admin")?customerId=" + $("#customerId").val() +"&statusId="+ $("#statusId").val();    
+                    }
+                    else {
+                        window.location = "@Url.Action("CustomerDetail", "Admin", new { customerId = Model.CustomerId})";    
+                    }                         
+                }
+                else {
+                    alert("ດຳເນີນການບໍ່ສຳເລັດ");
+                }
+            },
+            error: function ()
+            {
+                alert("Server error");
+            }
+
+        });
+    }
+</script>

@@ -9,10 +9,10 @@
 {
     
     <label>ສະຖານະ</label>
-    @Html.DropDownList("statusId", ViewBag.Statuses as SelectList,"ເລືອກ", new { @class="form-control"})
+    @Html.DropDownList("statusId", ViewBag.Statuses as SelectList,"ເລືອກ", new { @class="form-control" , @id ="statusId"})
     <label>ລູກຄ້າຫມາຍເລກ</label>
 
-    @Html.TextBox("customerId", ViewData["customerId"], new  { @readonly=true})
+    @Html.TextBox("customerId", ViewData["customerId"], new  { @readonly=true, @id="customerId"})
     <input type="submit" name="search" value="ຄົ້ນຫາ" />
 }
 <table>
@@ -24,6 +24,8 @@
             <th>ຊື່ຜູ້ຮັບ</th>
             <th>ເບີໂທຜູ້ຮັບ</th>
             <th>ທີ່ຢູ່ຜູ້ຮັບ</th>
+            <th>ລາຍລະອຽດເພີ່ມເຕີ</th>
+            <th></th>
         </tr>
     </thead>
     <tbody>
@@ -36,8 +38,72 @@
                 <td>@item.ReceiverName</td>
                 <td>@item.ReceipverPhone</td>
                 <td>@item.ReceiverAddress</td>
+                <td>@item.Description</td>
+                <td>
+                    <a onclick="DescriptionModal(@item.Id )">ໄສ່ລາຍລະອຽດເພີ່ມເຕີມ</a>
+                    <a href="@Url.Action("DeleteItem","Admin", new { id = item.Id})" onclick="return confirm('ທ່ານແນ່ໃຈແລ້ວບໍ່');" )">ລຶບ</a>
+                    <a href="@Url.Action("CreateUpdateItem","Admin", new { itemId = item.Id})">ປ່ຽນແປງ</a>
+                </td>
             </tr>
         }
     </tbody>
     
 </table>
+<div class="modal" id="customerModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">ເພີ່ມລາຍລະອຽດ</div>
+            <div class="modal-body">
+                <form class="form-content">
+
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript" language="javascript">
+    function DescriptionModal(id) {   
+        $.ajax({
+            url: "/Admin/ItemDescription",
+            type: "POST",
+            data: { id: id },
+            datatype: "json",
+            success: function (result) {
+                $(".form-content").html(result);
+                $("#customerModal").modal("show");
+            },
+            error: function () {
+                alert("Server error");
+            }
+            
+        });
+    }
+    function DeleteItem(id) {
+        $.ajax({
+            url: "/Admin/DeleteItem",
+            type: "POST",
+            data: { id: id },
+            datatype: "json",
+            success: function (result) {
+                if (result === true)
+                {
+                    if ($("#statusId").val() !== "") {
+                        window.location = "@Url.Action("CustomerDetail", "Admin")?customerId=" + $("#customerId").val() +"&statusId="+ $("#statusId").val();    
+                    }
+                    else {
+                        window.location = "@Url.Action("CustomerDetail", "Admin")?customerId=" + $("#customerId").val();    
+                    }                         
+                }
+                else {
+                    alert("ດຳເນີນການບໍ່ສຳເລັດ");
+                }
+            },
+            error: function ()
+            {
+                alert("Server error");
+            }
+
+        });
+    }
+</script>

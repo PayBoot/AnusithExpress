@@ -51,6 +51,22 @@ namespace AnousithExpress.Data.Implementation
             }
         }
 
+        public bool CheckExistingCustomer(int customerId)
+        {
+            using (var db = new EntityContext())
+            {
+                if (customerId > 0)
+                {
+                    return db.tbCustomers.Any(c => c.Id == customerId && c.isDeleted == false);
+                }
+                else
+                {
+                    return false;
+                }
+
+            }
+        }
+
         public bool Create(CustomerSingleModel model)
         {
             using (var db = new EntityContext())

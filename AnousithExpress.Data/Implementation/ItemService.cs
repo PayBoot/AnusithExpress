@@ -263,7 +263,10 @@ namespace AnousithExpress.Data.Implementation
                 using (var dbtransact = db.Database.BeginTransaction())
                 {
                     int itemstatus = 3;
-                    model.CustomerId = db.tbCustomers.FirstOrDefault(x => x.Phonenumber == model.CustomerPhonenumber).Id;
+                    if (model.CustomerId == 0)
+                    {
+                        model.CustomerId = db.tbCustomers.FirstOrDefault(x => x.Phonenumber == model.CustomerPhonenumber).Id;
+                    }
                     TbItems item = CreateItemMethod(model, db, dbtransact, itemstatus);
                     return GetSingle(item.Id);
                 }
@@ -376,6 +379,40 @@ namespace AnousithExpress.Data.Implementation
                 {
                     return new List<ItemSingleModel>();
                 }
+            }
+        }
+
+        public bool AddDescription(ItemSingleModel model)
+        {
+            using (var db = new EntityContext())
+            {
+                if (model.Id > 0)
+                {
+                    var item = itemsUtility.GetItemById(model.Id ?? default(int), db);
+                    db.Entry(item).State = EntityState.Modified;
+                    item.Descripttion = model.Description;
+                    db.SaveChanges();
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+
+            }
+        }
+
+        public ItemSingleModel CreateItemById(ItemSingleModel model)
+        {
+            using (var db = new EntityContext())
+            {
+                using (var dbtransact = db.Database.BeginTransaction())
+                {
+                    int itemstatus = 3;
+                    TbItems item = CreateItemMethod(model, db, dbtransact, itemstatus);
+                    return GetSingle(item.Id);
+                }
+
             }
         }
     }

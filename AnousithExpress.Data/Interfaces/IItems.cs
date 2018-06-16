@@ -25,9 +25,10 @@ namespace AnousithExpress.Data.Interfaces
 
         bool ReceiveItem(int[] itemId);
         bool SendItem(int itemId);
-
+        bool AddDescription(ItemSingleModel model);
         ItemSingleModel CreateItemForDelivery(ItemSingleModel model);
 
+        ItemSingleModel CreateItemById(ItemSingleModel model);
         List<TbItemStatus> GetItemStatus();
         List<TbRoute> GetRoute();
         List<TbTime> GetTime();

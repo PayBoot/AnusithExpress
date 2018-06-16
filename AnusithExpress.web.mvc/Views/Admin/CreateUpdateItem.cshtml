@@ -21,6 +21,11 @@
             @Html.ValidationMessageFor(m => m.CustomerPhonenumber)
         </div>
         <div class="form-group">
+            @Html.Label("ນຳເບີລຸກຄ້າ")
+            @Html.TextBoxFor(m => m.CustomerId)
+            @Html.ValidationMessageFor(m => m.CustomerId)
+        </div>
+        <div class="form-group">
             @Html.Label("ປະເພດສີນຄ້າ")
             @Html.TextBoxFor(m => m.ItemName)
             @Html.ValidationMessageFor(m => m.ItemName)

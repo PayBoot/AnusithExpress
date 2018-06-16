@@ -72,14 +72,35 @@ namespace AnusithExpress.web.mvc.Controllers
                 }
                 else
                 {
-                    if (custService.CheckExistingCustomer(model.CustomerPhonenumber))
+                    if (!string.IsNullOrEmpty(model.CustomerPhonenumber))
                     {
-                        var item = itemService.CreateItemForDelivery(model);
-                        return View();
+                        if (custService.CheckExistingCustomer(model.CustomerPhonenumber))
+                        {
+                            model.CustomerId = 0;
+                            var item = itemService.CreateItemForDelivery(model);
+                            return View();
+                        }
+                        else
+                        {
+                            ViewBag.Message = "ເບີໂທດັ່ງກ່າວຍັງບໍ່ທັນໄດ້ລົງທະບຽນ";
+                            return View();
+                        }
+                    }
+                    else if (model.CustomerId > 0)
+                    {
+                        if (custService.CheckExistingCustomer(model.CustomerId))
+                        {
+                            var item = itemService.CreateItemForDelivery(model);
+                            return View();
+                        }
+                        else
+                        {
+                            ViewBag.Message = "ເບີໂທດັ່ງກ່າວຍັງບໍ່ທັນໄດ້ລົງທະບຽນ";
+                            return View();
+                        }
                     }
                     else
                     {
-                        ViewBag.Message = "ເບີໂທດັ່ງກ່າວຍັງບໍ່ທັນໄດ້ລົງທະບຽນ";
                         return View();
                     }
                 }
@@ -89,6 +110,35 @@ namespace AnusithExpress.web.mvc.Controllers
             {
                 return View();
             }
+        }
+
+
+        public ActionResult ItemDescription(int id)
+        {
+            var model = itemService.GetSingle(id);
+            return PartialView("ItemDescription", model);
+        }
+
+        public ActionResult AddDescription(ItemSingleModel model)
+        {
+            bool result = itemService.AddDescription(model);
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult DeleteItem(int id)
+        {
+            if (Session["UserId"] != null)
+            {
+                bool result = false;
+                result = itemService.Delete(id);
+                return Json(result, JsonRequestBehavior.AllowGet);
+
+            }
+            else
+            {
+                return RedirectToAction("CLogin", "Account");
+            }
+
         }
 
     }

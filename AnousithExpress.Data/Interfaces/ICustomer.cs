@@ -9,6 +9,8 @@ namespace AnousithExpress.Data.Interfaces
         List<CustomerSingleModel> GetAll();
         bool CheckDuplicateNumber(string number);
         bool CheckDuplicateNumber(int id, string number);
+
+
         bool Create(CustomerSingleModel model);
         bool Edit(CustomerSingleModel model);
         bool Delete(int id);
@@ -20,5 +22,6 @@ namespace AnousithExpress.Data.Interfaces
         List<CustomerItemModel> ShowCustomer();
 
         bool CheckExistingCustomer(string phonenumber);
+        bool CheckExistingCustomer(int customerId);
     }
 }
