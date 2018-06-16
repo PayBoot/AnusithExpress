@@ -1,7 +1,7 @@
 ﻿
 @if (Session["UserID"] == null)
     {
-        Response.Redirect("~/Admin/Login/Index");
+        Response.Redirect("~/Account/ULogin");
     }
 <!DOCTYPE html>
 <html>
@@ -32,7 +32,7 @@
         <div class="divider"></div>
         <ul class="nav menu">
             @Html.Partial("_NavMenu")
-            <li><a href="@Url.Action("Logout","Login")"><em class="fa fa-power-off">&nbsp;</em> Logout</a></li>
+            <li><a href="@Url.Action("ULogout","Account")"><em class="fa fa-power-off">&nbsp;</em> Logout</a></li>
         </ul>
     </div><!--/.sidebar-->
     <div class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-2 main">
