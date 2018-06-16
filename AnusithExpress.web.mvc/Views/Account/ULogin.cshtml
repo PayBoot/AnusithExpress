@@ -30,31 +30,32 @@
                     <div class="panel-body">
                         @using (Html.BeginForm("ULogin", "Account", FormMethod.Post))
     {
-                                     
-                            
-                            <div class="form-group">
-                                @Html.Label("ຊື່ຜູ້ໃຊ້", new { @class = "control-label" })
-                                @Html.TextBox("username", null, new { @class = "form-control", @name = "phonenumber" })
-                                @* @Html.ValidationMessageFor(m => m.ItemName)*@
-                            </div>
-                            <div class="form-group">
-                                @Html.Label("ລະຫັດ", new { @class = "control-label" })
-                                @Html.Password("password",null, new { @class = "form-control", @name = "password" })
-                                @Html.Hidden("admin", "true")
-                                @* @Html.ValidationMessageFor(m => m.ItemName)*@
-                            </div>
-                            <button type="submit" class="btn btn-primary" name="submit"><span class="glyphicon glyphicon-log-in"></span> ເຂົ້າສູ່ລະບົບ</button>
-                      
-                       @*<input class=" btn btn-primary" type="submit" name="submit" value="ເຂົ້າສູ່ລະບົບ" />*@
-                          
 
-                           
 
-                 
+                    <div class="form-group">
+                        @Html.Label("ຊື່ຜູ້ໃຊ້", new { @class = "control-label" })
+                        @Html.TextBox("username", null, new { @class = "form-control", @name = "phonenumber" })
+                        @* @Html.ValidationMessageFor(m => m.ItemName)*@
+                    </div>
+                    <div class="form-group">
+                        @Html.Label("ລະຫັດ", new { @class = "control-label" })
+                        @Html.Password("password", null, new { @class = "form-control", @name = "password" })
+                        @Html.Hidden("admin", "true")
+                        @* @Html.ValidationMessageFor(m => m.ItemName)*@
+                    </div>
+                    <button type="submit" class="btn btn-primary" name="submit"><span class="glyphicon glyphicon-log-in"></span> ເຂົ້າສູ່ລະບົບ</button>
+                    <button type="button" class="btn btn-primary" name="submit" onclick='window.location = "@Url.Action("CLogin","Account")"'><span class="glyphicon glyphicon-arrow-left"></span> ກັບຄືນ</button>
+
+                    @*<input class=" btn btn-primary" type="submit" name="submit" value="ເຂົ້າສູ່ລະບົບ" />*@
 
 
 
-                  
+
+
+
+
+
+
 }
 
                     </div>

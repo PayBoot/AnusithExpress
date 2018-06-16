@@ -6,6 +6,8 @@ namespace AnousithExpress.Data.SingleViewModels
     {
         public int? Id { get; set; }
 
+        [Required(ErrorMessage ="ກະລຸນາຕື່ມຊື່ ແລະນາມສະກຸນ")]
+        public string Name { get; set; }
         [Required(ErrorMessage = "ກະລຸນາຕື່ມເບີໂທ"), MinLength(8, ErrorMessage = "ກະລຸນາຕື່ມເບີໂທ 8 ໂຕເລກ"), MaxLength(8, ErrorMessage = "ກະລຸນາຕື່ມເບີໂທ 8 ໂຕເລກ")]
         public string Phonenumber { get; set; }
         [Required(ErrorMessage = "ກະລຸນາໄສ່ລະຫັດຢ່າງໜ້ອຍ 6 ໂຕເລກ"), MinLength(6)]

@@ -76,6 +76,7 @@ namespace AnousithExpress.Data.Implementation
                     TbCustomer customer = new TbCustomer
                     {
                         Phonenumber = model.Phonenumber,
+                        Name = model.Name,
                         Password = model.Password,
                         Address = model.Address,
                         BCEL_Baht = model.BCEL_Baht,

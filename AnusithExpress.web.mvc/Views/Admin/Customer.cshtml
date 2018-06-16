@@ -9,14 +9,20 @@
 @foreach (var customer in Model)
 {
 <div>
-    <input type="button" onclick="window.location = '@Url.Action("CustomerDetail","Admin", new { customerId= customer.CustomerId})'" value="@customer.CustomerId" />
-    <span>@customer.CountItems</span>
-    <span>@customer.CountItemsToPickup</span>
-    <span>@customer.CountItemsPickedUp</span>
-    <span>@customer.CountItemsInProcess</span>
-    <span>@customer.CountItemsToSend</span>
-    <span>@customer.CountItemsAlreadySend</span>
-    <span>@customer.CountItemsCannotContact</span>
+    <div class="row">
+        <div class="col-md-2">
+            <input type="button" onclick="window.location = '@Url.Action("CustomerDetail","Admin", new { customerId= customer.CustomerId})'" value="@customer.CustomerId" />
+            <span>@customer.CountItems</span>
+            <span>@customer.CountItemsToPickup</span>
+            <span>@customer.CountItemsPickedUp</span>
+            <span>@customer.CountItemsInProcess</span>
+            <span>@customer.CountItemsToSend</span>
+            <span>@customer.CountItemsAlreadySend</span>
+            <span>@customer.CountItemsCannotContact</span>
+        </div>
+
+    </div>
+    
 </div> 
 }
 

@@ -163,6 +163,7 @@
     <Content Include="Content\bootstrap-grid.css.map" />
     <Content Include="LaoFont\phetsarath_ot.svg" />
     <Content Include="LaoFont\style.css" />
+    <Content Include="Reports\frmbill.aspx" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="LaoFont\phetsarath_ot.eot" />
@@ -243,6 +244,13 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>billdelivery.rpt</DependentUpon>
       <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Reports\frmbill.aspx.cs">
+      <DependentUpon>frmbill.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Reports\frmbill.aspx.designer.cs">
+      <DependentUpon>frmbill.aspx</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>

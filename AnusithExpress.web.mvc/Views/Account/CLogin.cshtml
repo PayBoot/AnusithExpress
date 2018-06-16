@@ -8,35 +8,60 @@
 <head>
     <meta name="viewport" content="width=device-width" />
     <title></title>
+    <link href="~/Styles/css/bootstrap.css" rel="stylesheet" />
+    <link href="~/Styles/css/styles.css" rel="stylesheet" />
+    <style type="text/css">
+        @@import url("/LaoFont/style.css");
+
+        * {
+            font-family: Phetsarath_OT;
+            font-size: 18px;
+        }
+    </style>
 </head>
 <body>
-    <div>
-        <div>
-            @using (Html.BeginForm("CLogin", "Account", FormMethod.Post, new { @class = "form-control" }))
-            {
-                <table>
-                    <tbody>
-                        <tr> 
-                            <td>@Html.Label("ເບີໂທລະສັບ", new { @class = "" })</td>
-                            <td>@Html.TextBox("phonenumber", "", new { @clas = "", @name = "phonenumber" })</td>
-                        </tr>
-                        <tr>
-                            <td>@Html.Label("ລະຫັດຜ່ານ", new { @class = "" })</td>
-                            <td>@Html.Password("password", "", new { @clas = "form-control", @name = "password" })</td>
-                        </tr>
-                    </tbody>
-                </table>
-                
-                
-               
-               
-                <input type="submit" name="submit" value="ເຂົ້າສູ່ລະບົບ" />
-                <a href="@Url.Action("CRegister","Account", null)">ສະຫມັກສະມາຊິກ</a>
-            }
-        </div>
-        <div>
-            <a href="@Url.Action("ULogin","Account", null)">ລ໋ອກອີນໃນສະຖານະຜູ້ໃຊ້ລະບົບ</a>
-        </div>
-    </div>
+
+    <div class="row">
+        <div class="col-xs-10 col-xs-offset-1 col-sm-8 col-sm-offset-2 col-md-4 col-md-offset-4">
+            <div class="login-panel panel panel-info ">
+                <div class="panel-heading">ອານຸສິດຂົນສົ່ງ</div>
+                <div class="panel-body">
+                    @using (Html.BeginForm("CLogin", "Account"))
+    {
+
+
+                <div class="form-group">
+                    <td>@Html.Label("ເບີໂທລະສັບ", new { @class = "control-label" })</td>
+                    <td>@Html.TextBox("phonenumber", "", new { @class = "form-control", @name = "phonenumber" })</td>
+                    @* @Html.ValidationMessageFor(m => m.ItemName)*@
+                </div>
+                <div class="form-group">
+                    <td>@Html.Label("ລະຫັດຜ່ານ", new { @class = "control-label" })</td>
+                    <td>@Html.Password("password", "", new { @class = "form-control", @name = "password" })</td>
+                    @* @Html.ValidationMessageFor(m => m.ItemName)*@
+                </div>
+
+                <button class=" btn btn-primary " type="submit" name="submit"><span class="glyphicon glyphicon-log-in"></span> ເຂົ້າສູ່ລະບົບ</button>
+                <a class="btn btn-default" href="@Url.Action("CRegister","Account", null)"><span class="glyphicon glyphicon-registration-mark"></span> ສະຫມັກສະມາຊິກ</a>
+                <div style="margin-top:5px;">
+                    <a class="btn btn-secondary" href="@Url.Action("ULogin","Account", null)">ລ໋ອກອີນໃນສະຖານະຜູ້ໃຊ້ລະບົບ</a>
+                </div>
+                @*<input class=" btn btn-primary" type="submit" name="submit" value="ເຂົ້າສູ່ລະບົບ" />*@
+
+}
+
+                </div>
+            </div>
+        </div><!-- /.col-->
+    </div><!-- /.row -->
+
+
+
+
+
+
+
+    <script src="~/Styles/js/jquery-1.11.1.min.js"></script>
+    <script src="~/Styles/js/bootstrap.js"></script>
 </body>
 </html>
