@@ -169,7 +169,9 @@ namespace AnousithExpress.Data.Implementation
                                 dbtransact.Rollback();
                                 return false;
                             };
+                            db.Entry(item).State = EntityState.Modified;
                             item.Status = db.tbItemStatuses.FirstOrDefault(s => s.Id == 3);
+                            item.ReceiveDate = DateTime.Now;
                             db.SaveChanges();
                         }
                         dbtransact.Commit();
@@ -211,6 +213,11 @@ namespace AnousithExpress.Data.Implementation
             {
                 if (itemsUtility.GetItemById(itemId, db) != null)
                 {
+                    var item = itemsUtility.GetItemById(itemId, db);
+                    db.Entry(item).State = EntityState.Modified;
+                    item.Status = db.tbItemStatuses.FirstOrDefault(s => s.Id == 6);
+                    item.SendingDate = DateTime.Now;
+                    db.SaveChanges();
                     return true;
                 }
                 return true;
