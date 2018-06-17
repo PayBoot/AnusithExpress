@@ -88,12 +88,12 @@ namespace AnusithExpress.web.mvc.Controllers
                     bool result = _custService.Create(model);
                     if (result == true)
                     {
-                        ViewBag.Message = "ລົງທະບຽນສຳເລັດ";
+                        ViewBag.Message = "ລົງທະບຽນສໍາເລັດ";
                         return View("CRegister");
                     }
                     else
                     {
-                        ViewBag.Message = "ລົງທະບຽນບໍ່ສຳເລັດ ກະລຸນາກວດເບີ່ງຂໍ້ມູນຂອງທ່ານ";
+                        ViewBag.Message = "ລົງທະບຽນບໍ່ສໍາເລັດ ກະລຸນາກວດເບີ່ງຂໍ້ມູນຂອງທ່ານ";
                         return View("CRegister", model);
                     }
 
