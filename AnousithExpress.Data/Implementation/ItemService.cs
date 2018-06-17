@@ -427,16 +427,29 @@ namespace AnousithExpress.Data.Implementation
             using (var db = new EntityContext())
             {
 
-                var item = itemsUtility.GetItemById(itemId, db);
-                TbItemAllocation allocation = new TbItemAllocation
+                if (db.tbItemAllocations.Include(x => x.Item).FirstOrDefault(x => x.Item.Id == itemId) != null)
                 {
-                    Item = item,
-                    Route = db.tbRoutes.FirstOrDefault(x => x.Id == routeId),
-                    Time = db.tbTimes.FirstOrDefault(x => x.Id == timeId)
-                };
-                db.tbItemAllocations.Add(allocation);
-                db.SaveChanges();
-                return true;
+                    var item = db.tbItemAllocations.Include(x => x.Item).FirstOrDefault(x => x.Item.Id == itemId);
+                    db.Entry(item).State = EntityState.Modified;
+                    item.Route = db.tbRoutes.FirstOrDefault(x => x.Id == routeId);
+                    item.Time = db.tbTimes.FirstOrDefault(x => x.Id == timeId);
+                    db.SaveChanges();
+                    return true;
+                }
+                else
+                {
+                    var item = itemsUtility.GetItemById(itemId, db);
+                    TbItemAllocation allocation = new TbItemAllocation
+                    {
+                        Item = item,
+                        Route = db.tbRoutes.FirstOrDefault(x => x.Id == routeId),
+                        Time = db.tbTimes.FirstOrDefault(x => x.Id == timeId)
+                    };
+                    db.tbItemAllocations.Add(allocation);
+                    db.SaveChanges();
+                    return true;
+                }
+
 
             }
         }
