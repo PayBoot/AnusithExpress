@@ -34,5 +34,7 @@ namespace AnousithExpress.Data.Interfaces
         List<TbTime> GetTime();
 
 
+        bool AllocateItem(int itemId, int routeId, int timeId);
+
     }
 }

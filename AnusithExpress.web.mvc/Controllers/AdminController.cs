@@ -1,6 +1,10 @@
 ﻿using AnousithExpress.Data.Implementation;
 using AnousithExpress.Data.SingleViewModels;
+using AnusithExpress.web.mvc.Reports;
+using CrystalDecisions.CrystalReports.Engine;
 using System.Collections.Generic;
+using System.Data;
+using System.IO;
 using System.Web.Mvc;
 
 namespace AnusithExpress.web.mvc.Controllers
@@ -48,6 +52,8 @@ namespace AnusithExpress.web.mvc.Controllers
 
         public ActionResult CreateUpdateItem(int itemId = 0)
         {
+            var status = itemService.GetItemStatus();
+            ViewBag.Statuses = new SelectList(status, "Status", "Status");
             var itemModel = itemService.GetSingle(itemId);
             return View(itemModel);
         }
@@ -55,6 +61,8 @@ namespace AnusithExpress.web.mvc.Controllers
         [HttpPost]
         public ActionResult CreateUpdateItem(ItemSingleModel model)
         {
+            var status = itemService.GetItemStatus();
+            ViewBag.Statuses = new SelectList(status, "Status", "Status");
             if (ModelState.IsValid)
             {
                 if (model.Id > 0)
@@ -141,5 +149,51 @@ namespace AnusithExpress.web.mvc.Controllers
 
         }
 
+        public ActionResult Reportexport(int id)
+        {
+
+            var model = itemService.GetSingle(id);
+            BillingDataSet dataset = new BillingDataSet();
+            DataTable table = new DataTable();
+            table = dataset.Barcode;
+            ReportDocument report = new ReportDocument();
+            report.Load(Path.Combine(Server.MapPath("~/Reports/billdelivery.rpt")));
+            report.SetDataSource(table);
+            Response.Buffer = false;
+            Response.ClearContent();
+            Response.ClearHeaders();
+            Stream stream = report.ExportToStream
+                (CrystalDecisions.Shared.ExportFormatType.PortableDocFormat);
+            stream.Seek(0, SeekOrigin.Begin);
+            return File(stream, "application/pdf", "Barcode.pdf");
+        }
+
+        public ActionResult ItemList()
+        {
+            var model = itemService.GetAll();
+            return View(model);
+        }
+
+        public ActionResult Allocation(int itemId)
+        {
+            var route = itemService.GetRoute();
+            var time = itemService.GetTime();
+            ViewData["itemId"] = itemId;
+            ViewBag.Routes = new SelectList(route, "Id", "Route");
+            ViewBag.Times = new SelectList(time, "Id", "Time");
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult Allocation(int itemId, int Routes, int Times)
+        {
+            var route = itemService.GetRoute();
+            var time = itemService.GetTime();
+            ViewData["itemId"] = itemId;
+            ViewBag.Routes = new SelectList(route, "Id", "Route");
+            ViewBag.Times = new SelectList(time, "Id", "Time");
+            bool result = itemService.AllocateItem(itemId, Routes, Times);
+            return View(result);
+        }
     }
 }

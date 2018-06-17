@@ -1,0 +1,15 @@
+﻿
+@{
+    ViewBag.Title = "Allocation";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<h2>Allocation</h2>
+
+@using (Html.BeginForm("Allocation", "Admin", FormMethod.Post))
+{
+    @Html.TextBox("itemId", ViewData["itemId"])
+    @Html.DropDownList("Routes", ViewBag.Routes as SelectList, "ເລືອກ", new { @class = "form-control" })
+    @Html.DropDownList("Times", ViewBag.Times as SelectList, "ເລືອກ", new { @class = "form-control" })
+    <button type="submit" class="btn btn-primary">ບັນທຶກ</button>
+}

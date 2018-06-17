@@ -109,6 +109,7 @@ namespace AnousithExpress.Data.Implementation
                 items.ReceipverPhone = model.ReceipverPhone;
                 items.ReceiverAddress = model.ReceiverAddress;
                 items.ReceiverName = model.ReceiverName;
+                items.Descripttion = model.Description;
                 if (model.Status != null)
                 {
                     items.Status = db.tbItemStatuses.FirstOrDefault(s => s.Status == model.Status);
@@ -263,6 +264,10 @@ namespace AnousithExpress.Data.Implementation
                 using (var dbtransact = db.Database.BeginTransaction())
                 {
                     int itemstatus = 3;
+                    if (model.Status != null)
+                    {
+                        itemstatus = db.tbItemStatuses.FirstOrDefault(x => x.Status == model.Status).Id;
+                    }
                     if (model.CustomerId == 0)
                     {
                         model.CustomerId = db.tbCustomers.FirstOrDefault(x => x.Phonenumber == model.CustomerPhonenumber).Id;
@@ -289,6 +294,7 @@ namespace AnousithExpress.Data.Implementation
                 ReceipverPhone = model.ReceipverPhone,
                 ReceiverAddress = model.ReceiverAddress,
                 ReceiverName = model.ReceiverName,
+                Descripttion = model.Description
             };
             db.TbItems.Add(item);
             db.SaveChanges();
@@ -412,6 +418,25 @@ namespace AnousithExpress.Data.Implementation
                     TbItems item = CreateItemMethod(model, db, dbtransact, itemstatus);
                     return GetSingle(item.Id);
                 }
+
+            }
+        }
+
+        public bool AllocateItem(int itemId, int routeId, int timeId)
+        {
+            using (var db = new EntityContext())
+            {
+
+                var item = itemsUtility.GetItemById(itemId, db);
+                TbItemAllocation allocation = new TbItemAllocation
+                {
+                    Item = item,
+                    Route = db.tbRoutes.FirstOrDefault(x => x.Id == routeId),
+                    Time = db.tbTimes.FirstOrDefault(x => x.Id == timeId)
+                };
+                db.tbItemAllocations.Add(allocation);
+                db.SaveChanges();
+                return true;
 
             }
         }

@@ -9,13 +9,12 @@
 {
     
     <label>ສະຖານະ</label>
-    @Html.DropDownList("statusId", ViewBag.Statuses as SelectList,"ເລືອກ", new { @class="form-control" , @id ="statusId"})
+    @Html.DropDownList("statusId", ViewBag.Statuses as SelectList,"ເລືອກ", new { @class="form-control" , @id ="statusId", onchange = "this.form.submit();"})
     <label>ລູກຄ້າຫມາຍເລກ</label>
 
     @Html.TextBox("customerId", ViewData["customerId"], new  { @readonly=true, @id="customerId"})
-    <input type="submit" name="search" value="ຄົ້ນຫາ" />
 }
-<table>
+<table class="table table-borderless">
     <thead>
         <tr>
             <th>ເລກຕິດຕາມ</th>
@@ -43,6 +42,8 @@
                     <a onclick="DescriptionModal(@item.Id )">ໄສ່ລາຍລະອຽດເພີ່ມເຕີມ</a>
                     <a href="@Url.Action("DeleteItem","Admin", new { id = item.Id})" onclick="return confirm('ທ່ານແນ່ໃຈແລ້ວບໍ່');" )">ລຶບ</a>
                     <a href="@Url.Action("CreateUpdateItem","Admin", new { itemId = item.Id})">ປ່ຽນແປງ</a>
+                    <a href="@Url.Action("Reportexport","Admin", new { id = item.Id})">Barcode</a>
+                    <a href="@Url.Action("Allocation","Admin", new { itemId = item.Id})">ຈັດການເຄື່ອງສົ່ງ</a>
                 </td>
             </tr>
         }

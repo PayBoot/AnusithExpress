@@ -1,0 +1,48 @@
+﻿
+@{
+    ViewBag.Title = "ItemList";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<h2>ItemList</h2>
+
+
+@model List<AnousithExpress.Data.SingleViewModels.ItemSingleModel>
+
+<a href="@Url.Action("CreateUpdateItem","Admin")">ສ້າງລາຍການ</a>
+<table class="table table-borderless">
+    <thead>
+        <tr>
+            <th>ເລກຕິດຕາມ</th>
+            <th>ສີນຄ້າ</th>
+            <th>ສະຖານະ</th>
+            <th>ຊື່ຜູ້ຮັບ</th>
+            <th>ເບີໂທຜູ້ຮັບ</th>
+            <th>ທີ່ຢູ່ຜູ້ຮັບ</th>
+            <th>ລາຍລະອຽດເພີ່ມເຕີ</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.TrackingNumber</td>
+                <td>@item.ItemName</td>
+                <td>@item.Status</td>
+                <td>@item.ReceiverName</td>
+                <td>@item.ReceipverPhone</td>
+                <td>@item.ReceiverAddress</td>
+                <td>@item.Description</td>
+                <td>
+                    <a onclick="DescriptionModal(@item.Id )">ໄສ່ລາຍລະອຽດເພີ່ມເຕີມ</a>
+                    <a href="@Url.Action("DeleteItem","Admin", new { id = item.Id})" onclick="return confirm('ທ່ານແນ່ໃຈແລ້ວບໍ່');" )">ລຶບ</a>
+                    <a href="@Url.Action("CreateUpdateItem","Admin", new { itemId = item.Id})">ປ່ຽນແປງ</a>
+                    <a href="@Url.Action("Reportexport","Admin", new { id = item.Id})">Barcode</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+
+</table>
+

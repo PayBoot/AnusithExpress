@@ -17,46 +17,56 @@
         @Html.HiddenFor(m => m.Id)
         <div class="form-group">
             @Html.Label("ເບີໂທຜູ້ສົ່ງ")
-            @Html.TextBoxFor(m => m.CustomerPhonenumber)
+            @Html.TextBoxFor(m => m.CustomerPhonenumber, new { @class = "form-control" })
             @Html.ValidationMessageFor(m => m.CustomerPhonenumber)
         </div>
         <div class="form-group">
             @Html.Label("ນຳເບີລຸກຄ້າ")
-            @Html.TextBoxFor(m => m.CustomerId)
+            @Html.TextBoxFor(m => m.CustomerId, new { @class = "form-control" })
             @Html.ValidationMessageFor(m => m.CustomerId)
         </div>
         <div class="form-group">
             @Html.Label("ປະເພດສີນຄ້າ")
-            @Html.TextBoxFor(m => m.ItemName)
+            @Html.TextBoxFor(m => m.ItemName, new { @class = "form-control" })
             @Html.ValidationMessageFor(m => m.ItemName)
         </div>
         <div class="form-group">
+            @Html.Label("ສະຖານະ")
+            @Html.DropDownListFor(m => m.Status, ViewBag.Statuses as SelectList, "ເລືອກ", new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.Status)
+        </div>
+        <div class="form-group">
             @Html.Label("ຊື່ຜູ້ຮັບ")
-            @Html.TextBoxFor(m => m.ReceiverName)
+            @Html.TextBoxFor(m => m.ReceiverName, new { @class = "form-control" })
             @Html.ValidationMessageFor(m => m.ReceiverName)
         </div>
 
         <div class="form-group">
             @Html.Label("ເບີໂທຜູ້ຮັບ")
-            @Html.TextBoxFor(m => m.ReceipverPhone)
+            @Html.TextBoxFor(m => m.ReceipverPhone, new { @class = "form-control" })
             @Html.ValidationMessageFor(m => m.ReceipverPhone)
         </div>
         <div class="form-group">
             @Html.Label("ທີ່ຢູ່ຜູ້ຮັບ")
-            @Html.TextBoxFor(m => m.ReceiverAddress)
+            @Html.TextBoxFor(m => m.ReceiverAddress, new { @class = "form-control" })
             @Html.ValidationMessageFor(m => m.ReceiverAddress)
         </div>
-        <div class="form-control">
+        <div class="form-group">
+            @Html.Label("ລາຍລະອຽດເພີ່ມເຕີມ")
+            @Html.TextAreaFor(m => m.Description, new { @class="form-control" })
+            @Html.ValidationMessageFor(m => m.Description)
+        </div>
+        <div class="form-group">
             @Html.Label("ເກັບເງີນປາຍທາງ ສະກຸນເງີນກີບ")
-            @Html.TextBoxFor(m => m.ItemValue_Kip)
+            @Html.TextBoxFor(m => m.ItemValue_Kip, new { @class = "form-control" })
         </div>
-        <div class="form-control">
+        <div class="form-group">
             @Html.Label("ເກັບເງີນປາຍທາງ ສະກຸນເງີນບາດ")
-            @Html.TextBoxFor(m => m.ItemValue_Baht)
+            @Html.TextBoxFor(m => m.ItemValue_Baht, new { @class = "form-control" })
         </div>
-        <div class="form-control">
+        <div class="form-group">
             @Html.Label("ເກັບເງີນປາຍທາງ ສະກຸນເງີນໂດລ້າ")
-            @Html.TextBoxFor(m => m.ItemValue_Dollar)
+            @Html.TextBoxFor(m => m.ItemValue_Dollar, new { @class = "form-control" })
         </div>
         <input type="submit" name="submit" value="ບັນທຶກລາຍການ" />
         <a href="@Url.Action("Index","Customer")">ກັບໄປຫນ້າຫລັກ</a>

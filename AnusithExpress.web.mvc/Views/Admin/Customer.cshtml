@@ -9,7 +9,7 @@
 @foreach (var customer in Model)
 {
 <div>
-    <div class="row">
+  
         <div class="col-md-2">
             <input type="button" onclick="window.location = '@Url.Action("CustomerDetail","Admin", new { customerId= customer.CustomerId})'" value="@customer.CustomerId" />
             <span>@customer.CountItems</span>
@@ -21,7 +21,7 @@
             <span>@customer.CountItemsCannotContact</span>
         </div>
 
-    </div>
+  
     
 </div> 
 }
