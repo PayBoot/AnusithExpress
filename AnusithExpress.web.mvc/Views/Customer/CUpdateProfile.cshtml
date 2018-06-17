@@ -5,6 +5,7 @@
 }
 @model AnousithExpress.Data.SingleViewModels.CustomerSingleModel
 <h2>CUpdateProfile</h2>
+<button type="button" onclick='window.location = "@Url.Action("Index","Customer")"'>ກັບໄປຫນ້າຫລັກ</button>
 
 <div>
     @using (Html.BeginForm("CUpdateProfile", "Customer", FormMethod.Post))

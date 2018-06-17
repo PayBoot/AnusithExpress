@@ -56,7 +56,7 @@ namespace AnousithExpress.Data.Implementation
             using (var db = new EntityContext())
             {
                 var items = itemsUtility.GetAllItem(db).ToList(); //Get data from database
-                var model = itemsUtility.ItemListModelProperty(items); //post data to model
+                var model = itemsUtility.AssingItemsProperty(items); //post data to model
                 return model;
             }
         }
@@ -66,7 +66,7 @@ namespace AnousithExpress.Data.Implementation
             using (var db = new EntityContext())
             {
                 var items = itemsUtility.GetAllItem(db).Where(i => i.Customer.Id == CustId).ToList();
-                var model = itemsUtility.ItemListModelProperty(items);
+                var model = itemsUtility.AssingItemsProperty(items);
                 return model;
             }
         }
@@ -76,7 +76,7 @@ namespace AnousithExpress.Data.Implementation
             using (var db = new EntityContext())
             {
                 var items = itemsUtility.GetAllItem(db).Where(i => i.Status.Id == 2 && i.Customer.Id == CustId).ToList();
-                var model = itemsUtility.ItemListModelProperty(items);
+                var model = itemsUtility.AssingItemsProperty(items);
                 return model;
             }
         }
@@ -198,7 +198,7 @@ namespace AnousithExpress.Data.Implementation
                     .Where(i => i.Route.Id == routeId && i.Time.Id == timeId);
                 if (item != null)
                 {
-                    var model = itemsUtility.ItemListModelProperty(item.ToList());
+                    var model = itemsUtility.AssignItemsProperty(item.ToList());
                     return model;
                 }
                 else
@@ -358,7 +358,7 @@ namespace AnousithExpress.Data.Implementation
                 var items = itemsUtility.GetAllItem(db).Where(i => i.Customer.Id == CustId && i.Status.Id == 6);
                 if (items != null)
                 {
-                    var model = itemsUtility.ItemListModelProperty(items.ToList());
+                    var model = itemsUtility.AssingItemsProperty(items.ToList());
                     return model;
                 }
                 else
@@ -378,7 +378,7 @@ namespace AnousithExpress.Data.Implementation
                         && !db.tbConsolidatedItems.Select(c => c.Items.Id).Contains(i.Id));
                 if (items != null)
                 {
-                    var model = itemsUtility.ItemListModelProperty(items.ToList());
+                    var model = itemsUtility.AssingItemsProperty(items.ToList());
                     return model;
                 }
                 else

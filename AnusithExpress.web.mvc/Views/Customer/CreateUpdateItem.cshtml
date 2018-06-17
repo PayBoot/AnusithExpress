@@ -5,9 +5,10 @@
 }
 @model AnousithExpress.Data.SingleViewModels.ItemSingleModel
 <h2>CreateItem</h2>
-<div>
+<div class="alert-danger">
     @ViewBag.Message
 </div>
+<button onclick='window.location = "@Url.Action("Index","Customer")"'>ກັບໄປຫນ້າຫລັກ</button>
 <div>
     @using (Html.BeginForm("CreateUpdateItem", "Customer", FormMethod.Post))
     {

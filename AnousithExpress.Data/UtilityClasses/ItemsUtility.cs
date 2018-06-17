@@ -8,7 +8,7 @@ namespace AnousithExpress.Data.UtilityClasses
 {
     public class ItemsUtility
     {
-        public List<ItemSingleModel> ItemListModelProperty(List<TbItems> items)
+        public List<ItemSingleModel> AssingItemsProperty(List<TbItems> items)
         {
             return items.Select(r => new ItemSingleModel
             {
@@ -32,7 +32,7 @@ namespace AnousithExpress.Data.UtilityClasses
                 isDeleted = r.isDeleted
             }).ToList();
         }
-        public List<ItemSingleModel> ItemListModelProperty(List<TbItemAllocation> items)
+        public List<ItemSingleModel> AssignItemsProperty(List<TbItemAllocation> items)
         {
             return items.Select(r => new ItemSingleModel
             {

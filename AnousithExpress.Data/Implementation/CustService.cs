@@ -111,7 +111,7 @@ namespace AnousithExpress.Data.Implementation
                 List<ItemSingleModel> itemsModelSource = new List<ItemSingleModel>();
                 if (items != null)
                 {
-                    itemsModelSource = itemsUtility.ItemListModelProperty(items);
+                    itemsModelSource = itemsUtility.AssingItemsProperty(items);
                 };
 
                 CustomerProfileModel profile = new CustomerProfileModel

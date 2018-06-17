@@ -46,7 +46,7 @@ namespace AnousithExpress.Data.Implementation
             {
                 var items = itemsUtility.GetAllItem(db)
                     .Where(x => x.Customer.Id == CustId && x.Status.Id == statusId);
-                var model = itemsUtility.ItemListModelProperty(items.ToList());
+                var model = itemsUtility.AssingItemsProperty(items.ToList());
                 return model;
 
             }
@@ -58,7 +58,7 @@ namespace AnousithExpress.Data.Implementation
             {
                 var items = itemsUtility.GetAllItem(db)
                     .Where(x => x.Customer.Id == CustId);
-                var model = itemsUtility.ItemListModelProperty(items.ToList());
+                var model = itemsUtility.AssingItemsProperty(items.ToList());
                 return model;
             }
         }
