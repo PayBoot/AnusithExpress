@@ -4,49 +4,55 @@
     Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
 }
 @model AnousithExpress.Data.SingleViewModels.ItemSingleModel
-<h2>CreateItem</h2>
+<h2></h2>
 <div>
     @ViewBag.Message
 </div>
 <div>
-    @using (Html.BeginForm("CreateUpdateItem", "Customer", FormMethod.Post))
+  <div class="panel panel-primary">
+      <div class=" panel panel-heading"><span class="glyphicon glyphicon-cog"></span> ເພີ້ມລາຍການ</div>
+      <div class=" panel panel-body">
+          @using (Html.BeginForm("CreateUpdateItem", "Customer", FormMethod.Post))
     {
-        @Html.HiddenFor(m => m.Id)
-        <div class="form-group">
-            @Html.Label("ປະເພດສີນຄ້າ")
-            @Html.TextBoxFor(m => m.ItemName)
-            @Html.ValidationMessageFor(m => m.ItemName)
-        </div>
-        <div class="form-group">
-            @Html.Label("ຊື່ຜູ້ຮັບ")
-            @Html.TextBoxFor(m => m.ReceiverName)
-            @Html.ValidationMessageFor(m => m.ReceiverName)
-        </div>
-        <div class="form-group">
-            @Html.Label("ເບີໂທຜູ້ຮັບ")
-            @Html.TextBoxFor(m => m.ReceipverPhone)
-            @Html.ValidationMessageFor(m => m.ReceipverPhone)
-        </div>
-        <div class="form-group">
-            @Html.Label("ທີ່ຢູ່ຜູ້ຮັບ")
-            @Html.TextBoxFor(m => m.ReceiverAddress)
-            @Html.ValidationMessageFor(m => m.ReceiverAddress)
-        </div>
-        <div class="form-control">
-            @Html.Label("ເກັບເງີນປາຍທາງ ສະກຸນເງີນກີບ")
-            @Html.TextBoxFor(m => m.ItemValue_Kip)
-        </div>
-        <div class="form-control">
-            @Html.Label("ເກັບເງີນປາຍທາງ ສະກຸນເງີນບາດ")
-            @Html.TextBoxFor(m => m.ItemValue_Baht)
-        </div>
-        <div class="form-control">
-            @Html.Label("ເກັບເງີນປາຍທາງ ສະກຸນເງີນໂດລ້າ")
-            @Html.TextBoxFor(m => m.ItemValue_Dollar)
-        </div>
-        <input type="submit" name="submit" value="ບັນທຶກລາຍການ" />
-        <a href="@Url.Action("ViewItems","Customer")">ກັບໄປຫາລາຍການສີນຄ້າ</a>
-        <a href="@Url.Action("Index","Customer")">ກັບໄປຫນ້າຫລັກ</a>
-    }
+      @Html.HiddenFor(m => m.Id)
+      <div class="form-group">
+          @Html.Label("ປະເພດສີນຄ້າ")
+          @Html.TextBoxFor(m => m.ItemName, new { @class = "form-control" })
+          @Html.ValidationMessageFor(m => m.ItemName)
+      </div>
+      <div class="form-group">
+          @Html.Label("ຊື່ຜູ້ຮັບ")
+          @Html.TextBoxFor(m => m.ReceiverName, new { @class = "form-control" })
+          @Html.ValidationMessageFor(m => m.ReceiverName)
+      </div>
+      <div class="form-group">
+          @Html.Label("ເບີໂທຜູ້ຮັບ")
+          @Html.TextBoxFor(m => m.ReceipverPhone, new { @class = "form-control" })
+          @Html.ValidationMessageFor(m => m.ReceipverPhone)
+      </div>
+      <div class="form-group">
+          @Html.Label("ທີ່ຢູ່ຜູ້ຮັບ")
+          @Html.TextBoxFor(m => m.ReceiverAddress, new { @class = "form-control" })
+          @Html.ValidationMessageFor(m => m.ReceiverAddress)
+      </div>
+      <div class="form-group">
+          @Html.Label("ເກັບເງີນປາຍທາງ ສະກຸນເງີນກີບ")
+          @Html.TextBoxFor(m => m.ItemValue_Kip, new { @class = "form-control" })
+
+      </div>
+      <div class="form-group">
+          @Html.Label("ເກັບເງີນປາຍທາງ ສະກຸນເງີນບາດ")
+          @Html.TextBoxFor(m => m.ItemValue_Baht, new { @class = "form-control" })
+      </div>
+      <div class="form-group">
+          @Html.Label("ເກັບເງີນປາຍທາງ ສະກຸນເງີນໂດລ້າ")
+          @Html.TextBoxFor(m => m.ItemValue_Dollar, new { @class = "form-control" })
+      </div>
+      <button class="btn btn-primary" type="submit" name="submit" value=""><span class="glyphicon glyphicon-saved"></span> ບັນທຶກລາຍການ</button>
+      <a class=" btn btn-success" href="@Url.Action("ViewItems","Customer")"><span class="glyphicon glyphicon-arrow-left"></span> ກັບໄປຫາລາຍການສີນຄ້າ</a>
+      <a class=" btn btn-info" href="@Url.Action("Index","Customer")"><span class="glyphicon glyphicon-home"></span> ກັບໄປຫນ້າຫລັກ</a>
+}
+      </div>
+  </div>
 
 </div>

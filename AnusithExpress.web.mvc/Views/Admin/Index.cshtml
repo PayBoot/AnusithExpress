@@ -4,16 +4,27 @@
     Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
 }
 
-<h2>Index</h2>
+<h2></h2>
 
 <div>
-    <div>ສີນຄ້າຕ້ອງໄປຮັບ</div>
+    <div><span class="glyphicon glyphicon-home"></span> ຫນ້າຫລັກ</div>
  
 </div>
-<a href="@Url.Action("Accounts","AdminAccount")">ບັນຊີຜູ້ໃຊ້ງານ</a>
+<div class="panel" style="font-weight:bold;">
+    <div class="panel panel-body">
+        <div class="row">
+            <div class="col-md-3"><a class="btn btn-primary" style=" height:100%; width:100%; padding:50px; margin:5px;" href="@Url.Action("Accounts","AdminAccount")"><span class="glyphicon glyphicon-user"></span> ບັນຊີຜູ້ໃຊ້ງານ</a></div>
+            <div class="col-md-3"><a class=" btn btn-success" style=" height:100%; width:100%; padding:50px;margin:5px;" href="@Url.Action("Customer","Admin")"><span class="fa fa-xl fa-users color-teal"></span> ລຸກຄ້າ</a></div>
+            <div class="col-md-3"><a class=" btn btn-info" style=" height:100%; width:100%; padding:50px;margin:5px;" href="@Url.Action("CreateUpdateItem","Admin")"><span class="glyphicon glyphicon-shopping-cart"></span> ສ້າງສີນຄ້າ</a></div>
+            <div class="col-md-3"><a class=" btn btn-warning" style=" height:100%; width:100%; padding:50px;margin:5px;" href="@Url.Action("Index","Consolidate")"> <span class="fa fa-xl fa-list color-teal "></span> ສັງລວມ</a></div>
+        </div>
+    </div>
+    
 
-<a href="@Url.Action("Customer","Admin")">ລຸກຄ້າ</a>
+</div>
 
-<a href="@Url.Action("CreateUpdateItem","Admin")">ສ້າງສີນຄ້າ</a>
 
-<a href="@Url.Action("Index","Consolidate")">ສັງລວມ</a>
+
+
+
+
