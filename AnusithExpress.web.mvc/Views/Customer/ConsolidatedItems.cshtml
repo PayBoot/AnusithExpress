@@ -5,30 +5,34 @@
 }
 @model AnousithExpress.Data.SingleViewModels.ConsolidatedItemsModel
 <h2>ConsolidatedItems</h2>
+<div class="panel">
+    <div class=" panel panel-body">
 
-ນຳເບີສັງລວມ<span>@Model.ConsolidationNumber</span>
-ຊື່ລຸກຄ້າ<span>@Model.Customername</span>
-ເບີຕິດຕໍ່ <span>@Model.CustomerPhonenumber</span>
+        ນຳເບີສັງລວມ<span>@Model.ConsolidationNumber</span>
+        ຊື່ລຸກຄ້າ<span>@Model.Customername</span>
+        ເບີຕິດຕໍ່ <span>@Model.CustomerPhonenumber</span>
 
-          <table class="table table-bordered">
-              <thead>
-                  <tr>
-                      <th>ເລກຕິດຕາມ</th>
-                      <th>ປະເພດສີນຄ້າ</th>
-                      <th>ສະຖານະ</th>
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>ເລກຕິດຕາມ</th>
+                    <th>ປະເພດສີນຄ້າ</th>
+                    <th>ສະຖານະ</th>
 
-                  </tr>
-              </thead>
-              <tbody>
-                  @foreach (var item in Model.Items)
-                  {
-                      <tr>
-                          <td>@item.TrackingNumber</td>
-                          <td>@item.ItemName</td>
-                          <td>@item.Status</td>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.Items)
+            {
+                <tr>
+                    <td>@item.TrackingNumber</td>
+                    <td>@item.ItemName</td>
+                    <td>@item.Status</td>
 
-                      </tr>
-                  }
-              </tbody>
-          </table>
-          <input onclick='window.location = "@Url.Action("ConsolidatedList","Customer")"' type="button" name="name" value="ກັບຄືນ" />
+                </tr>
+        }
+            </tbody>
+        </table>
+        <button class="btn btn-success" onclick='window.location = "@Url.Action("ConsolidatedList","Customer")"' type="button" name="name" value="">ກັບຄືນ</button>
+    </div>
+</div>

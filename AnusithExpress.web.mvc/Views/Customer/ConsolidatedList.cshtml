@@ -5,39 +5,44 @@
 }
 @model List<AnousithExpress.Data.SingleViewModels.ConsolidateSingleModel>
 
-<h2>ConsolidatedList</h2>
+<h2></h2>
+<div class="panel">
+    <div class="panel panel-body">
 
-@using (Html.BeginForm("ConsolidatedList", "Customer", FormMethod.Get))
-{
-    <label>ແຕ່</label>
-    <input type="date" name="searchDateFrom" />
-    <label>ຫາ</label>
-    <input type="date" name="searchDateTo" />
-    <button type="submit">ຄົ້ນຫາ</button>
-    <button type="button" onclick='window.location = "@Url.Action("Index","Customer")"'>ກັບໄປຫນ້າຫລັກ</button>
+        @using (Html.BeginForm("ConsolidatedList", "Customer", FormMethod.Get))
+    {
+        <label>ແຕ່</label>
+        <input class=" form-control" type="date" name="searchDateFrom" value="@DateTime.Now" />
+        <label>ຫາ</label>
+        <input class=" form-control" type="date" name="searchDateTo" />
+        <button class=" btn btn-success" type="submit"><span class=" glyphicon glyphicon-search"></span> ຄົ້ນຫາ</button>
+        <button class="btn btn-primary" type="button" onclick='window.location = "@Url.Action("Index","Admin")"'><span class=" glyphicon glyphicon-home"></span> ກັບໄປຫນ້າຫລັກ</button>
 }
 
-<table class="table table-borderless">
-    <thead>
-        <tr>
-            <th>ເລກທີ</th>
-            <th>ຈຳນວນເຄື່ອງ</th>
-            <th>ວັນທີ</th>
-            <th>ຄ່າບໍລິການ</th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>@item.ConsolidateNumber</td>
-                <td>@item.Amount</td>,
-                <td>@item.ConsolidateDate</td>
-                <td>@item.Fee</td>
-                <td><a class="btn btn-danger" href="@Url.Action("ConsolidatedItems","Customer", new { consolidatedId = item.Id })">ເນື່ອໃນ</a></td>
-            </tr>
+        <table class="table table-borderless">
+            <thead>
+                <tr>
+                    <th>ເລກທີ</th>
+                    <th>ຈຳນວນເຄື່ອງ</th>
+                    <th>ວັນທີ</th>
+                    <th>ຄ່າບໍລິການ</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.ConsolidateNumber</td>
+                    <td>@item.Amount</td>,
+                    <td>@item.ConsolidateDate</td>
+                    <td>@item.Fee</td>
+                    <td><a class="btn btn-danger" href="@Url.Action("ConsolidatedItems","Customer", new { consolidatedId = item.Id })">ເນື່ອໃນ</a></td>
+                </tr>
         }
 
-    </tbody>
-</table>
+            </tbody>
+        </table>
+
+    </div>
+</div>

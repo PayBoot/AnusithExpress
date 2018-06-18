@@ -4,46 +4,51 @@
     Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
 }
 @model List<AnousithExpress.Data.SingleViewModels.ItemSingleModel>
-<h2>ViewItems</h2>
+<h2></h2>
 <div>
     @ViewBag.Message
 </div>
-<button onclick='window.location = "@Url.Action("Index","Customer")"'>ກັບໄປຫນ້າຫລັກ</button>
-<div>
-    <table class="table table-bordered">
-        <thead>
-            <tr>
-                <th>ເລກຕິດຕາມ</th>
-                <th>ປະເພດສີນຄ້າ</th>
-                <th>ສະຖານະ</th>
-                <th>ລືບ ຫລື ປ່ຽນແປງ</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model)
-            {
-                <tr>
-                    <td>@item.TrackingNumber</td>
-                    <td>@item.ItemName</td>
-                    <td>@item.Status</td>
-                    <td>
-                        @if (item.Status == "ຢູ່ຮ້ານ")
+
+<div class="panel">
+    <div class="panel panel-body">
+        <div>
+            <button style="margin-bottom:5px;" class=" btn btn-primary" onclick='window.location = "@Url.Action("Index","Admin")"'><span class="glyphicon glyphicon-home"></span> ກັບໄປຫນ້າຫລັກ</button>
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>ເລກຕິດຕາມ</th>
+                        <th>ປະເພດສີນຄ້າ</th>
+                        <th>ສະຖານະ</th>
+                        <th>ລືບ ຫລື ປ່ຽນແປງ</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@item.TrackingNumber</td>
+                        <td>@item.ItemName</td>
+                        <td>@item.Status</td>
+                        <td>
+                            @if (item.Status == "ຢູ່ຮ້ານ")
                         {
                             @:<a class="btn btn-danger" href="@Url.Action("DeleteItem","Customer", new { id = item.Id })" onclick="return confirm('ແນ່ໃຈແລ້ວບໍ່')">ລືບ</a>
                             <a class="btn btn-danger" href="@Url.Action("CreateUpdateItem","Customer", new { id = item.Id})">ປ່ຽນແປງ</a>
                             <a class="btn btn-danger" href="@Url.Action("ConfirmItem", "Customer", new { id = item.Id })">ຢືນຢັນ</a>
-                        }
-                        @if (item.Status == "ຢືນຢັນ")
+                    }
+                            @if (item.Status == "ຢືນຢັນ")
                         {
                             @:<a class="btn btn-danger" href="@Url.Action("UnConfirmItem", "Customer", new { id = item.Id })">ປົດການຢືນຢັນ</a>
-                        }
+                    }
 
-                    </td>
-                </tr>
+                        </td>
+                    </tr>
             }
-        </tbody>
-      
+                </tbody>
 
-    </table>
+
+            </table>
+        </div>
+       @* <button class=" btn btn-primary" onclick='window.location = "@Url.Action("Index","Customer")"'>ກັບໄປຫນ້າຫລັກ</button>*@
+    </div>
 </div>
-<button onclick='window.location = "@Url.Action("Index","Customer")"'>ກັບໄປຫນ້າຫລັກ</button>
