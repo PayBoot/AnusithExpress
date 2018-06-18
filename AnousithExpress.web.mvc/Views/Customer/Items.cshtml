@@ -1,0 +1,60 @@
+﻿
+@{
+    ViewBag.Title = "Items";
+}
+@model List<AnousithExpress.DataEntry.ViewModels.Customer.ItemsModel>
+@using (Html.BeginForm(new { @id = "FormItemTable" }))
+{
+<div class="row" style="margin-top:10px;">
+    <div class="row">
+        <div class="col-md-3">
+            <label>ສະຖານະ</label>
+            @Html.DropDownList("status", ViewBag.Status as SelectList, "ທັງຫມົດ", new { @class = "form-control", @id = "status" })
+        </div>
+        <div class="col-md-3">
+            <label>ມື້ສ້າງລາຍການ</label>
+            <input type="date" name="createDate" id="createDate" class="form-control" />
+        </div>
+        <div class="col-md-3">
+            <label>ມື້ຢືນຢັນ</label>
+            <input type="date" name="submitDate" id="submitDate" class="form-control" />
+        </div>
+    </div>
+    
+    <div class="row">
+        <div class="col-md-12">
+            <button type="button" onclick="RenderItemTable()" class="btn btn-info">ຄົ້ນຫາ</button>
+
+            <a class="btn btn-success" href="@Url.Action("Index","Customer")">ກັບໄປຫນ້າຫລັກ</a>
+        </div>
+       
+    </div>
+</div>
+
+}
+<div id="TableContent">
+  @Html.Partial("ItemsTable", Model)
+</div>
+
+<script>
+    function RenderItemTable() {
+        $.ajax({
+            url: "/Customer/ItemsTable",
+            data: {
+                status: $("#status").val(),
+                createDate: $("#createDate").val(),
+                submitDate: $("#submitDate").val()
+            },
+            type: "POST",
+            datatype: "json",
+            success: function (r) {
+                $("#TableContent").html(r);
+                
+            },
+            error: function () {
+                alert("Server error");
+            }
+        });
+    }
+</script>
+

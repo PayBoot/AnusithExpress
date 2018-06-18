@@ -190,12 +190,21 @@ namespace AnousithExpress.Data.Implementation
             }
         }
 
-        public List<ItemSingleModel> GetToSendItems(int routeId, int timeId)
+        public List<ItemSingleModel> GetToSendItems(int routeId, int timeId, DateTime? dateToDeliver)
         {
             using (var db = new EntityContext())
             {
-                var item = itemsUtility.GetAllItemAllocation(db)
-                    .Where(i => i.Route.Id == routeId && i.Time.Id == timeId);
+                IQueryable<TbItemAllocation> item;
+                if (dateToDeliver == null)
+                {
+                    item = itemsUtility.GetAllItemAllocation(db)
+                   .Where(i => i.Route.Id == routeId && i.Time.Id == timeId);
+                }
+                else
+                {
+                    item = itemsUtility.GetAllItemAllocation(db)
+                   .Where(i => i.Route.Id == routeId && i.Time.Id == timeId && i.DateToDeliver == dateToDeliver);
+                }
                 if (item != null)
                 {
                     var model = itemsUtility.AssignItemsProperty(item.ToList());
@@ -422,7 +431,7 @@ namespace AnousithExpress.Data.Implementation
             }
         }
 
-        public bool AllocateItem(int itemId, int routeId, int timeId)
+        public bool AllocateItem(int itemId, int routeId, int timeId, DateTime dateToDeliver)
         {
             using (var db = new EntityContext())
             {
@@ -433,6 +442,7 @@ namespace AnousithExpress.Data.Implementation
                     db.Entry(item).State = EntityState.Modified;
                     item.Route = db.tbRoutes.FirstOrDefault(x => x.Id == routeId);
                     item.Time = db.tbTimes.FirstOrDefault(x => x.Id == timeId);
+                    item.DateToDeliver = dateToDeliver;
                     db.SaveChanges();
                     return true;
                 }
@@ -443,7 +453,9 @@ namespace AnousithExpress.Data.Implementation
                     {
                         Item = item,
                         Route = db.tbRoutes.FirstOrDefault(x => x.Id == routeId),
-                        Time = db.tbTimes.FirstOrDefault(x => x.Id == timeId)
+                        Time = db.tbTimes.FirstOrDefault(x => x.Id == timeId),
+                        DateToDeliver = dateToDeliver
+
                     };
                     db.tbItemAllocations.Add(allocation);
                     db.SaveChanges();

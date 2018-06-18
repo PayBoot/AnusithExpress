@@ -1,0 +1,64 @@
+﻿
+@{
+    ViewBag.Title = "ProfileUpdate";
+}
+@model AnousithExpress.DataEntry.ViewModels.Customer.ProfileModel
+<h2>ProfileUpdate</h2>
+@if (ViewBag.Message!=null)
+{
+    <div class="alert alert-info text-center">
+        <strong>@ViewBag.Message</strong>
+    </div>
+}
+
+    <div>
+        @using (Html.BeginForm("ProfileUpdate", "Customer", FormMethod.Post))
+        {
+           // @Html.HiddenFor(m=>m.Id)
+           // @Html.TextBoxFor(m => m.Id)
+            @Html.HiddenFor(m => m.Id)
+            <div class="row">
+                <div class="form-group">
+                    @Html.Label("ຊື່", new { @class = "control-label col-md-3" })
+                    @Html.TextBoxFor(m => m.Name, new { @class = "form-control col-md-9" })
+                    @Html.ValidationMessageFor(m => m.Name)
+                    @ViewBag.DuplicateMessage
+                </div>
+                <div class="form-group">
+                    @Html.Label("ເບີໂທ", new { @class = "control-label col-md-3" })
+                    @Html.TextBoxFor(m => m.Phonenumber, new { @class = "form-control col-md-9" })
+                    @Html.ValidationMessageFor(m => m.Phonenumber)
+                    @ViewBag.DuplicateMessage
+                </div>
+                <div class="form-group">
+                    @Html.Label("ລະຫັດ", new { @class = "control-label col-md-3" })
+                    @Html.PasswordFor(m => m.Password, new { @class = "form-control col-md-9" })
+                    @Html.ValidationMessageFor(m => m.Password)
+                </div>
+                <div class="form-group">
+                    @Html.Label("ທີ່ຢູ່", new { @class = "control-label col-md-3" })
+                    @Html.TextBoxFor(m => m.Address, new { @class = "form-control col-md-9" })
+                    @Html.ValidationMessageFor(m => m.Address)
+                </div>
+                <div class="form-group">
+                    @Html.Label("ເລກບັນຊີ BCEL ສະກຸນເງີນກີບ", new { @class = "control-label col-md-3" })
+                    @Html.TextBoxFor(m => m.BCEL_Kip, new { @class = "form-control col-md-9" })
+                </div>
+                <div class="form-group">
+                    @Html.Label("ເລກບັນຊີ BCEL ສະກຸນເງີນບາດ", new { @class = "control-label col-md-3" })
+                    @Html.TextBoxFor(m => m.BCEL_Baht, new { @class = "form-control col-md-9" })
+                </div>
+                <div class="form-group">
+                    @Html.Label("ເລກບັນຊີ BCEL ສະກຸນເງີນໂດລາ", new { @class = "control-label col-md-3" })
+                    @Html.TextBoxFor(m => m.BCEL_Dollar, new { @class = "form-control col-md-9" })
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <input type="submit" name="register" value="ບັນທຶກ" class="btn btn-success" />
+                    <a class="btn btn-success" href="@Url.Action("Index","Customer")">ກັບໄປຫນ້າຫລັກ</a>
+                </div>
+            </div>
+
+        }
+    </div>

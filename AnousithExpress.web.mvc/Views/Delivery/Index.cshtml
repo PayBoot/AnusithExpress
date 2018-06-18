@@ -1,0 +1,22 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>ຫນ້າຫລັກ</h2>
+<a href="@Url.Action("ItemsToPickUp","Delivery")" class="panel">
+    <div class="panel panel-default col-md-3 panelhover" style="margin:10px;">
+        <div class="panel-body">
+            <h3>ສີນຄ້າທີ່ຕ້ອງໄປຮັບ</h3>
+        </div>
+    </div>
+</a>
+
+<a href="@Url.Action("ItemsToSent","Delivery")" class="panel">
+    <div class="panel panel-default col-md-3 panelhover" style="margin:10px;">
+        <div class="panel-body">
+            <h3>ສີນຄ້າທີ່ຕ້ອງໄປສົ່ງ</h3>
+        </div>
+    </div>
+</a>
+

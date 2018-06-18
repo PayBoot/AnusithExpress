@@ -1,0 +1,45 @@
+﻿
+@{
+    ViewBag.Title = "Consolidation";
+}
+@model List<AnousithExpress.DataEntry.ViewModels.Customer.ConsolidationListModel>
+<h2>ລາຍການສັງລວມ</h2>
+<div class="panel">
+    <div class="panel-body">
+        @using (Html.BeginForm("Consolidation", "Customer", FormMethod.Get))
+        {
+            <label>ແຕ່ວັນທີ</label>
+            <input type="date" name="searchDateFrom" value="@TempData["searchDateFrom"]" />
+            <label>ຫາວັນທີ</label>
+            <input type="date" name="searchDateTo" value="@TempData["searchDateTo"]" />
+            <button type="submit">ຄົ້ນຫາ</button>
+            <button type="button" onclick='window.location = "@Url.Action("Index","Customer")"'>ກັບໄປຫນ້າຫລັກ</button>
+        }
+
+        <table class="table table-condensed">
+            <thead>
+                <tr>
+                    <th>ເລກທີ</th>
+                    <th>ຈຳນວນເຄື່ອງ</th>
+                    <th>ວັນທີ</th>
+                    <th>ຄ່າບໍລິການ</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@item.ConsolidateNumber</td>
+                        <td>@item.AmountOfItem</td>,
+                        <td>@item.ConsolidatedDate</td>
+                        <td>@item.Fee</td>
+                        <td><a class="btn btn-danger" href="@Url.Action("ConsolidationItem","Customer", new { consolidationId = item.Id })">ເນື່ອໃນ</a></td>
+                    </tr>
+                }
+
+            </tbody>
+        </table>
+
+    </div>
+</div>

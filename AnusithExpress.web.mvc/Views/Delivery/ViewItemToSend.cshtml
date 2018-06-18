@@ -14,6 +14,8 @@
     @Html.DropDownList("routeId", ViewBag.route as SelectList)
     <label>ເວລາສົ່ງ</label>
     @Html.DropDownList("timeId", ViewBag.time as SelectList)
+    <label>ວັນທີສົ່ງ</label>
+    <input type="date" name="dateToDeliver" />
     <input type="submit" name="submit" value="ຄົ້ນຫາ" />
 }
 <div>@TempData["Message"]</div>
@@ -34,12 +36,13 @@
             {
 
             <tr class="clickable-row" onclick="window.location= '@Url.Action("ShowItem","Delivery",new { id = item.Id})';">
-                
-  
-                    <td>@item.TrackingNumber</td>
-                    <td>@item.ReceiverName</td>
-                    <td>@item.ReceipverPhone</td>
-                    <td>@item.Description</td>
+
+
+                <td>@item.TrackingNumber</td>
+                <td>@item.ReceiverName</td>
+                <td>@item.ReceipverPhone</td>
+                <td>@item.Description</td>
+        
 
             </tr>
           

@@ -7,6 +7,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AnusithExpress.web.mvc", "A
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AnousithExpress.Data", "AnousithExpress.Data\AnousithExpress.Data.csproj", "{40C41ECF-6635-4611-84B3-B822009589F1}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AnousithExpress.DataEntry", "AnousithExpress.DataEntry\AnousithExpress.DataEntry.csproj", "{018E9CC8-41F7-4C3D-B9DE-C76BD6F9CAF2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AnousithExpress.web.mvc", "AnousithExpress.web.mvc\AnousithExpress.web.mvc.csproj", "{49D287A6-F9FA-404D-863F-CF4DFF65C0F4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +25,14 @@ Global
 		{40C41ECF-6635-4611-84B3-B822009589F1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{40C41ECF-6635-4611-84B3-B822009589F1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{40C41ECF-6635-4611-84B3-B822009589F1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{018E9CC8-41F7-4C3D-B9DE-C76BD6F9CAF2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{018E9CC8-41F7-4C3D-B9DE-C76BD6F9CAF2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{018E9CC8-41F7-4C3D-B9DE-C76BD6F9CAF2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{018E9CC8-41F7-4C3D-B9DE-C76BD6F9CAF2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{49D287A6-F9FA-404D-863F-CF4DFF65C0F4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{49D287A6-F9FA-404D-863F-CF4DFF65C0F4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{49D287A6-F9FA-404D-863F-CF4DFF65C0F4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{49D287A6-F9FA-404D-863F-CF4DFF65C0F4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

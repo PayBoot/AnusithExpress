@@ -2,6 +2,7 @@
 using AnousithExpress.Data.SingleViewModels;
 using AnusithExpress.web.mvc.Reports;
 using CrystalDecisions.CrystalReports.Engine;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.IO;
@@ -70,7 +71,8 @@ namespace AnusithExpress.web.mvc.Controllers
                     if (custService.CheckExistingCustomer(model.CustomerPhonenumber))
                     {
                         var item = itemService.Update(model);
-                        return View();
+                        return RedirectToAction("CustomerDetail", "Admin", new { customerId = model.CustomerId });
+
                     }
                     else
                     {
@@ -185,15 +187,19 @@ namespace AnusithExpress.web.mvc.Controllers
         }
 
         [HttpPost]
-        public ActionResult Allocation(int itemId, int Routes, int Times)
+        public ActionResult Allocation(int itemId, int Routes, int Times, DateTime DateToDeliver)
         {
             var route = itemService.GetRoute();
             var time = itemService.GetTime();
             ViewData["itemId"] = itemId;
             ViewBag.Routes = new SelectList(route, "Id", "Route");
             ViewBag.Times = new SelectList(time, "Id", "Time");
-            bool result = itemService.AllocateItem(itemId, Routes, Times);
+            bool result = itemService.AllocateItem(itemId, Routes, Times, DateToDeliver);
             return View(result);
+        }
+        public ActionResult AllocationList()
+        {
+            return View();
         }
     }
 }

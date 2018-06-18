@@ -1,0 +1,48 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - My ASP.NET Application</title>
+    <style>
+        .red-font {
+            color: red;
+        }
+        .panelhover:hover {
+            background-color: azure;
+        }
+    </style>
+
+    @Scripts.Render("~/bundles/modernizr")
+    @Styles.Render("~/Styles/css")
+
+</head>
+<body>
+    @Html.Partial("_Navbar")
+    <div id="sidebar-collapse" class="col-sm-3 col-lg-2 sidebar">
+        @Html.Partial("_Profile")
+        <div class="divider"></div>
+        <ul class="nav menu">
+            @Html.Partial("_NavMenu")
+            <li><a href="@Url.Action("ULogout","Account")"><em class="fa fa-power-off">&nbsp;</em> Logout</a></li>
+        </ul>
+    </div><!--/.sidebar-->
+    <div class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-2 main">
+        @RenderBody()
+    </div><!--col-sm-9 main-->
+    <footer></footer>
+    <footer></footer>
+
+
+    <script src="~/Styles/js/jquery-1.11.1.min.js"></script>
+    <script src="~/Styles/js/bootstrap.min.js"></script>
+    <script src="~/Styles/js/bootstrap-datepicker.js"></script>
+    <script src="~/Styles/js/html5shiv.min.js"></script>
+    <script src="~/Styles/js/lumino.glyphs.js"></script>
+    <script src="~/Styles/js/respond.min.js"></script>
+    <script src="~/Styles/js/custom.js"></script>
+    <script src="~/Styles/js/datatables.min.js"></script>
+    @Scripts.Render("~/bundles/ScriptsCustom")
+    @RenderSection("scripts", required: false)
+</body>
+</html>

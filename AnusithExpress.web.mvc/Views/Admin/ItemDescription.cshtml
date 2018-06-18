@@ -21,7 +21,7 @@
                         window.location = "@Url.Action("CustomerDetail", "Admin")?customerId=" + $("#customerId").val() +"&statusId="+ $("#statusId").val();    
                     }
                     else {
-                        window.location = "@Url.Action("CustomerDetail", "Admin", new { customerId = Model.CustomerId})";    
+                        window.location = "@Url.Action("CustomerDetail", "Admin")?customerId=" + $("#customerId").val();
                     }                         
                 }
                 else {
@@ -31,7 +31,7 @@
             error: function ()
             {
                 alert("Server error");
-<a href="~/Views/Admin/ItemDescription.cshtml">~/Views/Admin/ItemDescription.cshtml</a>
+
             }
 
         });

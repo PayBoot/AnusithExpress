@@ -1,0 +1,72 @@
+﻿
+@{
+    ViewBag.Title = "ItemsToPickUp";
+}
+
+@model List<AnousithExpress.DataEntry.ViewModels.Customer.ItemsModel>
+<div class="row">
+ <div class="col-md-12">
+        <h2>ສີນຄ້າທີ່ຕ້ອງໄປຮັບ</h2>
+ </div>
+    
+</div>
+<div class="row">
+    <div class=" col-md-12">
+        @if (TempData["Message"] != null)
+        {
+            <div class="alert alert-info text-center">@TempData["Message"]</div>
+        }
+    </div>
+</div>
+
+
+<div class="panel">
+    <div class=" panel-body">
+        @using (Html.BeginForm("ItemsToPickUp", "Delivery", FormMethod.Get))
+        {
+            <label>ລະຫັດລູກຄ້າ</label>
+            @Html.TextBox("customerId")
+            <input type="submit" name="submit" value="ຄົ້ນຫາ" />
+        }
+
+
+
+        @using (Html.BeginForm("PickUp", "Delivery", FormMethod.Post))
+        {
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th><input type="checkbox" name="checkall" onclick="toggle(this)" /></th>
+                        <th>ເລກຕິດຕາມ</th>
+                        <th>ປະເພດເຄື່ອງ</th>
+                        <th>ສະຖານະ</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td><input type="checkbox" name="itemsId" value="@item.Id" />@Html.Hidden("customerId", item.CustomerId)</td>
+                            <td>@item.TrackingNumber</td>
+                            <td>@item.ItemName</td>
+                            <td>@item.Status</td>
+                        </tr>
+                    }
+
+                </tbody>
+            </table>
+            <input type="submit" name="name" onclick="return confirm('ແນ່ໃຈແລ້ວບໍ່')" value="ຢືນຢັນການຮັບສີນຄ້າ" />
+        }
+    </div>
+</div>
+
+
+
+<script type="text/javascript" language="javascript">
+    function toggle(source) {
+        let checkboxes = document.getElementsByName("itemsId");
+        for (var i = 0, n = checkboxes.length; i < n; i++) {
+            checkboxes[i].checked = source.checked;
+        }
+    }
+</script>

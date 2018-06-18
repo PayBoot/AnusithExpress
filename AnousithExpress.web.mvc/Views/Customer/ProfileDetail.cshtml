@@ -1,0 +1,42 @@
+﻿
+@{
+    ViewBag.Title = "ProfileDetail";
+}
+
+@model AnousithExpress.DataEntry.ViewModels.Customer.CustomerProfileItemsModel
+    <h2>ຂໍ້ມູນສ່ວນໂຕ</h2>
+<div class="panel">
+    <div class="panel-body">
+        <table width="80%">
+            <tr>
+                <td width="20%"><strong>ຊື່ ແລະ ນາມສະກຸນ </strong></td>
+                <td width="80%">@Model.Profile.Name</td>
+            </tr>
+            <tr>
+                <td width="20%"><strong>ເບີໂທລະສັບ </strong></td>
+                <td width="80%">@Model.Profile.Phonenumber</td>
+            </tr>
+            <tr>
+                <td width="20%"><strong>ທີ່ຢູ່ </strong></td>
+                <td width="80%">@Model.Profile.Address</td>
+            </tr>
+            <tr>
+                <td width="20%"><strong>ເລກບັນຊີເງິນກີບ</strong></td>
+                <td width="80%">@Model.Profile.BCEL_Kip</td>
+            </tr>
+            <tr>
+                <td width="20%"><strong>ເລກບັນຊີເງິນບາດ</strong></td>
+                <td width="80%">@Model.Profile.BCEL_Baht</td>
+            </tr>
+            <tr>
+                <td width="20%"><strong>ເລກບັນຊີເງິນໂດລາ</strong></td>
+                <td width="80%">@Model.Profile.BCEL_Dollar</td>
+            </tr>
+        </table>
+
+        <button type="button" class="btn btn-info" onclick='window.location = "@Url.Action("ProfileUpdate","Customer")"'>ປ່ຽນແປງ</button>
+        <button type="button" class="btn btn-info" onclick='window.location = "@Url.Action("Index","Customer")"'>ກັບໄປຫນ້າຫລັກ</button>
+
+
+    </div>
+</div>

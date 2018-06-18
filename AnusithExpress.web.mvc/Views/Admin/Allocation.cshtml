@@ -11,5 +11,6 @@
     @Html.TextBox("itemId", ViewData["itemId"])
     @Html.DropDownList("Routes", ViewBag.Routes as SelectList, "ເລືອກ", new { @class = "form-control" })
     @Html.DropDownList("Times", ViewBag.Times as SelectList, "ເລືອກ", new { @class = "form-control" })
+    <input type="date" name="DateToDeliver" />
     <button type="submit" class="btn btn-primary">ບັນທຶກ</button>
 }

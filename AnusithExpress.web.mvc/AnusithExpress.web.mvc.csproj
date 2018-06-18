@@ -319,6 +319,7 @@
     <Content Include="Views\Admin\Allocation.cshtml" />
     <Content Include="Views\Customer\ConsolidatedList.cshtml" />
     <Content Include="Views\Customer\ConsolidatedItems.cshtml" />
+    <Content Include="Views\Admin\AllocationList.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

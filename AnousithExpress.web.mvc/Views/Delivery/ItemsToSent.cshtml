@@ -1,0 +1,67 @@
+﻿
+@{
+    ViewBag.Title = "ItemsToSent";
+}
+@model List<AnousithExpress.DataEntry.ViewModels.Delivery.ItemsAllocationModel>
+
+<h2>ສີນຄ້າຕ້ອງໄປສົ່ງ</h2>
+
+<div class="panel">
+    <div class="panel-body">
+        @using (Html.BeginForm("ItemsToSent", "Delivery", FormMethod.Get))
+        {
+            <label>ສາຍສົ່ງ</label>
+            @Html.DropDownList("routeId", ViewBag.Routes as SelectList)
+            <label>ເວລາສົ່ງ</label>
+            @Html.DropDownList("timeId", ViewBag.Times as SelectList)
+            <label>ວັນທີສົ່ງ</label>
+            <input type="date" name="dateToDeliver" />
+            <input type="submit" name="submit" value="ຄົ້ນຫາ" />
+        }
+        <div>@TempData["Message"]</div>
+        @using (Html.BeginForm("RecievedItem", "Delivery", FormMethod.Post))
+        {
+            <table class="table table-borderless">
+                <thead>
+                    <tr>
+
+                        <th>ເລກຕິດຕາມ</th>
+                        <th>ຜຸ້ຮັບ</th>
+                        <th>ເບີໂທຕິດຕໍ່</th>
+                        <th>ລາຍລະອຽດ</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+
+                        <tr class="clickable-row">
+                            <td>@item.ItemTrackingNumber</td>
+                            <td>@item.ReceiverName</td>
+                            <td>@item.ReceiverPhonenumber</td>
+                            <td>@item.Description</td>
+                        </tr>
+                    }
+
+                </tbody>
+            </table>
+
+        }
+
+    </div>
+</div>
+
+<script type="text/javascript" language="javascript">
+    $(document).ready(function () {
+        document.getElementsByName('dateToDeliver').valueAsDate = new Date();
+        //$(".clickable-row").click(function () {
+        //    window.location = $(this).data("href");
+        //});
+    });
+    function toggle(source) {
+        let checkboxes = document.getElementsByName("itemsId");
+        for (var i = 0, n = checkboxes.length; i < n; i++) {
+            checkboxes[i].checked = source.checked;
+        }
+    }
+</script>

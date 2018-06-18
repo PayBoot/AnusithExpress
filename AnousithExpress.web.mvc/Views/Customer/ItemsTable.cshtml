@@ -1,0 +1,99 @@
+﻿
+<table class="table table-bordered" id="table">
+    <thead>
+        <tr>
+            <th>ເລກຕິດຕາມ</th>
+            <th>ປະເພດສີນຄ້າ</th>
+            <th>ສະຖານະ</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.TrackingNumber</td>
+                <td>@item.ItemName</td>
+                <td>@item.Status</td>
+                <td>
+                    @if (item.Status == "ຢູ່ຮ້ານ")
+                    {
+                        @:<a class="btn btn-danger" onclick="DeleteItem(@item.Id)">ລືບ</a>
+                        <a class="btn btn-danger" href="@Url.Action("ItemsCreateUpdate","Customer", new { itemId = item.Id})">ປ່ຽນແປງ</a>
+                        <a class="btn btn-danger" onclick="Confirm(@item.Id)">ຢືນຢັນ</a>
+                    }
+                    @if (item.Status == "ຢືນຢັນ")
+                    {
+                        @:<a class="btn btn-danger" onclick="UndoConfirm(@item.Id)">ປົດການຢືນຢັນ</a>
+                    }
+
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<script>
+    function DeleteItem(id) {
+        if (confirm("ທ່ານແນ່ໃຈແລ້ວບໍທີ່ຈະດຳເນີນການລືບ")) {
+            $.ajax({
+                url: "/Customer/ItemDelete",
+                data: { itemId: id },
+                type: "POST",
+                datatype: "json",
+                success: function (r) {
+                    if (r===true) {
+                        window.location = "@Url.Action("Items","Customer")";
+                    }
+                    else {
+                        alert("ບໍ່ສາມາດລືບໄດ້");
+                    }
+                },
+                error: function () {
+                    alert("Server error");
+                }
+            });
+        }
+    }
+    function Confirm(id) {
+         if (confirm("ຢືນຢັນ")) {
+            $.ajax({
+                url: "/Customer/ItemSubmit",
+                data: { itemId: id },
+                type: "POST",
+                datatype: "json",
+                success: function (r) {
+                    if (r===true) {
+                        window.location = "@Url.Action("Items","Customer")";
+                    }
+                    else {
+                        alert("ບໍ່ສາມາດຢືນຢັນໄດ້");
+                    }
+                },
+                error: function () {
+                    alert("Server error");
+                }
+            });
+        }
+    }
+     function UndoConfirm(id) {
+         if (confirm("ເຊົາການຢືນຢັນ")) {
+            $.ajax({
+                url: "/Customer/ItemUndoSubmit",
+                data: { itemId: id },
+                type: "POST",
+                datatype: "json",
+                success: function (r) {
+                    if (r===true) {
+                        window.location = "@Url.Action("Items","Customer")";
+                    }
+                    else {
+                        alert("ບໍ່ສາມາດຢືນຢັນໄດ້");
+                    }
+                },
+                error: function () {
+                    alert("Server error");
+                }
+            });
+        }
+    }
+</script>

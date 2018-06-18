@@ -1,5 +1,6 @@
 ﻿using AnousithExpress.Data.Models;
 using AnousithExpress.Data.SingleViewModels;
+using System;
 using System.Collections.Generic;
 
 namespace AnousithExpress.Data.Interfaces
@@ -19,7 +20,7 @@ namespace AnousithExpress.Data.Interfaces
 
         List<ItemSingleModel> GetConfirmItems(int CustId);
         List<ItemSingleModel> GetSentItems(int CustId);
-        List<ItemSingleModel> GetToSendItems(int routeId, int timeId);
+        List<ItemSingleModel> GetToSendItems(int routeId, int timeId, DateTime? dateToDeliver);
 
         List<ItemSingleModel> GetSentItemsToConsolidate(int CustId);
 
@@ -34,7 +35,7 @@ namespace AnousithExpress.Data.Interfaces
         List<TbTime> GetTime();
 
 
-        bool AllocateItem(int itemId, int routeId, int timeId);
+        bool AllocateItem(int itemId, int routeId, int timeId, DateTime dateToDeliver);
 
     }
 }

@@ -1,5 +1,6 @@
 ﻿using AnousithExpress.Data.Implementation;
 using AnousithExpress.Data.SingleViewModels;
+using System;
 using System.Web.Mvc;
 
 namespace AnusithExpress.web.mvc.Controllers
@@ -109,7 +110,7 @@ namespace AnusithExpress.web.mvc.Controllers
         }
 
         [HttpGet]
-        public ActionResult ViewItemToSend(int routeId = 0, int timeId = 0)
+        public ActionResult ViewItemToSend(int routeId = 0, int timeId = 0, DateTime? dateToDeliver = null)
         {
             if (Session["Role"] != null)
             {
@@ -117,7 +118,7 @@ namespace AnusithExpress.web.mvc.Controllers
                 if (role == 2)
                 {
                     RouteTimeDropdownlist();
-                    var model = itemService.GetToSendItems(routeId, timeId);
+                    var model = itemService.GetToSendItems(routeId, timeId, dateToDeliver);
                     return View(model);
                 }
                 else

@@ -1,0 +1,57 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+<a href="@Url.Action("Account","Admin")" class="panel">
+    <div class="panel col-lg-3 panelhover" style="margin:10px;">
+        <div class="panel-body">
+            <strong>ບັນຊີຜູ້ໃຊ້ງານ</strong>
+        </div>
+    </div>
+</a>
+<a href="@Url.Action("Customer","Admin")" class="panel">
+    <div class="panel col-lg-3 panelhover" style="margin:10px;">
+        <div class="panel-body">
+            <strong>ລຸກຄ້າ</strong><span class="badge"><div id="Notification"></div></span>
+        </div>
+    </div>
+</a>
+<a href="@Url.Action("ItemsCreateUpdate","Admin")" class="panel">
+    <div class="panel col-lg-3 panelhover" style="margin:10px;">
+        <div class="panel-body">
+            <strong>ສ້າງສີນຄ້າ</strong>
+        </div>
+    </div>
+</a>
+
+<a href="@Url.Action("Consolidation","Admin")" class="panel">
+    <div class="panel col-lg-3 panelhover" style="margin:10px;">
+        <div class="panel-body">
+            <strong>ສັງລວມ</strong>
+        </div>
+    </div>
+</a>
+@section scripts{
+    <script>
+        $(document).ready(
+            function () {
+    
+                setInterval(function () {
+                    $.ajax({
+                        url: "/Admin/GetNotification",
+                        type: "GET",
+                        datatype: "json",
+                        success: function (result) {
+                            $("#Notification").html(result);
+                        },
+                        error: function () {
+                            alert("Server error");
+                        }
+                    });
+                }, 2000);  //Delay here = 5 seconds
+            });
+
+    </script>
+}
