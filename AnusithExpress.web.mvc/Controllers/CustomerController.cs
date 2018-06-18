@@ -1,5 +1,6 @@
 ﻿using AnousithExpress.Data.Implementation;
 using AnousithExpress.Data.SingleViewModels;
+using System;
 using System.Web.Mvc;
 
 namespace AnusithExpress.web.mvc.Controllers
@@ -8,10 +9,12 @@ namespace AnusithExpress.web.mvc.Controllers
     {
         private ItemService _itemServ;
         private CustService _custService;
-        public CustomerController(ItemService itemService, CustService custService)
+        private ConsolidatedService _consolidate;
+        public CustomerController(ItemService itemService, CustService custService, ConsolidatedService consolidatedService)
         {
             _itemServ = itemService;
             _custService = custService;
+            _consolidate = consolidatedService;
         }
         public ActionResult Index()
         {
@@ -64,6 +67,7 @@ namespace AnusithExpress.web.mvc.Controllers
                         else
                         {
                             ViewBag.Message = "ປ່ຽນແປງຂໍ້ມູນສີນຄ້າບໍ່ສຳເລັດ";
+
                             return View(model);
                         }
                     }
@@ -74,14 +78,14 @@ namespace AnusithExpress.web.mvc.Controllers
                         if (result == true)
                         {
                             ViewBag.Message = "ເພີ່ມລາຍການສຳເລັດ";
-                            return View();
+                            ModelState.Clear();
+                            return View(new ItemSingleModel());
                         }
                         else
                         {
                             ViewBag.Message = "ເພີ່ມລາຍການບໍ່ສຳເລັດ";
                             return View(model);
                         }
-
                     }
 
                 }
@@ -97,6 +101,7 @@ namespace AnusithExpress.web.mvc.Controllers
 
 
         }
+
         public ActionResult ViewItems()
         {
             if (Session["UserId"] != null)
@@ -111,6 +116,7 @@ namespace AnusithExpress.web.mvc.Controllers
             }
 
         }
+
         public ActionResult ConfirmItem(int id)
         {
             if (Session["UserId"] != null)
@@ -132,6 +138,7 @@ namespace AnusithExpress.web.mvc.Controllers
                 return RedirectToAction("CLogin", "Account");
             }
         }
+
         public ActionResult UnConfirmItem(int id)
         {
             if (Session["UserId"] != null)
@@ -153,6 +160,7 @@ namespace AnusithExpress.web.mvc.Controllers
                 return RedirectToAction("CLogin", "Account");
             }
         }
+
         public ActionResult DeleteItem(int id)
         {
             if (Session["UserId"] != null)
@@ -247,6 +255,34 @@ namespace AnusithExpress.web.mvc.Controllers
                 }
             }
 
+        }
+
+        public ActionResult ConsolidatedList(DateTime? searchDateFrom = null, DateTime? searchDateTo = null)
+        {
+            if (Session["UserId"] == null)
+            {
+                return RedirectToAction("CLogin", "Account");
+            }
+            else
+            {
+                int userId = (int)Session["UserId"];
+                var model = _consolidate.GetSingle(userId, searchDateFrom, searchDateTo);
+                return View(model);
+            }
+        }
+
+        public ActionResult ConsolidatedItems(int consolidatedId)
+        {
+            if (Session["UserId"] == null)
+            {
+                return RedirectToAction("CLogin", "Account");
+            }
+            else
+            {
+                int userId = (int)Session["UserId"];
+                var model = _consolidate.GetItems(consolidatedId);
+                return View(model);
+            }
         }
     }
 }
