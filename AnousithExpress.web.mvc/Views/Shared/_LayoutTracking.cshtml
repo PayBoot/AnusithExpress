@@ -1,0 +1,26 @@
+﻿<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>@ViewBag.Title</title>
+
+    @Scripts.Render("~/bundles/modernizr")
+    @Styles.Render("~/Styles/css")
+</head>
+<body>
+    <div>
+        @RenderBody()
+    </div>
+    <script src="~/Styles/js/jquery-1.11.1.min.js"></script>
+    <script src="~/Styles/js/bootstrap.min.js"></script>
+    <script src="~/Styles/js/bootstrap-datepicker.js"></script>
+    <script src="~/Styles/js/html5shiv.min.js"></script>
+    <script src="~/Styles/js/lumino.glyphs.js"></script>
+    <script src="~/Styles/js/respond.min.js"></script>
+    <script src="~/Styles/js/custom.js"></script>
+    <script src="~/Styles/js/datatables.min.js"></script>
+    @Scripts.Render("~/bundles/ScriptsCustom")
+    @RenderSection("scripts", required: false)
+</body>
+</html>

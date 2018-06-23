@@ -1,45 +1,151 @@
 ﻿
 @{
-    ViewBag.Title = "Consolidation";
+    Layout = "~/Views/Shared/_CustomerLayout.cshtml";
+    ViewBag.Title = "ສັງລວມ";
 }
-@model List<AnousithExpress.DataEntry.ViewModels.Customer.ConsolidationListModel>
-<h2>ລາຍການສັງລວມ</h2>
-<div class="panel">
-    <div class="panel-body">
-        @using (Html.BeginForm("Consolidation", "Customer", FormMethod.Get))
-        {
-            <label>ແຕ່ວັນທີ</label>
-            <input type="date" name="searchDateFrom" value="@TempData["searchDateFrom"]" />
-            <label>ຫາວັນທີ</label>
-            <input type="date" name="searchDateTo" value="@TempData["searchDateTo"]" />
-            <button type="submit">ຄົ້ນຫາ</button>
-            <button type="button" onclick='window.location = "@Url.Action("Index","Customer")"'>ກັບໄປຫນ້າຫລັກ</button>
-        }
-
-        <table class="table table-condensed">
-            <thead>
-                <tr>
-                    <th>ເລກທີ</th>
-                    <th>ຈຳນວນເຄື່ອງ</th>
-                    <th>ວັນທີ</th>
-                    <th>ຄ່າບໍລິການ</th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var item in Model)
-                {
-                    <tr>
-                        <td>@item.ConsolidateNumber</td>
-                        <td>@item.AmountOfItem</td>,
-                        <td>@item.ConsolidatedDate</td>
-                        <td>@item.Fee</td>
-                        <td><a class="btn btn-danger" href="@Url.Action("ConsolidationItem","Customer", new { consolidationId = item.Id })">ເນື່ອໃນ</a></td>
-                    </tr>
-                }
-
-            </tbody>
-        </table>
-
+<div class="breadcrumbs">
+    <div class="col-sm-4">
+        <div class="page-header float-left">
+            <div class="page-title">
+                <h1>ຫນ້າຫລັກ</h1>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-8">
+        <div class="page-header float-right">
+            <div class="page-title">
+                <ol class="breadcrumb text-right">
+                    <li><a href="@Url.Action("Index","Customer")">ຫນ້າຫລັກ</a></li>
+                    <li class="active">@ViewData["Title"]</li>
+                </ol>
+            </div>
+        </div>
     </div>
 </div>
+<div class="container" id="containerResize">
+    <div class="content mt-3">
+        <div class="animated fadeIn">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <strong class="card-title">ຕາຕະລາງ @ViewData["Title"]</strong>
+                        </div>
+                        <div class="card-body ">
+                            <div class="row">
+                                <div class="col-6 horizontal">
+                                    <label>ຈາກວັນທີ</label>
+                                    <input type="text" placeholder="ວັນ-ເດືອນ-ປີ" name="fromDate" onchange="searchByDate()" />
+          
+
+                                </div>
+                                <div class="col-6 horizontal">
+
+                                    <label>ຫາວັນທີ</label>
+                                    <input type="text" placeholder="ວັນ-ເດືອນ-ປີ" name="toDate" onchange="searchByDate()" />
+                             
+                                </div>
+                            </div>
+                            <table id="itemDataTable" class="table table-striped table-bordered" style="width:100%;">
+                                <thead>
+                                    <tr>
+                                        <th>ເລກສັງລວມ</th>
+                                        <th>ຈຳນວນສີນຄ້າ</th>
+                                        <th>ວັນທີສັງລວມ</th>
+                                        <th>ຄ່າບໍລິການ</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div><!-- .animated -->
+    </div><!-- .content -->
+</div>
+<div class="modal fade" id="modal1" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div id="content" class="text-center">
+              
+                </div>
+                <div id="modalButton" class="text-center">
+                    <button class="btn btn-primary btn-flat mb-1 w-75" data-dismiss="modal">ອອກ</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@section scripts{
+    <script>
+        let table;
+        jQuery(document).ready(function () {
+            jQuery("input[name='fromDate']").datepicker({
+                language: 'la'
+            });
+
+            jQuery("input[name='toDate']").datepicker({
+                language: 'la'
+            });
+            itemTable();
+        });
+        function itemTable() {
+            table = jQuery("#itemDataTable").DataTable({
+                serverSide: true,
+                responsive: true,
+                paging: false,
+                language: LaoLangage,
+                searching: false,
+                order:[[1,'desc']],
+                ajax: {
+                    url: "/Customer/ConsolidationTable",
+                    type: "POST",
+                    datatype: "json",
+                    data: function(d){
+                        d.fromDate= jQuery("input[name='fromDate']").val() || null,
+                        d.toDate= jQuery("input[name='toDate']").val() || null
+                    }
+                },
+                columns: [
+                    { data: "ConsolidateNumber", name: "ConsolidateNumber" },
+                    { data: "AmountOfItem", name: "AmountOfItem" },
+                    { data: "ConsolidatedDate", name: "ConsolidatedDate" },
+                    { data: "Fee", name: "Fee" },
+                    {
+                        data: "Id", render: function (data,type,full,meta) {
+                            return '<button class="btn btn-warning btn-sm" onclick="openDetail('+data+')">ລາຍລະອຽດ</button>';
+                        }
+                    }
+                ]
+
+            });
+        }
+
+        function searchByDate() {
+            table.ajax.reload(null, false);
+        }
+
+        function openDetail(id) {
+            let consolidationId = id;
+            jQuery.ajax({
+                url: "/Customer/ConsolidationDetail",
+                data: { consolidationId: consolidationId },
+                type: "POST",
+                datatype: "json",
+                success: function (r) {
+                    jQuery("#content").html(r);
+                    jQuery("#modal1").modal('show');
+                }
+            });
+        }
+
+        
+
+      
+    </script>
+
+}
+

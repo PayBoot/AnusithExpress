@@ -1,55 +1,170 @@
 ﻿
 @{
+    Layout = "~/Views/Shared/_CustomerLayout.cshtml";
     ViewBag.Title = "ItemsCreateUpdate";
 }
 @model AnousithExpress.DataEntry.ViewModels.Customer.ItemsModel
-<h2>CreateItem</h2>
-@if (ViewBag.Message !=null)
-{
-    <div class="alert alert-success text-center">
-        <strong>@ViewBag.Message</strong>
+<div class="breadcrumbs">
+    <div class="col-sm-4">
+        <div class="page-header float-left">
+            <div class="page-title">
+                <h1>ຫນ້າຫລັກ</h1>
+            </div>
+        </div>
     </div>
-}
-<div>
-    @using (Html.BeginForm("ItemsCreateUpdate", "Customer", FormMethod.Post, new { @id = "ItemCreateForm" }))
-    {
-        @Html.HiddenFor(m => m.Id)
-        <div class="form-group">
-            @Html.Label("ປະເພດສີນຄ້າ")
-            @Html.TextBoxFor(m => m.ItemName, new { @class="form-control"})
-            @Html.ValidationMessageFor(m => m.ItemName,"",new { @class=" red-font"})
+    <div class="col-sm-8">
+        <div class="page-header float-right">
+            <div class="page-title">
+                <ol class="breadcrumb text-right">
+                    <li><a href="@Url.Action("Index","Customer")">ຫນ້າຫລັກ</a></li>
+                    <li class="active">@TempData["Title"]</li>
+                </ol>
+            </div>
         </div>
-        <div class="form-group">
-            @Html.Label("ຊື່ຜູ້ຮັບ")
-            @Html.TextBoxFor(m => m.ReceiverName,new { @class="form-control"})
-            @Html.ValidationMessageFor(m => m.ReceiverName, "", new { @class = " red-font" })
-        </div>
-        <div class="form-group">
-            @Html.Label("ເບີໂທຜູ້ຮັບ")
-            @Html.TextBoxFor(m => m.ReceipverPhone, new { @class = "form-control" })
-            @Html.ValidationMessageFor(m => m.ReceipverPhone, "", new { @class = " red-font" })
-        </div>
-        <div class="form-group">
-            @Html.Label("ທີ່ຢູ່ຜູ້ຮັບ")
-            @Html.TextBoxFor(m => m.ReceiverAddress, new { @class = "form-control" })
-            @Html.ValidationMessageFor(m => m.ReceiverAddress, "", new { @class = " red-font" })
-        </div>
-        <div class="form-group">
-            @Html.Label("ເກັບເງີນປາຍທາງ ສະກຸນເງີນກີບ")
-            @Html.TextBoxFor(m => m.ItemValue_Kip, new { @class = "form-control" })
-        </div>
-        <div class="form-group">
-            @Html.Label("ເກັບເງີນປາຍທາງ ສະກຸນເງີນບາດ")
-            @Html.TextBoxFor(m => m.ItemValue_Baht, new { @class = "form-control" })
-        </div>
-        <div class="form-group">
-            @Html.Label("ເກັບເງີນປາຍທາງ ສະກຸນເງີນໂດລ້າ")
-            @Html.TextBoxFor(m => m.ItemValue_Dollar, new { @class = "form-control" })
-        </div>
-        <button type="submit" class="btn btn-primary">ບັນທຶກລາຍການ</button>
-        <a class="btn btn-info" href="@Url.Action("Items","Customer")">ກັບໄປຫາລາຍການສີນຄ້າ</a>
-        <a class="btn btn-success" href="@Url.Action("Index","Customer")">ກັບໄປຫນ້າຫລັກ</a>
-    }
+    </div>
 </div>
+<div class="container">
+    <div class="animated fadeIn">
+        <div class="col-lg-10">
+            <div class="card">
+                <div class="card-header">
+                    <strong>@TempData["Title"]</strong>
+                </div>
+                <div class="card-body card-block">
+                    <form id="itemForm" class="form-horizontal">
+                        @Html.HiddenFor(m => m.Id)
+                        <div class="row form-group">
+                            <div class="col col-md-3">
+                                <label for="hf-email" class=" form-control-label font-weight-bold">ປະເພດສີນຄ້າ</label>
+                            </div>
+                            <div class="col-12 col-md-9">
+                                @Html.TextBoxFor(m => m.ItemName, new { @class = "form-control", @placeholder = "ປະເພດສີນຄ້າ" })
+                            </div>
+                        </div>
+                        <div class="row form-group">
+                            <div class="col col-md-3">
+                                <label for="hf-email" class=" form-control-label font-weight-bold">ຊື່ຜູ້ຮັບ</label>
+                            </div>
+                            <div class="col-12 col-md-9">
+                                @Html.TextBoxFor(m => m.ReceiverName, new { @class = "form-control", @placeholder = "ຊື່ຜູ້ຮັບ" })
+                            </div>
+                        </div>
+                        <div class="row form-group">
+                            <div class="col col-md-3">
+                                <label for="hf-email" class=" form-control-label font-weight-bold">ເບີໂທຜູ້ຮັບ</label>
+                            </div>
+                            <div class="col-12 col-md-9">
+                                @Html.TextBoxFor(m => m.ReceipverPhone, new { @class = "form-control", @placeholder = "ເບີໂທຜູ້ຮັບ",@type="number" })
+                            </div>
+                        </div>
+                        <div class="row form-group">
+                            <div class="col col-md-3">
+                                <label for="hf-email" class=" form-control-label font-weight-bold">ທີ່ຢູ່ຜູ້ຮັບ</label>
+                            </div>
+                            <div class="col-12 col-md-9">
+                                @Html.TextBoxFor(m => m.ReceiverAddress, new { @class = "form-control", @placeholder = "ທີ່ຢູ່ຜູ້ຮັບ" })
+                            </div>
+                        </div>
+                        <div class="row form-group">
+                            <div class="col col-md-3">
+                                <label for="hf-email" class=" form-control-label font-weight-bold">ເກັບເງີນປາຍທາງ</label>
+                            </div>
+                            <div class="col-12 col-md-9">
+                                <label for="checkbox1" class="form-check-label ml-3">
+                                    <input type="checkbox" id="collectMoneyBox" name="collectMoneyBox" onchange="CollectMoneyCheck(this)" class="form-check-input">ເກັບ
+                                </label>
+                            </div>
+                        </div>
+                        <div id="CollectingMoney" class="collapse">
+                            <div class="row form-group">
+                                <div class="col col-md-3">
+                                    <label for="hf-email" class=" form-control-label font-weight-bold">ເກັບເງີນປາຍທາງ ສະກຸນເງີນກີບ</label>
+                                </div>
+                                <div class="col-12 col-md-9">
+                                    @Html.TextBoxFor(m => m.ItemValue_Kip, new { @class = "form-control", @placeholder = "ເກັບເງີນປາຍທາງ ສະກຸນເງີນກີບ", @type = "number" })
+                                </div>
+                            </div>
+                            <div class="row form-group">
+                                <div class="col col-md-3">
+                                    <label for="hf-email" class=" form-control-label font-weight-bold">ເກັບເງີນປາຍທາງ ສະກຸນເງີນບາດ</label>
+                                </div>
+                                <div class="col-12 col-md-9">
+                                    @Html.TextBoxFor(m => m.ItemValue_Baht, new { @class = "form-control", @placeholder = "ເກັບເງີນປາຍທາງ ສະກຸນເງີນບາດ", @type = "number" })
+                                </div>
+                            </div>
+                            <div class="row form-group">
+                                <div class="col col-md-3">
+                                    <label for="hf-email" class=" form-control-label font-weight-bold">ເກັບເງີນປາຍທາງ ສະກຸນເງີນໂດລ້າ</label>
+                                </div>
+                                <div class="col-12 col-md-9">
+                                    @Html.TextBoxFor(m => m.ItemValue_Dollar, new { @class = "form-control", @placeholder = "ເກັບເງີນປາຍທາງ ສະກຸນເງີນໂດລ້າ", @type = "number" })
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="card-footer">
+                    <button type="button" onclick="Save()" class="btn btn-primary ">
+                        <i class="fa fa-dot-circle-o"></i> ບັນທຶກ
+                    </button>
+                    <button type="reset" onclick="Reset()" class="btn btn-danger ">
+                        <i class="fa fa-ban"></i> ຕັ້ງໃຫມ່
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modal1" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div id="content" class="text-center">
+                    <strong id="popupmessage"></strong>
+                </div>
+                <div>
+                    <button class="btn btn-primary btn-flat m-b-15 w-100" data-dismiss="modal">ອອກ</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@section scripts{
+    <script>
+        function Reset() {
+            jQuery("#itemForm").trigger("reset");
+        }
+        function CollectMoneyCheck(source) {
+            if (source.checked) {
+                jQuery("#CollectingMoney").removeClass("collapse");
+            }
+            else {
+                jQuery("#CollectingMoney").addClass("collapse");
+            }
+        }
+        function Save() {
+            let formInfo = jQuery("#itemForm").serialize();
+            jQuery.ajax({
+                url: "/Customer/ItemsCreateUpdateSave",
+                data: formInfo,
+                datatype: "json",
+                type: "POST",
+                success: function (r) {
+                    if (!isNaN(r)) {
+                        window.location = "@Url.Action("ItemDetail", "Customer")?id="+r;
+                    }
+                    else {
+                        jQuery("#popupmessage").html("ຂໍ້ມູນບໍ່ຖືກຕ້ອງ ກະລຸນາກວດໃຫມ່<br/>"+r);
+                        jQuery('#modal1').modal("show");
+                    }
+                   
+                  
+                }
+            });
+        }
+    </script>
+
+}
 
 

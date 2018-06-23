@@ -1,0 +1,23 @@
+﻿
+@{
+    ViewBag.Title = "Customer";
+}
+@model List<AnousithExpress.DataEntry.ViewModels.Admin.CustomerModel>
+<h2>ລຸກຄ້າ</h2>
+
+<div class="panel">
+    <div class="panel-body">
+        @foreach (var customer in Model)
+        {
+        <a class="panel" href="@Url.Action("CustomerItems","Admin", new { customerId = customer.CustomerId})">
+            <div class="panel panel-teal col-md-1 customerButton">
+                <div class="panel-body">
+                    <strong>@customer.CustomerIdShow</strong>
+                    <span class="badge">@customer.NumberOfConfirmItem</span>
+                </div>
+            </div>
+        </a>
+           
+        }
+    </div>
+</div>

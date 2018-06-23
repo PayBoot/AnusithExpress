@@ -1,12 +1,12 @@
-﻿using System;
+﻿using AnousithExpress.DataEntry.ViewModels.Delivery;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace AnousithExpress.DataEntry.Interface
 {
-    interface IAllocation
+    public interface IAllocation
     {
+        List<ItemsAllocationModel> GetAll();
+        List<ItemsAllocationModel> GetBySorting(int? customerId, int? routeId, int? timeId, DateTime? sendingDateFrom, DateTime? sendingDateTo);
     }
 }

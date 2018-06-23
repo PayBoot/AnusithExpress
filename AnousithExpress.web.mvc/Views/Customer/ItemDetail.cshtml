@@ -1,0 +1,97 @@
+﻿
+@{
+    ViewBag.Title = "ລາຍລະອຽດສີນຄ້າ";
+    Layout = "~/Views/Shared/_CustomerLayout.cshtml";
+}
+@model AnousithExpress.DataEntry.ViewModels.Customer.ItemsModel
+<div class="breadcrumbs">
+    <div class="col-sm-4">
+        <div class="page-header float-left">
+            <div class="page-title">
+                <h1>ຫນ້າຫລັກ</h1>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-8">
+        <div class="page-header float-right">
+            <div class="page-title">
+                <ol class="breadcrumb text-right">
+                    <li><a href="@Url.Action("Index","Customer")">ຫນ້າຫລັກ</a></li>
+                    <li><a href="@Url.Action("ItemsCreateUpdate","Customer")">ສ້າງລາຍການ</a></li>
+                    <li class="active">@ViewData["Title"]</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="col-lg-10">
+    <div class="card">
+        <div class="card-header">
+            <strong>@ViewData["Title"]</strong>
+        </div>
+        <div class="card-body card-block">
+            <div class="row">
+                <div class="col-md-12">
+                    <table class="table table-bordered">
+                        <tr>
+                            <td style="font-weight:bolder;">ເລກຕິດຕາມ</td>
+                            <td>@Model.TrackingNumber</td>
+                        </tr>
+                        <tr>
+                            <td style="font-weight:bolder;">ປະເພດສີນຄ້າ</td>
+                            <td>@Model.ItemName</td>
+                        </tr>
+                        <tr>
+                            <td style="font-weight:bolder;">ສະຖານະ</td>
+                            <td>@Model.Status</td>
+                        </tr>
+                        <tr>
+                            <td style="font-weight:bolder;">(ວັນເດືອນປີ) ສ້າງລາຍການ</td>
+                            <td>@Model.CreatedDate</td>
+                        </tr>
+                        <tr>
+                            <td style="font-weight:bolder;">(ວັນເດືອນປີ) ວັນທີສົ່ງສີນຄ້າ</td>
+                            <td>@Model.ReceiveDate</td>
+                        </tr>
+                        <tr>
+                            <td style="font-weight:bolder;">(ວັນເດືອນປີ) ວັນທີ່ປາຍທາງຮັບສີນຄ້າ</td>
+                            <td>@Model.SendingDate</td>
+                        </tr>
+                        <tr>
+                            <td style="font-weight:bolder;">ຊື່ຜູ້ສົ່ງ</td>
+                            <td>@Model.CustomerName</td>
+                        </tr>
+                        <tr>
+                            <td style="font-weight:bolder;">ເບີໂທຜູ້ສົ່ງ</td>
+                            <td>@Model.CustomerPhonenumber</td>
+                        </tr>
+                        <tr>
+                            <td style="font-weight:bolder;">ຊື່ຜູ້ຮັບ</td>
+                            <td>@Model.ReceiverName</td>
+                        </tr>
+                        <tr>
+                            <td style="font-weight:bolder;">ເບີໂທຜູ້ຮັບ</td>
+                            <td>@Model.CustomerPhonenumber</td>
+                        </tr>
+
+                        <tr>
+                            <td style="font-weight:bolder;">ທີ່ຢູ່ຜູ້ຮັບ</td>
+                            <td>@Model.ReceiverAddress</td>
+                        </tr>
+
+
+                    </table>
+
+                </div>
+            </div>
+        </div>
+        <div class="card-footer text-center">
+            <button type="button" onclick='window.location="@Url.Action("ItemsCreateUpdate","Customer")"' class="btn btn-primary col-sm-5">
+                <i class="fa fa-dot-circle-o"></i> ສ້າງລາຍການໃຫມ່
+            </button>
+            <button type="reset" onclick='window.location="@Url.Action("Index","Customer")"'  class="btn btn-info  col-sm-5">
+                <i class="fa fa-backward"></i> ກັບໄປຫນ້າຫລັກ
+            </button>
+        </div>
+    </div>
+</div>

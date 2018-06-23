@@ -1,0 +1,219 @@
+﻿
+@{
+    ViewBag.Title = "ປະຫວັດການສົ່ງ";
+    Layout = "~/Views/Shared/_CustomerLayout.cshtml";
+}
+
+
+<div class="breadcrumbs">
+    <div class="col-sm-4">
+        <div class="page-header float-left">
+            <div class="page-title">
+                <h1>ຫນ້າຫລັກ</h1>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-8">
+        <div class="page-header float-right">
+            <div class="page-title">
+                <ol class="breadcrumb text-right">
+                    <li><a href="@Url.Action("Index","Customer")">ຫນ້າຫລັກ</a></li>
+                    <li class="active">@ViewData["Title"]</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container" id="containerResize">
+    <div class="content mt-3">
+        <div class="animated fadeIn">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <strong class="card-title">@ViewData["Title"]</strong>
+                        </div>
+                        <div class="card-body ">
+                            <div class="row">
+                                <div class="col-6">
+                                    <label>ຈາກວັນທີສົ່ງ</label>
+                                    <input type="text" placeholder="ວັນ-ເດືອນ-ປີ" name="fromDate" onchange="searchByDate()" />
+        
+
+                                </div>
+                                <div class="col-6 horizontal">
+
+                                    <label>ຫາວັນທີສົ່ງ</label>
+                                    <input type="text" placeholder="ວັນ-ເດືອນ-ປີ" name="toDate" readonly="readonly" onchange="searchByDate()" />
+              
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col text-center" style="vertical-align:middle;">
+                                    <table class="table" style="width:75%;margin-left:auto;margin-right:auto">
+                                        <tr>
+                                            <td style="width:50%;">ຈຳນວນເຄື່ອງສົ່ງທັງຫມົດ</td>
+                                            <td style="width:50%;" id="totalNumber"></td>
+                                        </tr>
+                                        <tr>
+                                            <td style="width:50%;">ຈຳນວນເຄື່ອງສົ່ງຮອດປາຍທາງ</td>
+                                            <td style="width:50%;" id="totalSuccess"></td>
+                                        </tr>
+                                        <tr>
+                                            <td style="width:50%;">ຈຳນວນເຄື່ອງສົ່ງກັບຄືນ</td>
+                                            <td style="width:50%;" id="totalFailure"></td>
+                                        </tr>
+
+                                    </table>
+                                </div>
+                            </div>
+                            <table id="itemDataTable" class="table table-striped table-bordered" style="width:100%;">
+                                <thead>
+                                    <tr>
+                                        <th>ເລກຕິດຕາມ</th>
+                                        <th>ປະເພດສີນຄ້າ</th>
+                                        <th>ສະຖານະ</th>
+                                        <th>ຊື່ຜູ້ຮັບ</th>
+                                        <th>ເບີໂທຜູ້ຮັບ</th>
+                                        <th>ທີ່ຢູ່ຜູ້ຮັບ</th>
+                                        <th>ມື້ສົ່ງ</th>
+                                        <th>ເກັບເງິນປາຍທາງ</th>
+                                        <th>ຝັງຊັ້ນ</th>
+                                    </tr>
+                                </thead>
+
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div><!-- .animated -->
+    </div><!-- .content -->
+</div>
+<div class="modal fade" id="modal1" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div id="content" class="text-center">
+                    <strong id="popupmessage">ທ່ານແນ່ໃຈທີ່ຈະລືບລາຍການ?</strong>
+                </div>
+                <div id="modalButton" class="text-center">
+                    <button class="btn btn-primary btn-flat mb-1 w-75" data-dismiss="modal">ອອກ</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@section scripts{
+    <script>
+        let table;
+        jQuery(document).ready(
+            function () {
+                itemCount();
+                itemTable();
+                jQuery("input[name='fromDate']").datepicker({
+                    language: 'la'
+                });
+              
+                jQuery("input[name='toDate']").datepicker({
+                    language:'la'
+                });
+            }
+            );
+        function itemTable() {
+            table = jQuery("#itemDataTable").DataTable({
+                serverSide: true,
+                responsive: true,
+                searching: false,
+                language: LaoLangage,
+                order:[[1,'desc']],
+                ajax: {
+                    url: "/Customer/ItemsProcessedTable",
+                    type: "POST",
+                    datatype: "json",
+                    data: function(d){
+                        d.fromDate= jQuery("input[name='fromDate']").val() || null,
+                        d.toDate= jQuery("input[name='toDate']").val() || null
+                    }
+                },
+                columns: [
+                    { data: "TrackingNumber", name: "TrackingNumber" },
+                    { data: "ItemName", name: "ItemName" },
+                    { data: "Status", name: "Status" },
+                    { data: "ReceiverName", name: "ReceiverName" },
+                    { data: "ReceipverPhone", name: "ReceipverPhone" },
+                    { data: "ReceiverAddress", name: "ReceiverAddress" },
+                    { data: "ReceiveDate", name: "ReceiveDate" },
+                    {
+                        data: "Id", render: function (data, type, full, meta) {
+                            let html = '';
+                            if (full.ItemValue_Kip !== null) {
+                                html += full.ItemValue_Kip + "ກີບ<br/>";
+                            }
+                            if (full.ItemValue_Baht !== null) {
+                                html += full.ItemValue_Baht + "ບາດ<br/>";
+                            }
+                            if (full.ItemValue_Dollar !== null) {
+                                html += full.ItemValue_Dollar + "ໂດລ້າ";
+                            }
+                            if (full.ItemValue_Kip === null && full.ItemValue_Baht === null && full.ItemValue_Dollar === null) {
+                                html = 'ບໍ່ມີ';
+                            }
+                            return '<p>' + html + '</p>';
+                        }
+                    },
+                    {
+                        data: "Id", render: function (data, type, full, meta) {
+                            let html = '';
+                                html += '<button type="button" onclick="itemDetail(' + data + ')" class="btn btn-flat btn-warning btn-sm">ລາຍລະອຽດ</button>';
+                            html += '';
+
+
+                            return html;
+                        }
+                    }
+                ]
+            });
+        }
+        function itemCount() {
+            jQuery.ajax({
+                url: "/Customer/ItemsCount",
+                type: "POST",
+                data: {
+                    fromDate: jQuery("input[name='fromDate']").val()||null,
+                    toDate: jQuery("input[name='toDate']").val()||null
+                },
+                datatype: "json",
+                success: function (r) {
+                    jQuery("#totalNumber").html(r.t +" ອັນ");
+                    jQuery("#totalSuccess").html(r.s + " ອັນ");
+                    jQuery("#totalFailure").html(r.f + " ອັນ");
+                },
+                error: function () {
+                    alert("Server error");
+                }
+            });
+        }
+        function searchByDate() {
+            table.ajax.reload(null, false);
+            itemCount();
+        }
+
+        function itemDetail(id) {
+            let itemId = id;
+            jQuery.ajax({
+                url: "/Customer/ItemDetailPartial",
+                type: "GET",
+                data: { itemId: itemId },
+                datatype: "json",
+                success: function (r) {
+                    jQuery("#content").html(r);
+                    jQuery("#modal1").modal('show');
+                }
+            });
+        }
+
+    </script>
+
+}

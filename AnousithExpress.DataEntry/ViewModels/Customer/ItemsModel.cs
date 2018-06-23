@@ -10,9 +10,12 @@ namespace AnousithExpress.DataEntry.ViewModels.Customer
         [Required(ErrorMessage = "ກະລຸນາຕື່ມປະເພດສີນຄ້າ")]
         public string ItemName { get; set; }
 
+
         public double? ItemValue_Kip { get; set; }
 
+
         public double? ItemValue_Baht { get; set; }
+
 
         public double? ItemValue_Dollar { get; set; }
 
@@ -22,12 +25,14 @@ namespace AnousithExpress.DataEntry.ViewModels.Customer
 
         public string CustomerPhonenumber { get; set; }
 
+        public string CustomerName { get; set; }
+
         public string Description { get; set; }
 
         [Required(ErrorMessage = "ກະລຸນາຕື່ມຊື່ຜູ້ຮັບ")]
         public string ReceiverName { get; set; }
 
-        [Required(ErrorMessage = "ກະລຸນາຕື່ມເບີໂທຜູ້ຮັບ")]
+        [Required(ErrorMessage = "ກະລຸນາຕື່ມເບີໂທຜູ້ຮັບ"), MinLength(8, ErrorMessage = "ກະລຸນາຕື່ມເບີໂທ 8 ໂຕເລກ"), MaxLength(8, ErrorMessage = "ກະລຸນາຕື່ມເບີໂທ 8 ໂຕເລກ")]
         public string ReceipverPhone { get; set; }
 
         [Required(ErrorMessage = "ກະລຸນາຕື່ມທີ່ຢູ່")]
@@ -42,5 +47,7 @@ namespace AnousithExpress.DataEntry.ViewModels.Customer
         public string ReceiveDate { get; set; }
 
         public string SendingDate { get; set; }
+
+        public string SentDate { get; set; }
     }
 }

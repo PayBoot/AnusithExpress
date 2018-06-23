@@ -1,0 +1,113 @@
+﻿@model AnousithExpress.DataEntry.ViewModels.Customer.ConsolidationModel
+<div class="col-md-12">
+    <div class="card">
+        <div class="card-header text-center">
+            <strong>ລາຍລະອຽດ</strong>
+        </div>
+        <div class="card-body card-block">
+            <div class="row">
+                <div class="col-md-12">
+                    <table class="table">
+                        <tr>
+                            <td style="font-weight:bolder;">ລະຫັດລຸກຄ້າ</td>
+                            <td>@Model.Detail.CustomerID</td>
+                            <td style="font-weight:bolder;">ເລກສັງລວມ</td>
+                            <td>@Model.Detail.ConsolidateNumber</td>
+                        </tr>
+                        <tr>
+                            <td style="font-weight:bolder;">ຊື່ລຸກຄ້າ</td>
+                            <td>@Model.Detail.CustomerName</td>
+                            <td style="font-weight:bolder;">ວັນທີສັງລວມ</td>
+                            <td>@Model.Detail.ConsolidatedDate</td>
+                        </tr>
+                        <tr>
+                            <td style="font-weight:bolder;">ເບີໂທລຸກຄ້າ</td>
+                            <td>@Model.Detail.CustomerPhonenumber</td>
+                            <td style="font-weight:bolder;">ຄ່າບໍລິການ</td>
+                            <td>@Model.Detail.Fee</td>
+                        </tr>
+                        <tr>
+                            <td style="font-weight:bolder;">ຈຳນວນສີນຄ້າ</td>
+                            <td>@Model.Detail.AmountOfItem</td>
+                            <td style="font-weight:bolder;"></td>
+                            <td></td>
+                        </tr>
+                    </table>
+
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <table class="table table-striped table-bordered table-hover table-condensed display responsive no-wrap" id="tableItemDetail" style="width:100%;">
+                        <thead>
+                            <tr>
+                                <th>ເລກຕິດຕາມສີນຄ້າ</th>
+                                <th>ປະເພດສີນຄ້າ</th>
+                                <th>ສະຖານະ</th>
+                                <th>ຜູ້ຮັບ</th>
+                                <th>ເບີໂທຜູ້ຮັບ</th>
+                                <th class="block">ມື້ສົ່ງ</th>
+                                <th>ມື້ຮັບເຄື່ອງ</th>
+                                <th>ເກັບເງີນປາຍທາງ</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.Items)
+                            {
+                                <tr>
+                                    <td width="auto">@item.TrackingNumber</td>
+                                    <td width="auto">@item.ItemName</td>
+                                    <td width="auto">@item.Status</td>
+                                    <td width="auto">@item.ReceiverName</td>
+                                    <td width="auto">@item.ReceiverPhone</td>
+                                    <td width="auto">@item.ReceiveDate</td>
+                                    <td width="auto">@item.SentDate</td>
+                                    <td>
+                                        @{
+                                            if (item.ItemValue_Kip != null)
+                                            {
+                                                <div>@item.ItemValue_Kip ກີບ</div>
+                                            }
+                                            if (item.ItemValue_Baht != null)
+                                            {
+                                                <div>@item.ItemValue_Baht ບາດ</div>
+                                            }
+                                            if (item.ItemValue_Dollar != null)
+                                            {
+                                                <div>@item.ItemValue_Dollar ໂດລາ</div>
+                                            }
+                                            if (item.ItemValue_Kip == null && item.ItemValue_Baht == null && item.ItemValue_Dollar == null)
+                                            {
+                                                <div>ບໍ່ມີ</div>
+                                            }
+                                        }
+                                    </td>
+                                </tr>
+                            }
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+              
+                    
+          
+        </div>
+    </div>
+</div>
+
+    <script type="text/javascript">
+        jQuery(document).ready(function () {
+            jQuery("#tableItemDetail").DataTable({
+                responsive: true,
+                paging: false,
+                searching: false,
+                serverSide: false,
+                language: LaoLangage,
+                
+            }).columns.adjust()
+                .responsive.recalc();
+       
+        });
+    </script>
+    

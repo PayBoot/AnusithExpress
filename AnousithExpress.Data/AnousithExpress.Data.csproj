@@ -51,6 +51,7 @@
     <Compile Include="Implementation\ConsolidatedService.cs" />
     <Compile Include="Implementation\CustomerListService.cs" />
     <Compile Include="Implementation\CustService.cs" />
+    <Compile Include="Implementation\DatabaseInit.cs" />
     <Compile Include="Implementation\InitiatingService.cs" />
     <Compile Include="Implementation\ItemService.cs" />
     <Compile Include="Implementation\SystemUserService.cs" />
@@ -137,6 +138,12 @@
     <EmbeddedResource Include="Migrations\201806170859520_initial5.resx">
       <DependentUpon>201806170859520_initial5.cs</DependentUpon>
     </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\AnousithExpress.DataEntry\AnousithExpress.DataEntry.csproj">
+      <Project>{018E9CC8-41F7-4C3D-B9DE-C76BD6F9CAF2}</Project>
+      <Name>AnousithExpress.DataEntry</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

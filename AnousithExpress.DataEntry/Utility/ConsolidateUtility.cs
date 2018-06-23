@@ -20,7 +20,11 @@ namespace AnousithExpress.DataEntry.Utility
 
         public IQueryable<TbConsolidatedItems> GetAllItems(EntityContext db)
         {
-            return db.tbConsolidatedItems.Include(c => c.Items).Include(c => c.Items.Status).Include(c => c.Consolidator);
+            return db.tbConsolidatedItems
+                .Include(c => c.Items)
+                .Include(c => c.Items.Status)
+                .Include(c => c.Items.Customer)
+                .Include(c => c.Consolidator);
         }
         public List<ConsolidationListModel> AssignConsolidationList(List<TbConsolidateList> source)
         {
@@ -74,9 +78,26 @@ namespace AnousithExpress.DataEntry.Utility
                     Id = r.Id,
                     ConsolidationId = r.Consolidator.Id,
                     ItemsId = r.Items.Id,
-                    ItemsTrackingNumber = r.Items.TrackingNumber,
+                    ConsolidationNumber = r.Consolidator.ConsolidateNumber,
+                    TrackingNumber = r.Items.TrackingNumber,
+                    Status = r.Items.Status.Status,
+                    CustomerId = r.Items.Customer.Id,
+                    CustomerName = r.Items.Customer.Name,
+                    CustomerPhonenumber = r.Items.Customer.Phonenumber,
+                    Description = r.Items.Descripttion,
+                    isDeleted = r.Items.isDeleted,
                     ItemName = r.Items.ItemName,
-                    ItemStatus = r.Items.Status.Status
+                    ItemValue_Baht = r.Items.ItemValue_Baht,
+                    ItemValue_Dollar = r.Items.ItemValue_Dollar,
+                    ItemValue_Kip = r.Items.ItemValue_Kip,
+                    ConfrimDate = r.Items.ConfrimDate == null ? "" : r.Items.ConfrimDate?.ToString("dd-MM-yyyy"),
+                    CreatedDate = r.Items.CreatedDate == null ? "" : r.Items.CreatedDate?.ToString("dd-MM-yyyy"),
+                    ReceiveDate = r.Items.ReceiveDate == null ? "" : r.Items.ReceiveDate?.ToString("dd-MM-yyyy"),
+                    SendingDate = r.Items.SendingDate == null ? "" : r.Items.SendingDate?.ToString("dd-MM-yyyy"),
+                    SentDate = r.Items.SentDate == null ? "" : r.Items.SentDate?.ToString("dd-MM-yyyy"),
+                    ReceiverAddress = r.Items.ReceiverAddress,
+                    ReceiverName = r.Items.ReceiverName,
+                    ReceiverPhone = r.Items.ReceipverPhone
                 }).ToList();
             }
             else

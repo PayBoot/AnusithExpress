@@ -1,4 +1,5 @@
 ﻿using AnousithExpress.DataEntry.Models;
+using AnousithExpress.DataEntry.ViewModels.Admin;
 using AnousithExpress.DataEntry.ViewModels.Customer;
 using AnousithExpress.DataEntry.ViewModels.Delivery;
 using System;
@@ -21,14 +22,28 @@ namespace AnousithExpress.DataEntry.Interface
             DateTime? SubmitDate,
             string Status);
         ItemsModel GetSingle(int itemId);
-        bool Create(ItemsModel model);
-        bool Update(ItemsModel model);
+        ItemsModel GetSingle(string trackingnumber);
+        int Create(ItemsModel model);
+        int Update(ItemsModel model);
         bool Submit(int itemId);
         bool UndoSubmit(int itemId);
         bool Delete(int itemId);
         List<TbItemStatus> GetStatus();
+        bool CheckTrackingNumber(string trackingNumber);
 
+        List<ItemsModel> GetProductInStorePerCustomer(int CustomerId,
+            DateTime? fromCreateDate,
+            DateTime? toCreateDate);
 
+        List<ItemsModel> GetProductInProcessPerCustomer(int CustomerId,
+            DateTime? fromReceiveDate,
+            DateTime? toReceiveDate);
+        List<ItemsModel> GetProductProcessedPerCustomer(int CustomerId,
+           DateTime? fromReceiveDate,
+           DateTime? toReceiveDate);
+        ItemsCountModel GetItemsCount(int CustomerId,
+           DateTime? fromReceiveDate,
+           DateTime? toReceiveDate);
         /// Delivery
         /// 
         /// /////////////////////////////////
@@ -50,6 +65,9 @@ namespace AnousithExpress.DataEntry.Interface
         /// ///////////////////
         /// 
         Double GetNotification();
+        List<CustomerItemsModel> GetProductByCustomerId(int customerId, int statusId, DateTime? fromDate, DateTime? toDate);
+        bool CreateByAdmin(ItemsModel model);
+
 
 
     }

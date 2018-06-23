@@ -1,0 +1,66 @@
+﻿
+@{
+    ViewBag.Title = "CustomerItems";
+}
+@model List<AnousithExpress.DataEntry.ViewModels.Admin.CustomerItemsModel>
+<h2>ລາຍການສີນຄ້າຂອງລຸກຄ້າຫມາຍເລກ @ViewBag.CustomerId</h2>
+
+<div class="panel">
+    <div class="panel-body">
+        <div>
+            @using (Html.BeginForm("CustomerItems", "Admin", FormMethod.Get))
+            {
+                @Html.Hidden("customerId",ViewData["CustomerId"])
+                <div class=" col-md-3">
+                    <label>ສະຖານະ</label>
+                    @Html.DropDownList("statusId", ViewBag.Statuses as SelectList)
+                </div>
+                <div class=" col-md-7">
+                    <label>ວັນທີຮັບເຄື່ອງແຕ່ວັນທີ</label>
+                    <input type="date" name="fromDate" />
+                    <label>ຫາວັນທີ</label>
+                    <input type="date" name="toDate" />
+                </div>
+                <div class="col-md-3">
+                    <button type="submit">ຄົ້ນຫາ</button>
+                </div>
+                
+            }
+
+        </div>
+        <table class=" table table-condensed">
+            <thead>
+                <tr>
+                    <th>ເລກຕິດຕາມ</th>
+                    <th>ປະເພດສີນຄ້າ</th>
+                    <th>ສະຖານະ</th>
+                    <th>ວັນທີຮັບສີນຄ້າ</th>
+                    <th>ຜູ້ຮັບປາຍທາງ</th>
+                    <th>ເບີໂທປາຍທາງ</th>
+                    <th>ທີ່ຢູ່ປາຍທາງ</th>
+                    <th>ຂໍ້ມູນເພີ່ມເຕີມ</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                <tr>
+                    <td>@item.TrackingNumber</td>
+                    <td>@item.ItemName</td>
+                    <td>@item.Status</td>
+                    <td>@item.ReceiveDate</td>
+                    <td>@item.ReceiverName</td>
+                    <td>@item.ReceipverPhone</td>
+                    <td>@item.ReceiverAddress</td>
+                    <td>@item.Description</td>
+                    <td>
+                        <a href="@Url.Action("ItemCreateUpdate","Admin", new {itemId = item.Id })">ລາຍລະອຽດ</a>
+                    </td>
+                </tr>
+                }
+
+            </tbody>
+        </table>
+    </div>
+</div>

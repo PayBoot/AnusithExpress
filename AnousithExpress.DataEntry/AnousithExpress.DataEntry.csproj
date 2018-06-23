@@ -48,13 +48,17 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="EntityContext.cs" />
+    <Compile Include="Implimentation\AccountService.cs" />
+    <Compile Include="Implimentation\AllocationService.cs" />
     <Compile Include="Implimentation\ConsolidationService.cs" />
     <Compile Include="Implimentation\CustomerService.cs" />
+    <Compile Include="Implimentation\DatabaseInit.cs" />
     <Compile Include="Implimentation\ProductService.cs" />
     <Compile Include="Interface\IAccounts.cs" />
     <Compile Include="Interface\IAllocation.cs" />
     <Compile Include="Interface\IConsolidation.cs" />
     <Compile Include="Interface\ICustomers.cs" />
+    <Compile Include="Interface\IDatabaseInit.cs" />
     <Compile Include="Interface\IProducts.cs" />
     <Compile Include="Migrations\201806180436572_initial.cs" />
     <Compile Include="Migrations\201806180436572_initial.Designer.cs">
@@ -79,10 +83,13 @@
     <Compile Include="Utility\ItemUtility.cs" />
     <Compile Include="Utility\UserUtility.cs" />
     <Compile Include="ViewModels\Admin\AccountModel.cs" />
+    <Compile Include="ViewModels\Admin\CustomerItemsModel.cs" />
+    <Compile Include="ViewModels\Admin\CustomerModel.cs" />
     <Compile Include="ViewModels\Customer\ConsolidationItemModel.cs" />
     <Compile Include="ViewModels\Customer\ConsolidationListModel.cs" />
     <Compile Include="ViewModels\Customer\ConsolidationModel.cs" />
     <Compile Include="ViewModels\Customer\CustomerProfileItemsModel.cs" />
+    <Compile Include="ViewModels\Customer\ItemsCountModel.cs" />
     <Compile Include="ViewModels\Customer\ItemsModel.cs" />
     <Compile Include="ViewModels\Customer\ProfileModel.cs" />
     <Compile Include="ViewModels\Delivery\ItemsAllocationModel.cs" />

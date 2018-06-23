@@ -1,0 +1,64 @@
+﻿@model AnousithExpress.DataEntry.ViewModels.Customer.ItemsModel
+<div class="col-lg-12">
+    <div class="card">
+        <div class="card-header text-center">
+            <strong>ລາຍລະອຽດ</strong>
+        </div>
+        <div class="card-body card-block">
+            <div class="row">
+                <div class="col-md-12">
+                    <table class="table table-bordered">
+                        <tr>
+                            <td style="font-weight:bolder;">ເລກຕິດຕາມ</td>
+                            <td>@Model.TrackingNumber</td>
+                        </tr>
+                        <tr>
+                            <td style="font-weight:bolder;">ປະເພດສີນຄ້າ</td>
+                            <td>@Model.ItemName</td>
+                        </tr>
+                        <tr>
+                            <td style="font-weight:bolder;">ສະຖານະ</td>
+                            <td>@Model.Status</td>
+                        </tr>
+                        <tr>
+                            <td style="font-weight:bolder;">(ວັນເດືອນປີ) ສ້າງລາຍການ</td>
+                            <td>@Model.CreatedDate</td>
+                        </tr>
+                        <tr>
+                            <td style="font-weight:bolder;">(ວັນເດືອນປີ) ວັນທີສົ່ງສີນຄ້າ</td>
+                            <td>@Model.ReceiveDate</td>
+                        </tr>
+                        <tr>
+                            <td style="font-weight:bolder;">(ວັນເດືອນປີ) ວັນທີ່ປາຍທາງຮັບສີນຄ້າ</td>
+                            <td>@Model.SendingDate</td>
+                        </tr>
+                        <tr>
+                            <td style="font-weight:bolder;">ຊື່ຜູ້ສົ່ງ</td>
+                            <td>@Model.CustomerName</td>
+                        </tr>
+
+                        <tr>
+                            <td style="font-weight:bolder;">ເບີໂທຜູ້ສົ່ງ</td>
+                            <td>@Model.CustomerPhonenumber</td>
+                        </tr>
+                        <tr>
+                            <td style="font-weight:bolder;">ຊື່ຜູ້ຮັບ</td>
+                            <td>@Model.ReceiverName</td>
+                        </tr>
+                        <tr>
+                            <td style="font-weight:bolder;">ເບີໂທຜູ້ຮັບ</td>
+                            <td>@Model.CustomerPhonenumber</td>
+                        </tr>
+                        <tr>
+                            <td style="font-weight:bolder;">ທີ່ຢູ່ຜູ້ຮັບ</td>
+                            <td>@Model.ReceiverAddress</td>
+                        </tr>
+
+
+                    </table>
+
+                </div>
+            </div>
+        </div>       
+    </div>
+</div>

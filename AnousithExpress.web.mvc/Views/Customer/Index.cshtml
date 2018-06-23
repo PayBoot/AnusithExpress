@@ -1,67 +1,138 @@
 ﻿
 @{
+    Layout = "~/Views/Shared/_CustomerLayout.cshtml";
     ViewBag.Title = "Index";
 }
 
-<h2>Index</h2>
-
-<div class="row">
-    <a href="@Url.Action("ItemsCreateUpdate","Customer")" class="panel">
-        <div class="panel col-md-2 panelhover" style="margin:10px;">
-            <div class="panel-body">
-                <div class="row">
-                    <div class="col">
-                        <img />
-                    </div>
-                    <div class="col">
-                        <h3>ເພີ່ມສີນຄ້າ</h3>
-                    </div>
-                </div>
+<div class="breadcrumbs">
+    <div class="col-sm-4">
+        <div class="page-header float-left">
+            <div class="page-title">
+                <h1>ຫນ້າຫລັກ</h1>
             </div>
         </div>
-    </a>
-    <a href="@Url.Action("Items","Customer")" class="panel">
-        <div class="panel col-md-2 panelhover" style="margin:10px;">
-            <div class="panel-body">
-                <div class="row">
-                    <div class="col">
-                        <img />
-                    </div>
-                    <div class="col">
-                        <h3>ລາຍການສີນຄ້າ</h3>
-                    </div>
-                </div>
+    </div>
+    <div class="col-sm-8">
+        <div class="page-header float-right">
+            <div class="page-title">
+                <ol class="breadcrumb text-right">
+                    <li class="active">ຫນ້າຫລັກ</li>
+                </ol>
             </div>
         </div>
-    </a>
-    <a href="@Url.Action("Consolidation","Customer")" class="panel">
-        <div class="panel  col-md-2 panelhover" style="margin:10px;">
-            <div class="panel-body">
-                <div class="row">
-                    <div class="col">
-                        <img />
-                    </div>
-                    <div class="col">
-                        <h3>ສັງລວມ</h3>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </a>
-    <a href="@Url.Action("ProfileDetail","Customer")" class="panel">
-        <div class="panel col-md-2 panelhover" style="margin:10px;">
-            <div class="panel-body">
-                <div class="row">
-                    <div class="col">
-                        <img />
-                    </div>
-                    <div class="col">
-                        <h3>ຂໍ້ມູນສ່ວນຕົວ</h3>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </a>
-
+    </div>
 </div>
+<div class="content mt-3">
+    <div class="animated">
+        <a href="@Url.Action("ItemsCreateUpdate","Customer")">
+            <div class="col-sm-6 col-lg-3">
+                <div class="card text-white bg-flat-color-1">
+                    <div class="card-body pb-0">
+                        <div class="dropdown float-right">
+                            <i class="fa fa-cog"></i>
+                        </div>
+                        <h4 class="mb-0">
+                            <span class="count"> </span>
+                        </h4>
+                        <p class="text-light">ສ້າງສີນຄ້າ</p>
+                    </div>
+                </div>
+            </div>
+        </a>
+        <a href="@Url.Action("ItemsInStore","Customer")">
+            <div class="col-sm-6 col-lg-3">
+                <div class="card text-white bg-flat-color-2">
+                    <div class="card-body pb-0">
+                        <div class="dropdown float-right">
+                            <i class="fa fa-cog"></i>
+                        </div>
+                        <h4 class="mb-0">
+                            <span class="count"> </span>
+                        </h4>
+                        <p class="text-light">ສີນຄ້າທີ່ຍັງບໍ່ທັນສົ່ງ</p>
+                    </div>
+                </div>
+            </div>
+        </a>
+        <a href="@Url.Action("ItemsInProcess","Customer")">
+            <div class="col-sm-6 col-lg-3">
+                <div class="card text-white bg-flat-color-3">
+                    <div class="card-body pb-0">
+                        <div class="dropdown float-right">
+                            <i class="fa fa-cog"></i>
+                        </div>
+                        <h4 class="mb-0">
+                            <span class="count"> </span>
+                        </h4>
+                        <p class="text-light">ສີນຄ້າກຳລັງດຳເນີນການ</p>
+                    </div>
+                </div>
+            </div>
+        </a>
+        <a href="@Url.Action("ItemsProcessed","Customer")">
+            <div class="col-sm-6 col-lg-3">
+                <div class="card text-white bg-flat-color-4">
+                    <div class="card-body pb-0">
+                        <div class="dropdown float-right">
+                            <i class="fa fa-cog"></i>
+                        </div>
+                        <h4 class="mb-0">
+                            <span class="count"> </span>
+                        </h4>
+                        <p class="text-light">ປະຫວັດການສົ່ງ</p>
+                    </div>
+                </div>
+            </div>
+        </a>
+        
+        <a href="@Url.Action("Consolidation","Customer")">
+            <div class="col-sm-6 col-lg-3">
+                <div class="card text-white bg-flat-color-5">
+                    <div class="card-body pb-0">
+                        <div class="dropdown float-right">
+                            <i class="fa fa-cog"></i>
+                        </div>
+                        <h4 class="mb-0">
+                            <span class="count"> </span>
+                        </h4>
+                        <p class="text-light">ສັງລວມ</p>
+                    </div>
+                </div>
+            </div>
+        </a>
+        
+        <div class="col-sm-6 col-lg-3">
+            <div class="card text-white bg-flat-color-1">
+                <div class="card-body pb-0">
+                    <div class="dropdown float-right">
+                        <i class="fa fa-cog"></i>
+                    </div>
+                    <h4 class="mb-0">
+                        <span class="count"> </span>
+                    </h4>
+                    <p class="text-light">ຂໍ້ມູນສ່ວນໂຕ</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-lg-3">
+            <div class="card text-white bg-flat-color-2">
+                <div class="card-body pb-0">
+                    <div class="dropdown float-right">
+                        <i class="fa fa-cog"></i>
+                    </div>
+                    <h4 class="mb-0">
+                        <span class="count"> </span>
+                    </h4>
+                    <p class="text-light">ອອກຈາກລະບົບ</p>
+                </div>
+            </div>
+        </div>
+
+
+
+
+    
+    </div><!-- .animated -->
+</div>
+
 

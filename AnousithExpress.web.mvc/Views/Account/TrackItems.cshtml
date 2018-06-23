@@ -1,0 +1,114 @@
+﻿
+@{
+    Layout = null;
+}
+@model AnousithExpress.DataEntry.ViewModels.Customer.ItemsModel
+
+<!doctype html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7" lang=""> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8" lang=""> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9" lang=""> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html class="no-js" lang="">
+<!--<![endif]-->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>ຄົ້ນຫາສີນຄ້າ</title>
+    <meta name="description" content="Sufee Admin - HTML5 Admin Template">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="apple-touch-icon" href="apple-icon.png">
+    <link rel="shortcut icon" href="favicon.ico">
+    <link rel="stylesheet" href="~/assets/css/normalize.css">
+    <link rel="stylesheet" href="~/assets/css/bootstrap.min.css">
+    <link rel="stylesheet" href="~/assets/css/font-awesome.min.css">
+    <link rel="stylesheet" href="~/assets/css/themify-icons.css">
+    <link rel="stylesheet" href="~/assets/css/flag-icon.min.css">
+    <link rel="stylesheet" href="~/assets/css/cs-skin-elastic.css">
+    <link href="~/LaoFont/style.css" rel="stylesheet" />
+    <!-- <link rel="stylesheet" href="assets/css/bootstrap-select.less"> -->
+    <link rel="stylesheet" href="~/assets/scss/style.css">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,600,700,800' rel='stylesheet' type='text/css'>
+    <!-- <script type="text/javascript" src="https://cdn.jsdelivr.net/html5shiv/3.7.3/html5shiv.min.js"></script> -->
+</head>
+@if (Model==null)
+{
+    Response.Redirect("~/Account/Index");
+}
+else
+{
+<body class="bg-dark">
+
+    <div class="sufee-login d-flex align-content-center flex-wrap">
+        <div class="container">
+            <div class="login-content">
+                <div class="login-logo">
+                
+                        <img class="align-content" src="~/assets/Image/anoutsithlogo.png" height="70" alt="">
+                 
+                </div>
+                <div class="login-form">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <table class="table table-bordered">
+                                    <tr>
+                                        <td style="font-weight:bolder;">ເລກຕິດຕາມ</td>
+                                        <td>@Model.TrackingNumber</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="font-weight:bolder;">ປະເພດສີນຄ້າ</td>
+                                        <td>@Model.ItemName</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="font-weight:bolder;">ສະຖານະ</td>
+                                        <td>@Model.Status</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="font-weight:bolder;">(ວັນເດືອນປີ) ສ້າງລາຍການ</td>
+                                        <td>@Model.CreatedDate</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="font-weight:bolder;">(ວັນເດືອນປີ) ວັນທີສົ່ງສີນຄ້າ</td>
+                                        <td>@Model.ReceiveDate</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="font-weight:bolder;">(ວັນເດືອນປີ) ວັນທີ່ປາຍທາງຮັບສີນຄ້າ</td>
+                                        <td>@Model.SendingDate</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="font-weight:bolder;">ຊື່ຜູ້ສົ່ງ</td>
+                                        <td>@Model.CustomerName</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="font-weight:bolder;">ເບີໂທຜູ້ສົ່ງ</td>
+                                        <td>@Model.CustomerPhonenumber</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="font-weight:bolder;">ຊື່ຜູ້ຮັບ</td>
+                                        <td>@Model.ReceiverName</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="font-weight:bolder;">ເບີໂທຜູ້ຮັບ</td>
+                                        <td>@Model.CustomerPhonenumber</td>
+                                    </tr>
+                                </table>
+
+                            </div>
+                            <button type="button" onclick='window.location="@Url.Action("Index","Account")"' class="btn social btn-secondary btn-flat btn-addon ">ຄົ້ນຫາສີນຄ້າຕາມເລກຕິດຕາມ</button>
+                        </div>
+                    </div>                   
+                </div>
+            </div>
+        </div>
+    </div>
+  
+    <script src="~/assets/js/vendor/jquery-2.1.4.min.js"></script>
+    <script src="~/assets/js/popper.min.js"></script>
+    <script src="~/assets/js/plugins.js"></script>
+    <script src="~/assets/js/main.js"></script>
+   
+</body>     
+}
+
+</html>
