@@ -1,72 +1,201 @@
 ﻿
 @{
-    ViewBag.Title = "ItemsToPickUp";
+    Layout = "~/Views/Shared/_CustomerLayout.cshtml";
+    ViewBag.Title = "ສີນຄ້າທີ່ຕ້ອງໄປຮັບ";
 }
 
 @model List<AnousithExpress.DataEntry.ViewModels.Customer.ItemsModel>
-<div class="row">
- <div class="col-md-12">
-        <h2>ສີນຄ້າທີ່ຕ້ອງໄປຮັບ</h2>
- </div>
-    
+
+<div class="breadcrumbs">
+    <div class="col-sm-4">
+        <div class="page-header float-left">
+            <div class="page-title">
+
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-8">
+        <div class="page-header float-right">
+            <div class="page-title">
+                <ol class="breadcrumb text-right">
+                    <li><a href="@Url.Action("Index","Customer")">ຫນ້າຫລັກ</a></li>
+                    <li class="active">@ViewData["Title"]</li>
+                </ol>
+            </div>
+        </div>
+    </div>
 </div>
-<div class="row">
-    <div class=" col-md-12">
-        @if (TempData["Message"] != null)
-        {
-            <div class="alert alert-info text-center">@TempData["Message"]</div>
-        }
+<div class="container" id="containerResize">
+    <div class="content mt-3">
+        <div class="animated fadeIn">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <strong class="card-title text-center">ຕາຕະລາງ @ViewData["Title"]</strong>
+                        </div>
+                        <div class="card-body ">
+                            <div class="row">
+                                <div class="col-md-12 form-horizontal">
+                                    <label>ລະຫັດລູກຄ້າ</label>
+                                    <input type="text" name="customerId" class="w-50" />
+                                    <input type="button" class="btn btn-sm btn-warning" onclick="searchItems()" name="searchForItem" value="ຄົ້ນຫາ" />
+                                </div>
+                            </div>
+                            <div class="table-responsive">
+                                <table id="itemDataTable" class="table table-striped table-hover table-bordered " style="width:100%;white-space:nowrap;">
+                                    <thead>
+                                        <tr>
+                                            <th><input type="checkbox" name="checkall" onclick="toggle(this)" /></th>
+                                            <th>ປະເພດສີນຄ້າ</th>
+                                            <th >ເລກຕິດຕາມ</th>
+                                            <th>ສະຖານະ</th>
+                                            <th>ຊື່ຜູ້ຮັບ</th>                 
+                                            <th>ເບີໂທຜູ້ຮັບ</th>
+                                            <th>ທີ່ຢູ່ຜູ້ຮັບ</th>
+                                            <th>ເກັບເງິນປາຍທາງ</th>
+                                        </tr>
+                                    </thead>
+
+                                </table>
+                            </div>
+                           
+                        </div>
+                        <div class="card-footer text-center">
+                            <input type="button" class="btn btn-warning btn-flat w-75" name="name" onclick="submitReceive()" value="ຢືນຢັນການຮັບສີນຄ້າ" />
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div><!-- .animated -->
+    </div><!-- .content -->
+</div>
+<div class="modal fade" id="modal1" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div id="content" class="text-center">
+                    <strong id="popupmessage">ທ່ານແນ່ໃຈທີ່ຈະລືບລາຍການ?</strong>
+                </div>
+                <div id="modalButton" class="text-center">
+                    <button class="btn btn-primary btn-flat mb-1 w-75" data-dismiss="modal">ອອກ</button>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 
 
-<div class="panel">
-    <div class=" panel-body">
-        @using (Html.BeginForm("ItemsToPickUp", "Delivery", FormMethod.Get))
-        {
-            <label>ລະຫັດລູກຄ້າ</label>
-            @Html.TextBox("customerId")
-            <input type="submit" name="submit" value="ຄົ້ນຫາ" />
+
+
+
+
+@section scripts{
+    <script type="text/javascript" language="javascript">
+        let table;
+        jQuery(document).ready(function () {
+            itemTable();
+        });
+        function toggle(source) {
+            let checkboxes = document.getElementsByName("itemsId");
+            for (var i = 0, n = checkboxes.length; i < n; i++) {
+                checkboxes[i].checked = source.checked;
+            }
         }
+  
+        function itemTable() {
+            table = jQuery("#itemDataTable").DataTable({
+                serverSide: true,
+                responsive: false,
+                paging: false,
+                searching: false,
+                sorting: false,
+                language: LaoLangage,
 
-
-
-        @using (Html.BeginForm("PickUp", "Delivery", FormMethod.Post))
-        {
-            <table class="table table-striped">
-                <thead>
-                    <tr>
-                        <th><input type="checkbox" name="checkall" onclick="toggle(this)" /></th>
-                        <th>ເລກຕິດຕາມ</th>
-                        <th>ປະເພດເຄື່ອງ</th>
-                        <th>ສະຖານະ</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var item in Model)
-                    {
-                        <tr>
-                            <td><input type="checkbox" name="itemsId" value="@item.Id" />@Html.Hidden("customerId", item.CustomerId)</td>
-                            <td>@item.TrackingNumber</td>
-                            <td>@item.ItemName</td>
-                            <td>@item.Status</td>
-                        </tr>
+                ajax: {
+                    url: "/Delivery/ItemsToPickUpTable",
+                    type: "POST",
+                    datatype: "json",
+                    data: function (d) {
+                        d.customerId = jQuery("input[name='customerId']").val() || 0
                     }
+                },
+                columnDefs: [
+                    {
+                        targets: [0, 1, 2, 3, 4, 5, 6],
+                        orderable: false
+                    },
 
-                </tbody>
-            </table>
-            <input type="submit" name="name" onclick="return confirm('ແນ່ໃຈແລ້ວບໍ່')" value="ຢືນຢັນການຮັບສີນຄ້າ" />
+                ],
+                columns: [
+                    {
+                        data: "Id", render: function (data, type, full, meta) {
+                            return '<input type="checkbox" id="checkId" name="checkId" value="' + data + '" />';
+                        }
+                    },
+
+                    { data: "ItemName", name: "ItemName" },
+                    { data: "TrackingNumber", name: "TrackingNumber" },
+                    { data: "Status", name: "Status" },
+                    { data: "ReceiverName", name: "ReceiverName" },
+                    { data: "ReceipverPhone", name: "ReceipverPhone" },
+                    { data: "ReceiverAddress", name: "ReceiverAddress" },                  
+                    {
+                        data: "Id", render: function (data, type, full, meta) {
+                            let html = '';
+                            if (full.ItemValue_Kip !== null) {
+                                html += full.ItemValue_Kip + "ກີບ<br/>";
+                            }
+                            if (full.ItemValue_Baht !== null) {
+                                html += full.ItemValue_Baht + "ບາດ<br/>";
+                            }
+                            if (full.ItemValue_Dollar !== null) {
+                                html += full.ItemValue_Dollar + "ໂດລ້າ";
+                            }
+                            if (full.ItemValue_Kip === null && full.ItemValue_Baht === null && full.ItemValue_Dollar === null) {
+                                html = 'ບໍ່ມີ';
+                            }
+                            return '' + html + '';
+                        }
+                    }
+                   
+                ]
+            });
         }
-    </div>
-</div>
-
-
-
-<script type="text/javascript" language="javascript">
-    function toggle(source) {
-        let checkboxes = document.getElementsByName("itemsId");
-        for (var i = 0, n = checkboxes.length; i < n; i++) {
-            checkboxes[i].checked = source.checked;
+        function searchItems() {
+            table.ajax.reload(false,null);
         }
+
+        function submitReceive() {
+            let CheckboxArray = [];
+            jQuery("#checkId:checked").each(function ()
+            {
+                CheckboxArray.push(jQuery(this).val());
+            });
+   
+            jQuery.ajax({
+                url: "/Delivery/PickUp",
+                data: { itemsId: CheckboxArray },
+                type: "POST",
+                datatype: "json",
+                success: function (r) {
+                    if (r===true) {
+                        jQuery("#popupmessage").html("ສຳເລັດ");
+                        jQuery("#modal1").modal("show");
+                        table.ajax.reload(null, false);
+                    }
+                    else if (r ==="inValid") {
+                        jQuery("#popupmessage").html("ກະລຸນາເລືອກສີນຄ້າ");
+                        jQuery("#modal1").modal("show");
+                    }
+                    else {
+                        jQuery("#popupmessage").html("ບໍ່ສຳເລັດ");
+                        jQuery("#modal1").modal("show");
+                        table.ajax.reload(null, false);
+                    }
+                }
+            });
+        }
+    </script>
     }
-</script>

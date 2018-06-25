@@ -215,11 +215,13 @@
     <Content Include="assets\fonts\themify.svg" />
     <Content Include="assets\Image\anoutsithlogo.png" />
     <Content Include="assets\js\bootstrap-datepicker.js" />
+    <Content Include="assets\js\bootstrap.js" />
     <Content Include="assets\js\chartjs.min.js" />
     <Content Include="assets\js\dashboard.js" />
     <Content Include="assets\js\datatables.min.js" />
     <Content Include="assets\js\DatatableVariable.js" />
-    <Content Include="assets\js\index.html" />
+    <Content Include="assets\js\datepicker-cy-GB.js" />
+    <Content Include="assets\js\datepicker.js" />
     <Content Include="assets\js\jQuery-datePicker.lao.js" />
     <Content Include="assets\js\less.min.js" />
     <Content Include="assets\js\lib\chart-js\Chart.bundle.js" />
@@ -282,6 +284,7 @@
     <Content Include="assets\js\main.js" />
     <Content Include="assets\js\plugins.js" />
     <Content Include="assets\js\popper.min.js" />
+    <Content Include="assets\js\require.js" />
     <Content Include="assets\js\selectFx.js" />
     <Content Include="assets\js\vendor\index.html" />
     <Content Include="assets\js\vendor\jquery-1.11.3.min.js" />
@@ -683,6 +686,7 @@
     <Content Include="Views\Customer\ItemDetailPartial.cshtml" />
     <Content Include="Views\Customer\ItemsProcessed.cshtml" />
     <Content Include="Views\Customer\ConsolidationDetail.cshtml" />
+    <Content Include="Views\Shared\_DeliveryMenu.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -1,64 +1,128 @@
 ﻿
 @{
-    ViewBag.Title = "ProfileUpdate";
+    Layout = "~/Views/Shared/_CustomerLayout.cshtml";
+    ViewBag.Title = "ປ່ຽນແປງຂໍ້ມູນສ່ວນໂຕ";
 }
 @model AnousithExpress.DataEntry.ViewModels.Customer.ProfileModel
-<h2>ProfileUpdate</h2>
-@if (ViewBag.Message!=null)
-{
-    <div class="alert alert-info text-center">
-        <strong>@ViewBag.Message</strong>
+<div class="breadcrumbs">
+    <div class="col-sm-4">
+        <div class="page-header float-left">
+            <div class="page-title">
+                <h1>ຫນ້າຫລັກ</h1>
+            </div>
+        </div>
     </div>
-}
+    <div class="col-sm-8">
+        <div class="page-header float-right">
+            <div class="page-title">
+                <ol class="breadcrumb text-right">
+                    <li><a href="@Url.Action("Index","Customer")">ຫນ້າຫລັກ</a></li>
+                    <li><a href="@Url.Action("ProfileDetail","Customer")">ຂໍ້ມູນສ່ວນໂຕ</a></li>
+                    <li class="active">@ViewData["Title"]</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container">
+    <div class="col-lg-10">
+        <div class="card">
+            <div class="card-header">
+                <strong>@ViewData["Title"]</strong>
+            </div>
+            <div class="card-body card-block">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="login-form">
+                            <form id="profileDetailForm">
+                                @Html.HiddenFor(m => m.Id)
+                                <div class="form-group">
+                                    <label>ຊື່ ແລະ ນາມສະກຸນ</label>
+                                    @Html.TextBoxFor(m => m.Name, new { @class = "form-control", @placeholder = "ຊື່ ແລະ ນາມສະກຸນ" })
+                                </div>
+                                <div class="form-group">
+                                    <label>ເບີໂທ</label>
+                                    @Html.TextBoxFor(m => m.Phonenumber, new { @class = "form-control", @placeholder = "ເບີໂທ" })
+                                </div>
+                                <div class="form-group">
+                                    <label>ລະຫັດ (ຢ່າງຫນ້ອຍ 6 ຕົວເລກ)</label>
+                                    @Html.PasswordFor(m => m.Password, new { @class = "form-control", @placeholder = "ລະຫັດ" })
+                                </div>
+                                <div class="form-group">
+                                    <label>ທີ່ຢູ່</label>
+                                    @Html.TextBoxFor(m => m.Address, new { @class = "form-control", @placeholder = "ທີ່ຢູ່" })
+                                </div>
+                                <div class="form-group">
+                                    <label>ເລກບັນຊີ BCEL ສະກຸນເງີນກີບ (ບໍ່ໄສ່ກໍໄດ້)</label>
+                                    @Html.TextBoxFor(m => m.BCEL_Kip, new { @class = "form-control", @placeholder = "ເລກບັນຊີ" })
+                                </div>
+                                <div class="form-group">
+                                    <label>ເລກບັນຊີ BCEL ສະກຸນເງີນບາດ (ບໍ່ໄສ່ກໍໄດ້)</label>
+                                    @Html.TextBoxFor(m => m.BCEL_Baht, new { @class = "form-control", @placeholder = "ເລກບັນຊີ" })
+                                </div>
+                                <div class="form-group">
+                                    <label>ເລກບັນຊີ BCEL ສະກຸນເງີນໂດລາ (ບໍ່ໄສ່ກໍໄດ້)</label>
+                                    @Html.TextBoxFor(m => m.BCEL_Dollar, new { @class = "form-control", @placeholder = "ເລກບັນຊີ" })
+                                </div>
+                                <div class="card-footer text-center">
+                                    <button type="button" onclick="updateDetail()" class="btn btn-warning col-sm-5 mb-1">
+                                        <i class="fa fa-dot-circle-o"></i> ປ່ຽນແປງ
+                                    </button>
+                                    <button type="button" onclick='window.location = "@Url.Action("Index","Customer")"' class="btn btn-info  col-sm-5 mb-1">
+                                        <i class="fa fa-backward"></i> ກັບໄປຫນ້າຫລັກ
+                                    </button>
+                                </div>
+                                <hr />
 
-    <div>
-        @using (Html.BeginForm("ProfileUpdate", "Customer", FormMethod.Post))
-        {
-           // @Html.HiddenFor(m=>m.Id)
-           // @Html.TextBoxFor(m => m.Id)
-            @Html.HiddenFor(m => m.Id)
-            <div class="row">
-                <div class="form-group">
-                    @Html.Label("ຊື່", new { @class = "control-label col-md-3" })
-                    @Html.TextBoxFor(m => m.Name, new { @class = "form-control col-md-9" })
-                    @Html.ValidationMessageFor(m => m.Name)
-                    @ViewBag.DuplicateMessage
-                </div>
-                <div class="form-group">
-                    @Html.Label("ເບີໂທ", new { @class = "control-label col-md-3" })
-                    @Html.TextBoxFor(m => m.Phonenumber, new { @class = "form-control col-md-9" })
-                    @Html.ValidationMessageFor(m => m.Phonenumber)
-                    @ViewBag.DuplicateMessage
-                </div>
-                <div class="form-group">
-                    @Html.Label("ລະຫັດ", new { @class = "control-label col-md-3" })
-                    @Html.PasswordFor(m => m.Password, new { @class = "form-control col-md-9" })
-                    @Html.ValidationMessageFor(m => m.Password)
-                </div>
-                <div class="form-group">
-                    @Html.Label("ທີ່ຢູ່", new { @class = "control-label col-md-3" })
-                    @Html.TextBoxFor(m => m.Address, new { @class = "form-control col-md-9" })
-                    @Html.ValidationMessageFor(m => m.Address)
-                </div>
-                <div class="form-group">
-                    @Html.Label("ເລກບັນຊີ BCEL ສະກຸນເງີນກີບ", new { @class = "control-label col-md-3" })
-                    @Html.TextBoxFor(m => m.BCEL_Kip, new { @class = "form-control col-md-9" })
-                </div>
-                <div class="form-group">
-                    @Html.Label("ເລກບັນຊີ BCEL ສະກຸນເງີນບາດ", new { @class = "control-label col-md-3" })
-                    @Html.TextBoxFor(m => m.BCEL_Baht, new { @class = "form-control col-md-9" })
-                </div>
-                <div class="form-group">
-                    @Html.Label("ເລກບັນຊີ BCEL ສະກຸນເງີນໂດລາ", new { @class = "control-label col-md-3" })
-                    @Html.TextBoxFor(m => m.BCEL_Dollar, new { @class = "form-control col-md-9" })
+                            </form>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <div class="row">
-                <div class="col-md-12">
-                    <input type="submit" name="register" value="ບັນທຶກ" class="btn btn-success" />
-                    <a class="btn btn-success" href="@Url.Action("Index","Customer")">ກັບໄປຫນ້າຫລັກ</a>
+
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modal1" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div id="content" class="text-center">
+                    <strong id="messageModal"></strong>
+                </div>
+                <div>
+                    <button class="btn btn-primary btn-flat m-b-15 w-100" data-dismiss="modal">ອອກ</button>
                 </div>
             </div>
+        </div>
+    </div>
 
+</div>
+@section scripts{
+    <script type="text/javascript">
+        function updateDetail() {
+            jQuery.ajax({
+                url: "/Customer/ProfileUpdateFunction",
+                data: jQuery("#profileDetailForm").serialize(),
+                type: "POST",
+                datatype: "json",
+                success: function (r) {
+                    if (r === true) {
+                        jQuery("#messageModal").html("ສຳເລັດ");
+                        jQuery("#modal1").modal('show');
+                    }
+                    else if (r === false) {
+                        jQuery("#messageModal").html("ບໍ່ສຳເລັດ ກະລຸນາກວດໃຫມ່ອີກຄັ້ງ");
+                        jQuery("#modal1").modal('show');
+                    }
+                    else {
+                        jQuery("#messageModal").html(r);
+                        jQuery("#modal1").modal('show');
+                    }
+                }
+
+            });
         }
-    </div>
+    </script>
+}

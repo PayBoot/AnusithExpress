@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Dynamic;
+using System.Text;
 using System.Web.Mvc;
 
 namespace AnousithExpress.web.mvc.Controllers
@@ -301,6 +302,8 @@ namespace AnousithExpress.web.mvc.Controllers
             var model = _consolidation.GetConsolidationDetailByConsolidationId(consolidationId);
             return PartialView("ConsolidationDetail", model);
         }
+
+
         /// <summary>
         /// /////////
         /// </summary>
@@ -328,8 +331,17 @@ namespace AnousithExpress.web.mvc.Controllers
 
         public ActionResult ProfileDetail()
         {
-            var model = _customer.GetCustomerProfileItems(1);
-            return View(model);
+            if (Session["UserId"] != null)
+            {
+                int UserId = (int)Session["UserId"];
+                var model = _customer.GetCustomerProfileItems(UserId);
+                return View(model);
+            }
+            else
+            {
+                return RedirectToAction("Index", "Account");
+            }
+
         }
         public ActionResult ProfileUpdate()
         {
@@ -338,39 +350,40 @@ namespace AnousithExpress.web.mvc.Controllers
         }
 
         [HttpPost]
-        public ActionResult ProfileUpdate(ProfileModel model)
+        public ActionResult ProfileUpdateFunction(ProfileModel model)
         {
 
-            bool result = _customer.Update(model);
-            if (result == true)
+            StringBuilder errorList = new StringBuilder();
+            if (model.Name == null)
             {
-                ViewBag.Message = "ບັນທຶກສຳເລັດ";
+                errorList.Append("ກະລຸນາໃສ່ຊື່ <br/>");
+            }
+            if (model.Phonenumber == null || model.Phonenumber.Length != 8)
+            {
+                errorList.Append("ກະລຸນາໃສ່ເບີໂທ 8 ໂຕເລກ <br/>");
+            }
+            if (!string.IsNullOrEmpty(model.Password))
+            {
+                if (model.Password.Length < 6)
+                {
+                    errorList.Append("ລະຫັດຕ້ອງຢ່າງຫນ້ອຍ 6 ໂຕເລກ <br/>");
+                }
+            }
+            if (model.Address == null)
+            {
+                errorList.Append("ກະລຸນາໃສ່ທີ່ຢູ່ຂອງທ່ານ <br/>");
+            }
+            if (string.IsNullOrEmpty(errorList.ToString()))
+            {
+                bool result = _customer.Update(model);
+                return Json(result, JsonRequestBehavior.AllowGet);
             }
             else
             {
-                ViewBag.Message = "ບັນທຶກບໍ່ສຳເລັດ";
+                return Json(errorList.ToString(), JsonRequestBehavior.AllowGet);
             }
-            return View(model);
-        }
-        public ActionResult Consolidationold()
-        {
-            var model = _consolidation.GetConsolidationListByCustomerId(1, null, null);
-            return View(model);
         }
 
-        [HttpGet]
-        public ActionResult Consolidationold(DateTime? searchDateFrom = null, DateTime? searchDateTo = null)
-        {
-            TempData["searchDateFrom"] = searchDateFrom;
-            TempData["searchDateTo"] = searchDateTo;
-            var model = _consolidation.GetConsolidationListByCustomerId(1, searchDateFrom, searchDateTo);
-            return View(model);
-        }
-        public ActionResult ConsolidationItemold(int consolidationId)
-        {
-            var model = _consolidation.GetConsolidationDetailByConsolidationId(consolidationId);
-            return View(model);
-        }
 
 
 

@@ -9,7 +9,7 @@
     <div class="col-sm-4">
         <div class="page-header float-left">
             <div class="page-title">
-                <h1>ຫນ້າຫລັກ</h1>
+               
             </div>
         </div>
     </div>
@@ -37,33 +37,36 @@
                             <div class="row">
                                 <div class="col-6 horizontal">
                                     <label>ຈາກວັນທີສົ່ງ</label>
-                                    <input type="text" placeholder="ວັນ-ເດືອນ-ປີ" name="fromDate" onchange="searchByDate()" />
+                                    <input type="text" placeholder="ວັນ-ເດືອນ-ປີ" class="w-100" name="fromDate" onchange="searchByDate(this)" />
                                   
 
                                 </div>
                                 <div class="col-6 horizontal">
 
                                     <label>ຫາວັນທີ</label>
-                                    <input type="text" placeholder="ວັນ-ເດືອນ-ປີ" name="toDate" onchange="searchByDate()" />
+                                    <input type="text" placeholder="ວັນ-ເດືອນ-ປີ" class="w-100" name="toDate" onchange="searchByDate(this)" />
                                    
                                 </div>
                             </div>
-                            <table id="itemDataTable" class="table table-striped table-bordered" style="width:100%;">
-                                <thead>
-                                    <tr>
-                                        <th>ເລກຕິດຕາມ</th>
-                                        <th>ປະເພດສີນຄ້າ</th>
-                                        <th>ສະຖານະ</th>
-                                        <th>ຊື່ຜູ້ຮັບ</th>
-                                        <th>ເບີໂທຜູ້ຮັບ</th>
-                                        <th>ທີ່ຢູ່ຜູ້ຮັບ</th>
-                                        <th>ມື້ສົ່ງ</th>
-                                        <th>ເກັບເງິນປາຍທາງ</th>
-                                        <th>ຝັງຊັ້ນ</th>
-                                    </tr>
-                                </thead>
+                            <div class="table-responsive">
+                                <table id="itemDataTable" class="table table-striped table-hover table-bordered" style="width:100%;white-space:nowrap;">
+                                    <thead>
+                                        <tr>
+                                            <th class="control">ເລກຕິດຕາມ</th>
+                                            <th class="control">ປະເພດສີນຄ້າ</th>
+                                            <th class="control">ສະຖານະ</th>
+                                            <th>ຊື່ຜູ້ຮັບ</th>
+                                            <th>ເບີໂທຜູ້ຮັບ</th>
+                                            <th>ທີ່ຢູ່ຜູ້ຮັບ</th>
+                                            <th>ມື້ສົ່ງ</th>
+                                            <th>ເກັບເງິນປາຍທາງ</th>
+                                            <th class="control">ຝັງຊັ້ນ</th>
+                                        </tr>
+                                    </thead>
 
-                            </table>
+                                </table>
+                            </div>
+                           
                         </div>
                     </div>
                 </div>
@@ -156,8 +159,9 @@
             });
         }
 
-        function searchByDate() {
+        function searchByDate(source) {
             table.ajax.reload(null, false);
+            jQuery(source).datepicker('hide');
         }
 
         function itemDetail(id) {

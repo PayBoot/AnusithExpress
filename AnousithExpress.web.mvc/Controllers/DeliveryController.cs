@@ -1,5 +1,9 @@
 ﻿using AnousithExpress.DataEntry.Implimentation;
+using AnousithExpress.DataEntry.ViewModels.Customer;
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Linq.Dynamic;
 using System.Web.Mvc;
 
 namespace AnousithExpress.web.mvc.Controllers
@@ -17,39 +21,98 @@ namespace AnousithExpress.web.mvc.Controllers
             return View();
         }
 
-        public ActionResult ItemsToPickUp(int customerId = 0)
+        public ActionResult ItemsToPickUp()
         {
-            var model = _product.GetProductToPickUpByCustomerId(customerId);
-            return View(model);
+            return View();
         }
 
-        public ActionResult ItemsToSent(int routeId = 0, int timeId = 0, DateTime? dateToDeliver = null)
+        public ActionResult ItemsToPickUpTable(int customerId = 0)
+        {
+            string draw, searchValue, sortColumnName, sortDir;
+            int start, length;
+            int UserId = 0;
+            if (Session["UserId"] != null)
+            {
+                UserId = (int)Session["UserId"];
+            }
+
+            DatatableInitiator(out draw, out start, out length, out searchValue, out sortColumnName, out sortDir);
+            List<ItemsModel> AllList = new List<ItemsModel>();
+            AllList = _product.GetProductToPickUpByCustomerId(customerId);
+
+            int totalRecord = AllList.Count;
+            if (!String.IsNullOrEmpty(searchValue)) // filter
+            {
+                AllList = AllList.Where(x =>
+                        x.TrackingNumber.Contains(searchValue) ||
+                        x.ItemName.Contains(searchValue) ||
+                        x.ReceiverName.Contains(searchValue) ||
+                        x.CreatedDate.Contains(searchValue)).ToList();
+            }
+            int totalRowAfterFilter = AllList.Count;
+            //sorting
+
+            if (!String.IsNullOrEmpty(sortColumnName) && !String.IsNullOrEmpty(sortDir))
+            {
+                AllList = AllList.OrderBy(sortColumnName + " " + sortDir).ToList();
+            }
+
+            //paging
+
+            AllList = AllList.ToList();
+
+            return Json(new
+            {
+                draw = draw,
+                recordsTotal = totalRecord,
+                recordsFiltered = totalRowAfterFilter,
+                data = AllList
+            }, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult PickUp(int[] itemsId)
+        {
+            if (itemsId == null || itemsId.Length == 0)
+            {
+                return Json("inValid", JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                bool result = _product.PickUp(itemsId);
+                return Json(result, JsonRequestBehavior.AllowGet);
+            }
+
+
+
+        }
+
+        public ActionResult ItemsToSent()
         {
             var route = _product.GetRoute();
             var time = _product.GetTime();
             ViewBag.Routes = new SelectList(route, "Id", "Route");
             ViewBag.Times = new SelectList(time, "Id", "Time");
-            var model = _product.GetProductToSend(routeId, timeId, dateToDeliver);
-            return View(model);
+            return View();
         }
 
-        public ActionResult PickUp(int[] itemsId)
+        public ActionResult ItemsToSentTable(int routeId = 0, int timeId = 0, DateTime? dateToDeliver = null)
         {
-            bool result = _product.PickUp(itemsId);
-            if (result == true)
-            {
-                TempData["Message"] = "ສຳເລັດ";
-            }
-            else
-            {
-                TempData["Message"] = "ບໍ່ສຳເລັດ";
-            }
-            return RedirectToAction("ItemsToPickUp", "Delivery");
+            var model = _product.GetProductToSend(routeId, timeId, dateToDeliver);
+            return Json(model);
         }
 
         public ActionResult ItemDetail()
         {
             return View();
+        }
+        private void DatatableInitiator(out string draw, out int start, out int length, out string searchValue, out string sortColumnName, out string sortDir)
+        {
+            draw = Request["draw"];
+            start = Convert.ToInt32(Request["start"]);
+            length = Convert.ToInt32(Request["length"]);
+            searchValue = Request["search[value]"];
+            sortColumnName = Request["columns[" + Request["order[0][column]"] + "][name]"];
+            sortDir = Request["order[0][dir]"];
         }
 
     }

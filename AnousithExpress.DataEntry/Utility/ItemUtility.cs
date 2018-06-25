@@ -119,7 +119,7 @@ namespace AnousithExpress.DataEntry.Utility
                     ConfrimDate = r.ConfrimDate == null ? "" : r.ConfrimDate?.ToString("dd-MM-yyyy"),
                     CreatedDate = r.CreatedDate == null ? "" : r.CreatedDate?.ToString("dd-MM-yyyy"),
                     SendingDate = r.SendingDate == null ? "" : r.SendingDate?.ToString("dd-MM-yyyy"),
-                    SentDate = r.SentDate == null ? "" : r.SentDate?.ToString("dd-MM-YYYY"),
+                    SentDate = r.SentDate == null ? "" : r.SentDate?.ToString("dd-MM-yyyy"),
                     isDeleted = r.isDeleted
                 }).ToList();
             }

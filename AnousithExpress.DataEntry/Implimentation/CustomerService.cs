@@ -85,7 +85,10 @@ namespace AnousithExpress.DataEntry.Implimentation
                     var customer = _customer.GetSingle(db, (int)model.Id);
                     db.Entry(customer).State = EntityState.Modified;
                     customer.Name = model.Name;
-                    customer.Password = model.Password;
+                    if (model.Password != null)
+                    {
+                        customer.Password = model.Password;
+                    };
                     customer.Phonenumber = model.Phonenumber;
                     customer.Address = model.Address;
                     customer.BCEL_Baht = model.BCEL_Baht;
