@@ -51,7 +51,6 @@
     <Compile Include="Implementation\ConsolidatedService.cs" />
     <Compile Include="Implementation\CustomerListService.cs" />
     <Compile Include="Implementation\CustService.cs" />
-    <Compile Include="Implementation\DatabaseInit.cs" />
     <Compile Include="Implementation\InitiatingService.cs" />
     <Compile Include="Implementation\ItemService.cs" />
     <Compile Include="Implementation\SystemUserService.cs" />
