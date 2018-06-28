@@ -46,6 +46,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="CrystalDecisions.CrystalReports.Engine, Version=13.0.3500.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL" />
+    <Reference Include="CrystalDecisions.ReportSource, Version=13.0.3500.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL" />
+    <Reference Include="CrystalDecisions.Shared, Version=13.0.3500.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL" />
+    <Reference Include="CrystalDecisions.Web, Version=13.0.3500.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL" />
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
     </Reference>
@@ -181,6 +185,30 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Reports\BarCodePage.aspx.cs">
+      <DependentUpon>BarCodePage.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Reports\BarCodePage.aspx.designer.cs">
+      <DependentUpon>BarCodePage.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Reports\CrystalReport1.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>CrystalReport1.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Reports\ItemBarCode.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ItemBarCode.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Reports\ItemBarcodeDataSet.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ItemBarcodeDataSet.xsd</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Content Include="assets\css\animate.css" />
@@ -214,12 +242,15 @@
     <Content Include="assets\fonts\index.html" />
     <Content Include="assets\fonts\themify.svg" />
     <Content Include="assets\Image\anoutsithlogo.png" />
+    <Content Include="assets\Image\user-male-icon.png" />
     <Content Include="assets\js\bootstrap-datepicker.js" />
+    <Content Include="assets\js\bootstrap.js" />
     <Content Include="assets\js\chartjs.min.js" />
     <Content Include="assets\js\dashboard.js" />
     <Content Include="assets\js\datatables.min.js" />
     <Content Include="assets\js\DatatableVariable.js" />
-    <Content Include="assets\js\index.html" />
+    <Content Include="assets\js\datepicker-cy-GB.js" />
+    <Content Include="assets\js\datepicker.js" />
     <Content Include="assets\js\jQuery-datePicker.lao.js" />
     <Content Include="assets\js\less.min.js" />
     <Content Include="assets\js\lib\chart-js\Chart.bundle.js" />
@@ -282,6 +313,7 @@
     <Content Include="assets\js\main.js" />
     <Content Include="assets\js\plugins.js" />
     <Content Include="assets\js\popper.min.js" />
+    <Content Include="assets\js\require.js" />
     <Content Include="assets\js\selectFx.js" />
     <Content Include="assets\js\vendor\index.html" />
     <Content Include="assets\js\vendor\jquery-1.11.3.min.js" />
@@ -305,6 +337,7 @@
     <Content Include="Content\Site.css" />
     <Content Include="LaoFont\phetsarath_ot.svg" />
     <Content Include="LaoFont\style.css" />
+    <Content Include="Reports\BarCodePage.aspx" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="ApplicationInsights.config">
@@ -600,12 +633,25 @@
     <Content Include="assets\scss\_gauge.scss" />
     <Content Include="assets\scss\_switches.scss" />
     <Content Include="assets\scss\_widgets.scss" />
+    <Content Include="Reports\ItemBarcodeDataSet.xsc">
+      <DependentUpon>ItemBarcodeDataSet.xsd</DependentUpon>
+    </Content>
+    <None Include="Reports\ItemBarcodeDataSet.xsd">
+      <SubType>Designer</SubType>
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>ItemBarcodeDataSet.Designer.cs</LastGenOutput>
+    </None>
+    <Content Include="Reports\ItemBarcodeDataSet.xss">
+      <DependentUpon>ItemBarcodeDataSet.xsd</DependentUpon>
+    </Content>
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.3.1.js" />
     <Content Include="Scripts\jquery-3.3.1.min.js" />
     <Content Include="Scripts\jquery-3.3.1.slim.js" />
     <Content Include="Scripts\jquery-3.3.1.slim.min.js" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
+    <Content Include="Scripts\jquery.unobtrusive-ajax.js" />
+    <Content Include="Scripts\jquery.unobtrusive-ajax.min.js" />
     <Content Include="Scripts\jquery.validate.js" />
     <Content Include="Scripts\jquery.validate.min.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
@@ -683,6 +729,23 @@
     <Content Include="Views\Customer\ItemDetailPartial.cshtml" />
     <Content Include="Views\Customer\ItemsProcessed.cshtml" />
     <Content Include="Views\Customer\ConsolidationDetail.cshtml" />
+    <Content Include="Views\Shared\_DeliveryMenu.cshtml" />
+    <Content Include="Views\Delivery\ItemDetail.cshtml" />
+    <Content Include="Views\Shared\_AdminMenu.cshtml" />
+    <Content Include="Views\Admin\Account.cshtml" />
+    <Content Include="Views\Admin\AccountCreateUpdate.cshtml" />
+    <Content Include="Views\Admin\ScanBarCodeReceiveItem.cshtml" />
+    <Content Include="Views\Admin\ScanBarCode.cshtml" />
+    <Content Include="Views\Admin\ScanBarCodeSendingItem.cshtml" />
+    <Content Include="Views\Admin\ScanBarCodeItemUnableToSend.cshtml" />
+    <Content Include="Views\Admin\ScanBarCodeItemReturn.cshtml" />
+    <Content Include="Views\Admin\CustomerItemList.cshtml" />
+    <Content Include="Views\Admin\CustomerItemConfirm.cshtml" />
+    <Content Include="Views\Admin\CustomerItemInProcess.cshtml" />
+    <Content Include="Views\Admin\AllocateItemFirstStage.cshtml" />
+    <Content Include="Views\Admin\CreateUpdateUpdateItemDetailPage.cshtml" />
+    <Content Include="Views\Admin\ItemsTransporting.cshtml" />
+    <Content Include="Views\Admin\BarCodeReport.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -706,6 +769,19 @@
       <Project>{018E9CC8-41F7-4C3D-B9DE-C76BD6F9CAF2}</Project>
       <Name>AnousithExpress.DataEntry</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Reports\CrystalReport1.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>CrystalReport1.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\ItemBarCode.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>ItemBarCode.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{C0C07587-41A7-46C8-8FBD-3F9C8EBE2DDC}" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

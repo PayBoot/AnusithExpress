@@ -36,6 +36,9 @@ tbody {
     font-size:small;
 }
 
+.nowarp {
+    white-space:nowrap;
+}
 body {
   background: #f1f2f7;
   display: table;

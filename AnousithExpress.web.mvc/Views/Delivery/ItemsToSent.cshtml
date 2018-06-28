@@ -1,67 +1,270 @@
 ﻿
 @{
-    ViewBag.Title = "ItemsToSent";
+    Layout = "~/Views/Shared/_CustomerLayout.cshtml";
+    ViewBag.Title = "ສີນຄ້າຕ້ອງໄປສົ່ງ";
 }
-@model List<AnousithExpress.DataEntry.ViewModels.Delivery.ItemsAllocationModel>
 
-<h2>ສີນຄ້າຕ້ອງໄປສົ່ງ</h2>
+<div class="breadcrumbs">
+    <div class="col-sm-4">
+        <div class="page-header float-left">
+            <div class="page-title">
 
-<div class="panel">
-    <div class="panel-body">
-        @using (Html.BeginForm("ItemsToSent", "Delivery", FormMethod.Get))
-        {
-            <label>ສາຍສົ່ງ</label>
-            @Html.DropDownList("routeId", ViewBag.Routes as SelectList)
-            <label>ເວລາສົ່ງ</label>
-            @Html.DropDownList("timeId", ViewBag.Times as SelectList)
-            <label>ວັນທີສົ່ງ</label>
-            <input type="date" name="dateToDeliver" />
-            <input type="submit" name="submit" value="ຄົ້ນຫາ" />
-        }
-        <div>@TempData["Message"]</div>
-        @using (Html.BeginForm("RecievedItem", "Delivery", FormMethod.Post))
-        {
-            <table class="table table-borderless">
-                <thead>
-                    <tr>
-
-                        <th>ເລກຕິດຕາມ</th>
-                        <th>ຜຸ້ຮັບ</th>
-                        <th>ເບີໂທຕິດຕໍ່</th>
-                        <th>ລາຍລະອຽດ</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var item in Model)
-                    {
-
-                        <tr class="clickable-row">
-                            <td>@item.ItemTrackingNumber</td>
-                            <td>@item.ReceiverName</td>
-                            <td>@item.ReceiverPhonenumber</td>
-                            <td>@item.Description</td>
-                        </tr>
-                    }
-
-                </tbody>
-            </table>
-
-        }
-
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-8">
+        <div class="page-header float-right">
+            <div class="page-title">
+                <ol class="breadcrumb text-right">
+                    <li><a href="@Url.Action("Index","Customer")">ຫນ້າຫລັກ</a></li>
+                    <li class="active">@ViewData["Title"]</li>
+                </ol>
+            </div>
+        </div>
     </div>
 </div>
+<div class="container" id="containerResize">
+    <div class="content mt-3">
+        <div class="animated fadeIn">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <strong class="card-title text-center">ຕາຕະລາງ @ViewData["Title"]</strong>
+                        </div>
+                        <div class="card-body ">
+                            <div class="row">
+                                <div class="col-md-12 form-horizontal text-center">
+                                    <div class="form-group">
+                                        <label>ສາຍສົ່ງ</label>
+                                        @Html.DropDownList("routeId", ViewBag.Routes as SelectList, new { @id = "Route" })
+                                        <label>ເວລາສົ່ງ</label>
+                                        @Html.DropDownList("timeId", ViewBag.Times as SelectList, new { @id = "Time" })
+                                    </div>
+                    
+                                    <div class="form-group">
+                                        <label>ວັນທີສົ່ງ</label>
+                                        <input type="text" name="dateToDeliver" id="dateToDeliver" onchange="hideDatePicker(this)" placeholder="ວັນ ເດືອນ ປີ ທີ່ສົ່ງ" />
+                                    </div>
+                                    <button class="btn btn-warning" onclick="searchItems()">ຄົ້ນຫາ</button>
+                                   
+                                </div>
+                            </div>
+                            <div class="table-responsive">
+                                <table id="itemDataTable" class="table table-striped table-hover table-bordered " style="width:100%;white-space:nowrap;">
+                                    <thead>
+                                        <tr>
 
-<script type="text/javascript" language="javascript">
-    $(document).ready(function () {
-        document.getElementsByName('dateToDeliver').valueAsDate = new Date();
-        //$(".clickable-row").click(function () {
-        //    window.location = $(this).data("href");
-        //});
-    });
-    function toggle(source) {
-        let checkboxes = document.getElementsByName("itemsId");
-        for (var i = 0, n = checkboxes.length; i < n; i++) {
-            checkboxes[i].checked = source.checked;
+
+                                            <th class="control">ເລກຕິດຕາມ</th>
+                                            <th class="none">ປະເພດສີນຄ້າ</th>
+                                            <th class="control">ຊື່ຜູ້ຮັບ</th>
+                                            <th class="control">ເບີໂທຜູ້ຮັບ</th>
+                                            <th class="none">ສະຖານະ</th>
+                                            <th class="control">ມື້ພະນັກງານສົ່ງ</th>
+                                            <th class="none">ມື້ສີນຄ້າຮອດປາຍທາງ</th>
+                                            <th class="none">ທີ່ຢູ່ຜູ້ຮັບ</th>
+                                            <th class="none">ລາຍລະອຽດ</th>
+                                            <th class="none">ເກັບເງິນປາຍທາງ</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+
+                                </table>
+                            </div>
+
+                        </div>
+                       
+                    </div>
+                </div>
+
+            </div>
+        </div><!-- .animated -->
+    </div><!-- .content -->
+</div>
+<div class="modal fade" id="modal1" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div id="content" class="text-center">
+                   
+                </div>
+                <div id="modalButton" class="text-center">
+                    
+                   
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="modal2" role="dialog" data-backdrop="static">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div id="content" class="text-center">
+                    <strong id="messageOutput"></strong>
+                </div>
+                <div id="modalButton2" class="text-center">
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@section scripts{
+    <script type="text/javascript" language="javascript">
+        let table;
+        jQuery(document).ready(function () {
+            itemTable();
+            jQuery('input[name="dateToDeliver"]').datepicker({
+                language:"la"
+            });
+        
+        });
+        function hideDatePicker(source) {
+           jQuery(source).datepicker('hide');
         }
-    }
-</script>
+        function toggle(source) {
+            let checkboxes = document.getElementsByName("itemsId");
+            for (var i = 0, n = checkboxes.length; i < n; i++) {
+                checkboxes[i].checked = source.checked;
+            }
+        }
+
+        function itemTable() {
+            table = jQuery("#itemDataTable").DataTable({
+                serverSide: true,
+                responsive: true,
+                paging: true,
+                pageLength: 25,
+                lengthChange: false,
+                searching: false,
+                sorting: false,
+                language: LaoLangage,
+
+                ajax: {
+                    url: "/Delivery/ItemsToSentTable",
+                    type: "POST",
+                    datatype: "json",
+                    data: function (d) {
+                        d.routeId = jQuery("#Route").val() || 0;
+                        d.timeId = jQuery("#Time").val() || 0;
+                        d.dateToDeliver = jQuery("#dateToDeliver").val();
+                    }
+                },
+                rowCallback: function (row, data) {
+                    if (data.StatusId==6 || data.StatusId == 8) {
+                        jQuery("td", row).css('background-color','#98FB98');
+                    }
+                },
+                columnDefs: [
+                    {
+                        targets: [0, 1, 2, 3, 4, 5, 6],
+                        orderable: false
+                    },
+
+                ],
+                columns: [
+
+
+                    
+                    { data: "TrackingNumber", name: "TrackingNumber" }, 
+                    
+                    { data: "ItemName", name: "ItemName" },
+                    { data: "ReceiverName", name: "ReceiverName" },
+                    { data: "ReceipverPhone", name: "ReceipverPhone" },
+                    { data: "Status", name: "Status" },
+                    { data: "DateToDeliver", name: "DateToDeliver" },
+                    { data: "SentDate", name: "SentDate" },
+                    { data: "ReceiverAddress", name: "ReceiverAddress" },        
+                    { data: "Description", name: "Description" },
+                    {
+                        data: "Id", render: function (data, type, full, meta) {
+                            let html = '';
+                            if (full.ItemValue_Kip !== null) {
+                                html += full.ItemValue_Kip + "ກີບ<br/>";
+                            }
+                            if (full.ItemValue_Baht !== null) {
+                                html += full.ItemValue_Baht + "ບາດ<br/>";
+                            }
+                            if (full.ItemValue_Dollar !== null) {
+                                html += full.ItemValue_Dollar + "ໂດລ້າ";
+                            }
+                            if (full.ItemValue_Kip === null && full.ItemValue_Baht === null && full.ItemValue_Dollar === null) {
+                                html = 'ບໍ່ມີ';
+                            }
+                            return '' + html + '';
+                        }
+                    },
+                    {
+                        data: "ItemId", render: function (data, type, full, meta) {
+                            if (full.StatusId !== 6 && full.StatusId !== 8) {
+                                return '<button class="btn btn-warning" onclick="SendItemDialog('+ data +','+ full.StatusId +')" style="align:center;">ກົດສົ່ງເຄື່ອງ</button>';
+                            }
+                            else {
+                                return '';
+                            }
+                            
+                        }
+                    }
+
+                ]
+            });
+        }
+        function searchItems() {
+            table.ajax.reload(false, null);
+        }
+
+        function SendItemDialog(id, status) {
+            let itemId = id;
+            let statusId = status;
+            jQuery.ajax({
+                url: "/Delivery/ItemDetail",
+                data: { itemId:itemId  },
+                type: "POST",
+                datatype: "json",
+                success: function (r) {
+                    let htmlButton = ' <button class="btn btn-warning btn-flat mb-2 w-75" onclick="SendItemConfirmDialog('+ itemId +','+ statusId +')" >ລູກຄ້າກົດຮັບເຄື່ອງ</button>';
+                    htmlButton += ' <button class="btn btn-primary btn-flat mb-1 w-75" data-dismiss="modal" data-target="#modal1">ອອກ</button>';
+                    jQuery("#content").html(r);
+                    jQuery("#modalButton").html(htmlButton);
+                    jQuery("#modal1").modal("show");
+    
+                },
+                error: function () {
+                    alert("Server error");
+                }
+            });
+        }
+        function SendItemConfirmDialog(id, status) {
+            let itemId = id;
+            let statusId = status;
+            let htmlButton = ' <button class="btn btn-warning btn-flat mb-2 w-75" onclick="UpdateItemSent(' + itemId + ',' + statusId +')">ຢືນຢັນ</button>';
+            htmlButton += ' <button class="btn btn-primary btn-flat mb-1 w-75" data-dismiss="modal" data-target="#modal2">ອອກ</button>';
+            jQuery("#messageOutput").html("ກະລຸນາກົດຍືນຢັນ");
+            jQuery("#modalButton2").html(htmlButton);
+            jQuery("#modal2").modal("show");         
+        }
+        function UpdateItemSent(id, status) {
+            let itemId = id;
+            let statusId = status;
+            jQuery.ajax({
+                url: "/Delivery/SentItem",
+                data: { itemId: itemId, statusId: statusId },
+                type: "POST",
+                datatype: "json",
+                success: function (r) {
+                    if (r === true) {
+                        let htmlButton = ' <button class="btn btn-primary btn-flat mb-1 w-75" data-dismiss="modal" data-target="#modal2">ອອກ</button>';
+                        jQuery("#modal1").modal("hide"); 
+                        jQuery("#modal2").modal("hide"); 
+                        table.ajax.reload(null,false);
+                        jQuery("#messageOutput").html("ສຳເລັດ");            
+                        jQuery("#modalButton2").html(htmlButton);
+                        jQuery("#modal2").modal("show"); 
+                    }
+                }
+            });
+        }
+    </script>
+}

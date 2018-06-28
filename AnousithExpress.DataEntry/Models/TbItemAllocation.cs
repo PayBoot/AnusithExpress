@@ -9,5 +9,6 @@ namespace AnousithExpress.DataEntry.Models
         public TbRoute Route { get; set; }
         public TbTime Time { get; set; }
         public DateTime DateToDeliver { get; set; }
+        public TbUser DeliveryMan { get; set; }
     }
 }

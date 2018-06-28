@@ -1,0 +1,175 @@
+﻿
+@{
+    ViewBag.Title = "CustomerItemList";
+    Layout = "~/Views/Shared/_CustomerLayout.cshtml";
+}
+@model AnousithExpress.DataEntry.ViewModels.Customer.ItemsModel
+
+<div class="breadcrumbs">
+    <div class="col-sm-4">
+        <div class="page-header float-left">
+            <div class="page-title">
+
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-8">
+        <div class="page-header float-right">
+            <div class="page-title">
+                <ol class="breadcrumb text-right">
+                    <li><a href="@Url.Action("Index","Admin")">ຫນ້າຫລັກ</a></li>
+                    <li><a href="@Url.Action("Customer","Admin")">ລຸກຄ້າ</a></li>
+                    <li class="active">@ViewData["CustomerID"]</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container" id="containerResize">
+    <div class="content mt-3">
+        <div class="animated fadeIn">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-body " id="CustomerBody">
+                            <div class="custom-tab">
+                                <nav>
+                                    <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                                        <a class="nav-item nav-link" onclick="ConfirmItemList()" id="ConfirmItemTab" data-toggle="tab" href="#tabDataContent" role="tab">ສີນຄ້າຢືນຢັນໃຫມ່</a>
+                                        <a class="nav-item nav-link" onclick="InProcessItemList()" id="InProcessItemTab" data-toggle="tab" href="#tabDataContent" role="tab">ສີນຄ້າກຳລັງດຳເນີນການ</a>
+                                        <a class="nav-item nav-link" onclick="TransportingItemList()" id="SendingItemTab" data-toggle="tab" href="#tabDataContent" role="tab">ສີນຄ້າກຳລັງເຂື່ອນຍ້າຍ</a>
+                                        <a class="nav-item nav-link" id="ProcessedItemTab" data-toggle="tab" href="#tabDataContent" role="tab">ສີນຄ້າສົ່ງແລ້ວ</a>
+                                        <a class="nav-item nav-link" id="CustomerProfileTab" data-toggle="tab" href="#tabDataContent" role="tab">ຂໍ້ມູນລຸກຄ້າ</a>
+                                        <a class="nav-item nav-link" id="ConsolidateTab" data-toggle="tab" href="#tabDataContent" role="tab">ສັງລວມ</a>
+
+                                    </div>
+                                </nav>
+                                <div class="tab-content pl-3 pt-2" id="nav-tabContent">
+                                    <div class="tab-pane fade" id="tabDataContent" role="tabpanel">
+                                        <div id="confirmItemTabContent"></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div><!-- .animated -->
+    </div><!-- .content -->
+</div>
+<div class="modal fade" id="modal3" role="dialog">
+    <div class="modal-dialog  modal-lg">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div id="content3" class="text-center">
+                    <form id="model3Form"></form>
+                </div>
+                <div id="modalButton3" class="form-horizontal text-center">
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="modal1" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div id="content" class="text-center">
+
+                </div>
+                <div id="modalButton" class="text-center">
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="modal2" role="dialog">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div id="content2" class="text-center">
+
+                </div>
+                <div id="modalButton2" class="text-center">
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script>
+
+        let TabIndex = '@ViewBag.TabIndex';
+        jQuery(document).ready(function (e) {
+            if (TabIndex === "1") {
+                jQuery("#ConfirmItemTab").tab('show');
+                ConfirmItemList();
+            }
+            else if (TabIndex ==="2") {
+                jQuery("#InProcessItemTab").tab('show');
+                InProcessItemList();
+            }
+            else if(TabIndex ==="3") {
+                jQuery("#SendingItemTab").tab('show');
+                TransportingItemList();
+            }
+            else {
+                jQuery("#ProcessedItemTab").tab('show');
+            }
+
+
+        });
+        function ConfirmItemList() {
+            jQuery.ajax({
+                url: "/Admin/CustomerItemConfirm",
+                data: { customerId: '@ViewBag.CustomerId' },
+                type: "GET",
+                datatype: "json",
+                success: function (r) {
+                    jQuery("#confirmItemTabContent").html(r);
+                },
+                error: function () {
+                    alert("Server error");
+                }
+            });
+        }
+
+        function InProcessItemList() {
+            jQuery.ajax({
+                url: "/Admin/CustomerItemInProcess",
+                data: { customerId: '@ViewBag.CustomerId' },
+                type: "GET",
+                datatype: "json",
+                success: function (r) {
+                    jQuery("#confirmItemTabContent").html(r);
+                },
+                error: function () {
+                    alert("Server error");
+                }
+            });
+        }
+        function TransportingItemList() {
+            jQuery.ajax({
+                url: "/Admin/ItemsTransporting",
+                data: { customerId: '@ViewBag.CustomerId' },
+                type: "GET",
+                datatype: "json",
+                success: function (r) {
+                    jQuery("#confirmItemTabContent").html(r);
+                },
+                error: function () {
+                    alert("Server error");
+                }
+            });
+        }
+
+    </script>
+}
+
+
+

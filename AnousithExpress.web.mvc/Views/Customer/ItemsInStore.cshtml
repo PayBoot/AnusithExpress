@@ -8,7 +8,7 @@
     <div class="col-sm-4">
         <div class="page-header float-left">
             <div class="page-title">
-                <h1>ຫນ້າຫລັກ</h1>
+                
             </div>
         </div>
     </div>
@@ -36,33 +36,35 @@
                             <div class="row">
                                 <div class="col-6 horizontal">
                                     <label>ຈາກວັນທີ</label>
-                                    <input type="text" placeholder="ວັນ-ເດືອນ-ປີ" name="fromDate" onchange="searchByDate()" />
+                                    <input type="text" placeholder="ວັນ-ເດືອນ-ປີ" class="w-100" name="fromDate" id="fromDate" onchange="searchByDate(this)" />
                                     
                                   
                                 </div>
                                 <div class="col-6 horizontal">
                   
                                     <label>ຫາວັນທີ</label>
-                                    <input type="text" placeholder="ວັນ-ເດືອນ-ປີ" name="toDate" onchange="searchByDate()" />
+                                    <input type="text" placeholder="ວັນ-ເດືອນ-ປີ" class="w-100" name="toDate" id="toDate" onchange="searchByDate(this)" />
                                    
                                 </div>
                             </div>
-                            <table id="itemDataTable" class="table table-striped table-bordered" style="width:100%;">
-                                <thead>
-                                    <tr>
-                                        <th>ເລກຕິດຕາມ</th>
-                                        <th>ປະເພດສີນຄ້າ</th>
-                                        <th>ສະຖານະ</th>
-                                        <th>ຊື່ຜູ້ຮັບ</th>
-                                        <th>ເບີໂທຜູ້ຮັບ</th>
-                                        <th>ທີ່ຢູ່ຜູ້ຮັບ</th>
-                                        <th>ມື້ທີ່ສ້າງ</th>
-                                        <th>ເກັບເງິນປາຍທາງ</th>
-                                        <th>ຝັງຊັ້ນ</th>
-                                    </tr>
-                                </thead>
-                               
-                            </table>
+                            <div class="table-responsive">
+                                <table id="itemDataTable" class="table table-striped table-bordered nowarp" style="width:100%;white-space:nowrap;">
+                                    <thead>
+                                        <tr>
+                                            <th class="control">ປະເພດສີນຄ້າ</th>
+                                            <th class="control">ສະຖານະ</th>
+                                            <th>ເລກຕິດຕາມ</th>
+                                            <th>ຊື່ຜູ້ຮັບ</th>
+                                            <th>ເບີໂທຜູ້ຮັບ</th>
+                                            <th>ທີ່ຢູ່ຜູ້ຮັບ</th>
+                                            <th>ມື້ທີ່ສ້າງ</th>
+                                            <th>ເກັບເງິນປາຍທາງ</th>
+                                            <th class="control">ຝັງຊັ້ນ</th>
+                                        </tr>
+                                    </thead>
+                                </table>
+                            </div>
+                            
                         </div>
                     </div>
                 </div>
@@ -92,16 +94,20 @@
         jQuery(document).ready(
             function () {
                 jQuery("input[name='fromDate']").datepicker({
-                    language: 'la'
+                    language: "la",
+                       
                 });
 
-                jQuery("input[name='toDate']").datepicker({
-                    language: 'la'
-                });
+                jQuery("input[name='toDate']").datepicker(
+                    {
+                        language: "la"
+                    }
+                );
                 itemTable();
             }
            );        
         function itemTable() {
+           
             table = jQuery("#itemDataTable").DataTable({
                 serverSide: true,
                 responsive: true,
@@ -114,14 +120,15 @@
                     type: "POST",
                     datatype: "json",
                     data: function(d){
-                        d.fromDate= jQuery("input[name='fromDate']").val() || null,
-                        d.toDate= jQuery("input[name='toDate']").val() || null
+                        d.fromDate = jQuery("#fromDate").val(),
+                        d.toDate = jQuery("#toDate").val()
                     }
                 },
                 columns: [
-                    { data: "TrackingNumber", name: "TrackingNumber" },
+                    
                     { data: "ItemName", name: "ItemName" },
                     { data: "Status", name: "Status" },
+                    { data: "TrackingNumber", name: "TrackingNumber" },
                     { data: "ReceiverName", name: "ReceiverName" },
                     { data: "ReceipverPhone", name: "ReceipverPhone" },
                     { data: "ReceiverAddress", name: "ReceiverAddress" },
@@ -167,8 +174,9 @@
             });
         }
 
-        function searchByDate() {
-            table.ajax.reload(null, false);
+        function searchByDate(source) {        
+            table.ajax.reload();
+            jQuery( source).datepicker('hide');
         }
 
         function editItem(id) {

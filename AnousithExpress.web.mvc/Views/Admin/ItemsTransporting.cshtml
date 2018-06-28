@@ -1,0 +1,90 @@
+﻿@model List<AnousithExpress.DataEntry.ViewModels.Customer.ItemsModel>
+<div class="animated fadeIn">
+    <div class="table-responsive">
+        <table id="itemConfirmTable" class="table  table-hover  " style="width:100%;white-space:nowrap;">
+            <thead>
+                <tr>
+
+                    <th class="control">ປະເພດສີນຄ້າ</th>
+                    <th class="control">ເລກຕິດຕາມ</th>
+                    <th class="control">ສະຖານະ</th>
+                    <th class="control">ຊື່ຜູ້ຮັບ</th>
+                    <th class="control">ເບີໂທຜູ້ຮັບ</th>
+                    <th class="control">ທີ່ຢູ່ຜູ້ຮັບ</th>
+                    <th class="control">ປລີ້ນບາໂຄດ</th>
+                    <th class="none">ມື້ພະນັກງານຮັບສີນຄ້າ</th>
+                    <th class="none">ມື້ພະນັກງານສົ່ງສີນຄ້າ</th>
+                    <th class="none">ເກັບເງິນປາຍທາງ</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                <tr>
+                    <td>@item.ItemName</td>
+                    <td>@item.TrackingNumber</td>
+                    <td>@item.Status</td>
+                    <td>@item.ReceiverName</td>
+                    <td>@item.ReceipverPhone</td>
+                    <td>@item.ReceiverAddress</td>
+                    <td><button class="btn btn-warning" onclick="barcodeDialog(@item.Id)">ປລີ້ນບາໂຄດ</button></td>
+                    <td>@item.ReceiveDate</td>
+                    <td>@item.SendingDate</td>
+                    <td>
+                        @{
+                            <b>: </b>
+                            if (item.ItemValue_Kip != null)
+                            {
+                                <b>@item.ItemValue_Kip ກີບ </b>
+                            }
+                            if (item.ItemValue_Baht != null)
+                            {
+                                <b>@item.ItemValue_Baht ບາດ </b>
+                            }
+                            if (item.ItemValue_Dollar != null)
+                            {
+                                <b>@item.ItemValue_Dollar ໂດລ້າ</b>
+                            }
+                            if (item.ItemValue_Kip == null && item.ItemValue_Baht == null && item.ItemValue_Dollar == null)
+                            {
+                                <b>ບໍ່ມີ</b>
+                            }
+                        }
+                    </td>
+                </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+    jQuery(document).ready(function () {
+            jQuery("#itemConfirmTable").DataTable({
+                lengthChange: false,
+                responsive:true,
+                paging: true,
+                pageLength: 25,
+                serverSide: false,
+                language:LaoLangage
+            });
+    });
+    function barcodeDialog(id) {
+        let itemId = id;
+        jQuery.ajax({
+            url: "/Admin/BarCodeReport",
+            type: "GET",
+            data: { itemId: itemId },
+            datatype: "json",
+            success: function (r) {
+                let htmlButton = '';
+                htmlButton += '<button class="btn btn-primary btn-flat mb-1 w-100 mr-1 ml-1" data-dismiss="modal">ອອກ</button>';
+                jQuery("#content3").html(r);
+                jQuery("#modalButton3").html(htmlButton);
+                jQuery("#modal3").modal('show');
+            }
+        });
+    }
+</script>
+
+

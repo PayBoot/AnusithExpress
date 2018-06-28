@@ -1,0 +1,27 @@
+﻿@model AnousithExpress.DataEntry.ViewModels.Admin.AccountModel
+
+<div class="login-form">
+
+    @Html.HiddenFor(m => m.Id)
+    <div class="form-group">
+        <label>ຊື່ບັນຊີ</label>
+        @Html.TextBoxFor(m => m.Username, new { @class = "form-control", @placeholder = "ຊື່ບັນຊີ" })
+    </div>
+    <div class="form-group">
+        <label>ລະຫັດ (ຢ່າງຫນ້ອຍ 6 ຕົວເລກ)</label>
+        @Html.TextBoxFor(m => m.Password, new { @class = "form-control", @placeholder = "ລະຫັດ" })
+    </div>
+    <div class="form-group">
+        <label>ເບີໂທ</label>
+        @Html.TextBoxFor(m => m.Phonenumber, new { @class = "form-control", @placeholder = "ເບີໂທ" })
+    </div>
+    <div class="form-group">
+        <label>ຫນ້າທີ່</label>
+        @Html.DropDownListFor(m => m.Role, ViewBag.Roles as SelectList, new { @class = "form-control" })
+    </div>
+    <div class="form-group">
+        <label>ສະຖານະ</label>
+        @Html.DropDownListFor(m => m.Status, ViewBag.Statuses as SelectList, new { @class = "form-control" })
+    </div>
+
+</div>

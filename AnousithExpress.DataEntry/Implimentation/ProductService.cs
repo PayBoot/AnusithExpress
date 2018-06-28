@@ -191,13 +191,15 @@ namespace AnousithExpress.DataEntry.Implimentation
             }
         }
 
-        public List<ItemsAllocationModel> GetProductToSend(int routeId, int timeId, DateTime? date)
+        public List<ItemsAllocationModel> GetProductToSend(int routeId, int timeId, DateTime? date, int userId)
         {
             using (var db = new EntityContext())
             {
                 var source = _item.GetAllAllocation(db)
                     .Where(i => i.Route.Id == routeId
-                            && i.Time.Id == timeId).ToList();
+                            && i.Time.Id == timeId
+                                && (i.Item.Status.Id == 5 || i.Item.Status.Id == 9 || i.Item.Status.Id == 6 || i.Item.Status.Id == 8)
+                                    && i.DeliveryMan.Id == userId).ToList();
                 if (date != null)
                 {
                     source = source.Where(i => i.DateToDeliver == date).ToList();
@@ -222,23 +224,31 @@ namespace AnousithExpress.DataEntry.Implimentation
                     source.Status = db.tbItemStatuses.FirstOrDefault(s => s.Id == 3);
                     source.ReceiveDate = DateTime.Now;
                 }
-
                 db.SaveChanges();
                 return true;
             }
         }
 
-        public bool Send(int itemId)
+        public bool Send(int itemId, int statusId)
         {
             using (var db = new EntityContext())
             {
                 var source = _item.GetSingle(db, itemId);
+                int status;
                 if (source == null)
                 {
                     return false;
                 };
+                if (statusId == 9)
+                {
+                    status = 8;
+                }
+                else
+                {
+                    status = 6;
+                }
                 db.Entry(source).State = EntityState.Modified;
-                source.Status = db.tbItemStatuses.FirstOrDefault(s => s.Id == 6);
+                source.Status = db.tbItemStatuses.FirstOrDefault(s => s.Id == status);
                 source.SentDate = DateTime.Now;
                 db.SaveChanges();
                 return true;
@@ -296,7 +306,7 @@ namespace AnousithExpress.DataEntry.Implimentation
             }
         }
 
-        public bool CreateByAdmin(ItemsModel model)
+        public int CreateByAdmin(ItemsModel model)
         {
             using (var db = new EntityContext())
             {
@@ -309,7 +319,7 @@ namespace AnousithExpress.DataEntry.Implimentation
                     }
                     TbItems item = _item.CreateProduct(model, db, itemstatus);
                     dbtransact.Commit();
-                    return true;
+                    return item.Id;
                 }
             }
         }
@@ -353,7 +363,7 @@ namespace AnousithExpress.DataEntry.Implimentation
         {
             using (var db = new EntityContext())
             {
-                List<TbItems> source = _item.GetAll(db).Where(i => i.Customer.Id == CustomerId && (i.Status.Id == 3 || i.Status.Id == 4 || i.Status.Id == 5 || i.Status.Id == 7)).ToList();
+                List<TbItems> source = _item.GetAll(db).Where(i => i.Customer.Id == CustomerId && (i.Status.Id == 3 || i.Status.Id == 4 || i.Status.Id == 5 || i.Status.Id == 7 || i.Status.Id == 9)).ToList();
 
                 if (fromReceiveDate != null)
                 {
@@ -430,6 +440,223 @@ namespace AnousithExpress.DataEntry.Implimentation
                     totalItem = totalItem.Count(),
                     totalSuccess = totalSuccess.Count(),
                     totalSendBack = totalFailture.Count()
+                };
+                return result;
+            }
+        }
+
+        public ItemsModel ScanBarCodeItemReceive(string itemTrackingNumber)
+        {
+            using (var db = new EntityContext())
+            {
+                var item = _item.GetAll(db).FirstOrDefault(i => i.TrackingNumber == itemTrackingNumber);
+                if (item != null)
+                {
+                    db.Entry(item).State = EntityState.Modified;
+                    item.ReceiveDate = DateTime.Now;
+                    item.Status = db.tbItemStatuses.FirstOrDefault(s => s.Id == 4);
+                    db.SaveChanges();
+                    var result = _item.AssignItem(item);
+                    return result;
+                }
+                else
+                {
+                    return null;
+                }
+            }
+        }
+        public ItemsModel ScanBarCodeItemToSend(string itemTrackingNumber)
+        {
+            using (var db = new EntityContext())
+            {
+                var item = _item.GetAll(db).FirstOrDefault(i => i.TrackingNumber == itemTrackingNumber);
+                if (item != null)
+                {
+                    db.Entry(item).State = EntityState.Modified;
+                    item.Status = db.tbItemStatuses.FirstOrDefault(s => s.Id == 5);
+                    db.SaveChanges();
+                    var result = _item.AssignItem(item);
+                    return result;
+                }
+                else
+                {
+                    return null;
+                }
+            }
+        }
+        public ItemsModel ScanBarCodeItemUnableToContact(string itemTrackingNumber)
+        {
+            using (var db = new EntityContext())
+            {
+                var item = _item.GetAll(db).FirstOrDefault(i => i.TrackingNumber == itemTrackingNumber);
+                if (item != null)
+                {
+                    db.Entry(item).State = EntityState.Modified;
+                    item.Status = db.tbItemStatuses.FirstOrDefault(s => s.Id == 7);
+                    item.SendingDate = null;
+                    var allocation = _item.GetAllAllocation(db).FirstOrDefault(x => x.Item.TrackingNumber == itemTrackingNumber);
+                    if (allocation != null)
+                    {
+                        db.tbItemAllocations.Remove(allocation);
+                    }
+                    db.SaveChanges();
+                    var result = _item.AssignItem(item);
+                    return result;
+                }
+                else
+                {
+                    return null;
+                }
+            }
+        }
+        public ItemsModel ScanBarCodeItemToReturn(string itemTrackingNumber)
+        {
+            using (var db = new EntityContext())
+            {
+                var item = _item.GetAll(db).FirstOrDefault(i => i.TrackingNumber == itemTrackingNumber);
+                if (item != null)
+                {
+                    db.Entry(item).State = EntityState.Modified;
+                    item.Status = db.tbItemStatuses.FirstOrDefault(s => s.Id == 9);
+                    db.SaveChanges();
+                    var result = _item.AssignItem(item);
+                    return result;
+                }
+                else
+                {
+                    return null;
+                }
+            }
+        }
+
+        public bool CannotContactCustomer(int itemId)
+        {
+            using (var db = new EntityContext())
+            {
+                var item = _item.GetSingle(db, itemId);
+                if (item == null)
+                {
+                    return false;
+                };
+                db.Entry(item).State = EntityState.Modified;
+                item.Status = db.tbItemStatuses.FirstOrDefault(s => s.Id == 7);
+                item.SendingDate = null;
+                var allocatedItem = _item.GetAllAllocation(db).FirstOrDefault(i => i.Item.Id == itemId);
+                if (allocatedItem != null)
+                {
+                    db.tbItemAllocations.Remove(allocatedItem);
+                }
+                db.SaveChanges();
+                return true;
+            }
+        }
+
+        public bool UpdateItemDescription(int itemId, string description)
+        {
+            using (var db = new EntityContext())
+            {
+                var item = _item.GetSingle(db, itemId);
+                if (item != null)
+                {
+                    db.Entry(item).State = EntityState.Modified;
+                    item.Descripttion = description;
+                    db.SaveChanges();
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+        }
+
+        public bool AllocateRouteAndTime(int itemId, int routeId, int timeId, DateTime dateToDeliver)
+        {
+            using (var db = new EntityContext())
+            {
+                using (var dbtransact = db.Database.BeginTransaction())
+                {
+                    if (_item.GetAllAllocation(db).Any(i => i.Item.Id == itemId))
+                    {
+                        var item = _item.GetAllAllocation(db).FirstOrDefault(i => i.Item.Id == itemId);
+                        db.tbItemAllocations.Remove(item);
+                        db.SaveChanges();
+                    };
+                    var itemAllocation = new TbItemAllocation
+                    {
+                        DateToDeliver = dateToDeliver,
+                        DeliveryMan = null,
+                        Item = db.TbItems.FirstOrDefault(i => i.Id == itemId),
+                        Route = db.tbRoutes.FirstOrDefault(r => r.Id == routeId),
+                        Time = db.tbTimes.FirstOrDefault(t => t.Id == timeId)
+                    };
+                    var updateItem = _item.GetSingle(db, itemId);
+                    db.Entry(updateItem).State = EntityState.Modified;
+                    updateItem.SendingDate = dateToDeliver;
+                    db.tbItemAllocations.Add(itemAllocation);
+                    db.SaveChanges();
+                    dbtransact.Commit();
+                    return true;
+                }
+
+            }
+        }
+
+        public List<ItemsModel> GetProductInProcessPerCustomerAdminUser(int CustomerId)
+        {
+            using (var db = new EntityContext())
+            {
+                List<TbItems> source = _item.GetAll(db).Where(i => i.Customer.Id == CustomerId && (i.Status.Id == 4 || i.Status.Id == 7)).ToList();
+
+
+                if (source != null)
+                {
+                    List<ItemsModel> model = _item.AssignItemsList(source);
+                    return model;
+                }
+                else
+                {
+                    return new List<ItemsModel>();
+                }
+
+            }
+        }
+
+        public List<ItemsModel> GetProductTransportingPerCustomerAdminUser(int CustomerId)
+        {
+            using (var db = new EntityContext())
+            {
+                List<TbItems> source = _item.GetAll(db).Where(i => i.Customer.Id == CustomerId && (i.Status.Id == 3 || i.Status.Id == 5 || i.Status.Id == 9)).ToList();
+
+
+                if (source != null)
+                {
+                    List<ItemsModel> model = _item.AssignItemsList(source);
+                    return model;
+                }
+                else
+                {
+                    return new List<ItemsModel>();
+                }
+
+            }
+        }
+
+        public ItemBarCodeModel GetBarCodeModel(int itemId)
+        {
+            using (var db = new EntityContext())
+            {
+                var item = _item.GetSingle(db, itemId);
+                ItemBarCodeModel result = new ItemBarCodeModel
+                {
+                    Itemname = item.ItemName,
+                    Trackingnumber = item.TrackingNumber,
+                    SenderName = item.Customer.Name,
+                    SenderPhonenumber = item.Customer.Phonenumber,
+                    ReceiverName = item.ReceiverName,
+                    ReceiverPhoenumber = item.ReceipverPhone,
+                    ReceiverAddress = item.ReceiverAddress,
+                    Barcode = null
                 };
                 return result;
             }

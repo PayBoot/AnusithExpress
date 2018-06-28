@@ -1,0 +1,68 @@
+﻿@model AnousithExpress.DataEntry.ViewModels.Customer.ItemsModel
+
+<div class="animated fadeIn">
+    <div class="row">
+
+        <div class="col-6">
+            <table class="table text-center">
+                <tr>
+                    <td>ຊື່ຜູ້ຮັບ</td>
+                    <td>@Model.ReceiverName</td>
+                </tr>
+                <tr>
+                    <td>ເບີໂທຜູ້ຮັບ</td>
+                    <td>@Model.ReceipverPhone</td>
+                </tr>
+                <tr>
+                    <td>ທີ່ຢູ່ຜູ້ຮັບ</td>
+                    <td>@Model.ReceiverAddress</td>
+                </tr>
+            </table>
+        </div>
+        <div class="col-6">
+            <table class="table text-center">
+                <tr>
+                    <td>ຊື່ຜູ້ສົ່ງ</td>
+                    <td>@Model.CustomerName</td>
+                </tr>
+                <tr>
+                    <td>ເບີໂທຜູ້ສົ່ງ</td>
+                    <td>@Model.CustomerPhonenumber</td>
+                </tr>
+            </table>
+        </div>
+
+
+    </div>
+    <div class="row">
+        <div class="col">
+            <div class="form-horizontal">
+                <div class="form-group">
+                    @Html.HiddenFor(m=>m.Id, new { @id="itemId" })
+                    <label>ສາຍສົ່ງ</label>
+                    @Html.DropDownList("Route", ViewBag.Routes as SelectList, new { @id = "routeId"})
+                    <label>ເວລາສົ່ງ</label>
+                    @Html.DropDownList("Time", ViewBag.Times as SelectList, new { @id = "timeId"})
+                    <label>ວັນທີສົ່ງ</label>
+                    <input type="text" id="dateToDeliver" readonly="readonly" />
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <div class="form-group">
+                <label>ລາຍລະອຽດເພີ່ມເຕີມ</label>
+            </div>
+            @Html.TextAreaFor(m=>m.Description, new { @class="form-control", @id="descriptiontext" })
+        </div>
+    </div>
+</div>
+
+<script>
+    jQuery(document).ready(function () {
+        jQuery("#dateToDeliver").datepicker({
+            language: 'la'
+        });     
+    });
+</script>

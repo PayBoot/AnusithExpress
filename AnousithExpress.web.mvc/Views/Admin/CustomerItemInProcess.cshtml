@@ -1,0 +1,270 @@
+﻿@model AnousithExpress.DataEntry.ViewModels.Customer.ItemsModel
+<div class="animated fadeIn">
+    <div class="table-responsive">
+        <table id="itemInProcessDataTable" class="table table-hover " style="width:100%;white-space:nowrap;">
+            <thead>
+                <tr>
+                    <th class="control">ເລກຕິດຕາມ</th>
+                    <th class="control">ປະເພດສີນຄ້າ</th>
+                    <th class="control">ສະຖານະ</th>
+                    <th class="none">ຊື່ຜູ້ຮັບ</th>
+                    <th class="none">ເບີໂທຜູ້ຮັບ</th>
+                    <th class="none">ທີ່ຢູ່ຜູ້ຮັບ</th>
+                    <th class="none">ມື້ທີ່ຈະສົ່ງ</th>
+                    <th class="none">ລາຍລະອຽດ</th>
+                    <th>ເກັບເງິນປາຍທາງ</th>
+                    <th class="control">ຈັດການ</th>
+                    <th class="none">ລືບ ຫລື ປ່ຽນແປງ</th>
+                </tr>
+            </thead>
+
+        </table>
+    </div>
+
+</div>
+
+<script>
+    var inProcesstable;
+        jQuery(document).ready(function () {
+
+            itemTable();
+        });
+    function itemTable() {
+        inProcesstable = jQuery("#itemInProcessDataTable").DataTable({
+                serverSide: true,
+                responsive: true,
+                paging: true,
+                pageLength: 25,
+
+                lengthChange:false,
+                searching: true,
+                language: LaoLangage,
+                order:[[1,'desc']],
+                ajax: {
+                    url: "/Admin/CustomerItemInProcessTable",
+                    type: "POST",
+                    datatype: "json",
+                    data: function (d) {
+                        d.customerId = '@ViewBag.CustomerId'
+                    }
+                },
+                columns: [
+                    { data: "TrackingNumber", name: "TrackingNumber" },
+                    { data: "ItemName", name: "ItemName" },
+                    { data: "Status", name: "Status" },
+                    { data: "ReceiverName", name: "ReceiverName" },
+                    { data: "ReceipverPhone", name: "ReceipverPhone" },
+                    { data: "ReceiverAddress", name: "ReceiverAddress" },
+                    { data: "SendingDate", name: "SendingDate" },
+                    { data: "Description", name: "Description" },
+                    {
+                        data: "Id", render: function (data, type, full, meta) {
+                            let html = '';
+                            if (full.ItemValue_Kip !== null) {
+                                html += full.ItemValue_Kip + "ກີບ<br/>";
+                            }
+                            if (full.ItemValue_Baht !== null) {
+                                html += full.ItemValue_Baht + "ບາດ<br/>";
+                            }
+                            if (full.ItemValue_Dollar !== null) {
+                                html += full.ItemValue_Dollar + "ໂດລ້າ";
+                            }
+                            if (full.ItemValue_Kip === null && full.ItemValue_Baht === null && full.ItemValue_Dollar === null) {
+                                html = 'ບໍ່ມີ';
+                            }
+                            return '<p>' + html + '</p>';
+                        }
+                    },
+                    {
+                        data: "Id", render: function (data, type, full, meta) {
+                            let html = '';
+                            html += '<button type="button" onclick="allocateItemDiaLog(' + data + ')" class="btn btn-flat btn-warning btn-sm">ກຽມສີນຄ້າສົ່ງ</button>';
+                            html += '';
+
+
+                            return html;
+                        }
+                    },
+                    {
+                        data: "Id", render: function (data, type, full, meta) {
+                            let html = '';
+                            html += '<button type="button" onclick="deleteItemDialog(' + data + ')" class="btn btn-flat btn-danger btn-sm mr-2 ml-2"><i class="fa fa-trash"></i> ລືບ</button>';
+                            html += '<button type="button" onclick="updateItemDialog(' + data + ')" class="btn btn-flat btn-warning btn-sm mr-2 ml-2"><i class="fa fa-edit"></i> ປ່ຽນແປງ</button>';
+
+                            html += '';
+
+
+                            return html;
+                        }
+                    }
+                ]
+            });
+
+
+    }
+
+    function searchByDate(source) {
+        inProcesstable.ajax.reload(null, false);
+            jQuery(source).datepicker('hide');
+        }
+
+    function allocateItemDiaLog(id) {
+            let itemId = id;
+            jQuery.ajax({
+                url: "/Admin/AllocateItemFirstStage",
+                type: "GET",
+                data: { itemId: itemId },
+                datatype: "json",
+                success: function (r) {
+                    let htmlButton = '';
+                    htmlButton += '<button class="btn btn-warning btn-flat mb-1 w-25 mr-1 ml-1" onclick = "allocateitem()">ຈັດສີນຄ້າສົ່ງ</button>';
+                    htmlButton += '<button class="btn btn-danger btn-flat mb-1 w-25 mr-1 ml-1" onclick ="CannotContactCustomer()" data-dismiss="modal">ຕິດຕໍ່ບໍ່ໄດ້</button>';
+                    htmlButton += '<button class="btn btn-primary btn-flat mb-1 w-25 mr-1 ml-1" data-dismiss="modal">ອອກ</button>';
+                    jQuery("#content").html(r);
+                    jQuery("#modalButton").html(htmlButton);
+                    jQuery("#modal1").modal('show');
+                }
+            });
+    }
+    function allocateitem() {
+        jQuery.ajax({
+            url: "/Admin/AllocateItemFirstSageFunction",
+            data: {
+                itemId: jQuery("#itemId").val(),
+                routeId: jQuery("#routeId :selected").val(),
+                timeId: jQuery("#timeId :selected").val(),
+                dateToDeliver: jQuery("#dateToDeliver").val() || null,
+                description: jQuery("#descriptiontext").val()
+            },
+            datatype: "json",
+            type: "POST",
+            success: function (r) {
+                if (r.first === true && r.second === true) {
+                    let htmlButton = '';
+                    htmlButton += '<button class="btn btn-primary btn-flat mb-1 w-100 mr-1 ml-1" data-dismiss="modal" data-target ="#modal2">ອອກ</button>';
+                    jQuery("#content2").html("ສຳເລັດ");
+                    jQuery("#modalButton2").html(htmlButton);
+                    jQuery("#modal2").modal('show');
+                    jQuery("#modal1").modal("hide");
+                    inProcesstable.ajax.reload(null, false);
+                }
+                else {
+                    let htmlButton = '';
+                    htmlButton += '<button class="btn btn-primary btn-flat mb-1 w-100 mr-1 ml-1" data-dismiss="modal" data-target ="#modal2">ອອກ</button>';
+                    jQuery("#content2").html(r);
+                    jQuery("#modalButton2").html(htmlButton);
+                    jQuery("#modal2").modal('show');
+
+                }
+            }
+        });
+    }
+    function CannotContactCustomer() {
+        jQuery.ajax({
+            url: "/Admin/CannotContactCustomer",
+            data: {
+                itemId: jQuery("#itemId").val(),
+                description: jQuery("#descriptiontext").val()
+            },
+            type: "POST",
+            datatype: "json",
+            success: function (r) {
+                if (r.first===true && r.second ===true) {
+                    let htmlButton = '';
+                    htmlButton += '<button class="btn btn-primary btn-flat mb-1 w-100 mr-1 ml-1" data-dismiss="modal" data-target ="#modal2">ອອກ</button>';
+                    jQuery("#content2").html("ສຳເລັດ");
+                    jQuery("#modalButton2").html(htmlButton);
+                    jQuery("#modal2").modal('show');
+                    jQuery("#modal1").modal("hide");
+                    inProcesstable.ajax.reload(null, false);
+                }
+                else {
+                    let htmlButton = '';
+                    htmlButton += '<button class="btn btn-primary btn-flat mb-1 w-100 mr-1 ml-1" data-dismiss="modal" data-target ="#modal2">ອອກ</button>';
+                    jQuery("#content2").html(r.first + "" + r.second);
+                    jQuery("#modalButton2").html(htmlButton);
+                    jQuery("#modal2").modal('show');
+                }
+            }
+        });
+    }
+    function updateItemDialog(id) {
+        let itemId = id;
+        jQuery.ajax({
+            url: "/Admin/CreateUpdateUpdateItemDetailPage",
+            data: { itemId: itemId, customerId: '@ViewBag.CustomerId' },
+            type: "POST",
+            datatype: "json",
+            success: function (r) {
+                let htmlButton = '';
+                htmlButton += '<button class="btn btn-warning btn-flat mb-1 w-25 mr-1 ml-1" onclick = "saveItem()"><i class="fa fa-dot-circle-o"></i> ບັນທຶກ</button>';
+                htmlButton += '<button class="btn btn-primary btn-flat mb-1 w-25 mr-1 ml-1" data-dismiss="modal"> <i class="fa fa-ban"></i> ອອກ</button>';
+                jQuery("#model3Form").html(r);
+                jQuery("#modalButton3").html(htmlButton);
+                jQuery("#modal3").modal('show');
+            }
+        });
+    }
+    function saveItem() {
+      
+         jQuery.ajax({
+             url: "/Admin/CreateUpdateItemFunction",
+             
+             data: jQuery("#itemAdminForm").serialize() + '&customerId= ' + jQuery("#customerId").val(),
+             datatype: "json",
+             type: "POST",
+             success: function (r) {
+                if (!isNaN(r)) {
+                    let htmlButton = '';
+                    htmlButton += '<button class="btn btn-primary btn-flat mb-1 w-100 mr-1 ml-1" data-dismiss="modal" data-target ="#modal2">ອອກ</button>';
+                    jQuery("#content2").html("ສຳເລັດ");
+                    jQuery("#modalButton2").html(htmlButton);
+                    jQuery("#modal2").modal('show');
+                    jQuery("#modal3").modal("hide");
+                    inProcesstable.ajax.reload(null, false);
+                }
+                else {
+                    let htmlButton = '';
+                    htmlButton += '<button class="btn btn-primary btn-flat mb-1 w-100 mr-1 ml-1" data-dismiss="modal" data-target ="#modal2">ອອກ</button>';
+                    jQuery("#content2").html(""+r);
+                    jQuery("#modalButton2").html(htmlButton);
+                    jQuery("#modal2").modal('show');
+
+                }
+            }
+        });
+    }
+    function deleteItemDialog(id) {
+        let itemId = id;
+        let html = '';
+
+        html += '<button class="btn btn-danger btn-flat mb-1 w-100" onclick="deleteItem(' + itemId + ')" data-dismiss="modal">ລືບ</button>';
+        html += '<button class="btn btn-primary btn-flat mb-1 w-100" data-dismiss="modal">ອອກ</button>';
+        jQuery("#content2").html("ຢືນຢັນທີ່ຈະລືບ");
+        jQuery("#modalButton2").html(html);
+        jQuery("#modal2").modal('show');            
+    }
+    function deleteItem(id) {
+        let itemId = id;
+
+        jQuery.ajax({
+            url: "/Admin/DeleteItem",
+            data: { itemId: itemId },
+            type: "POST",
+            datatype: "json",
+            success: function (r) {
+                if (r === true) {
+                    inProcesstable.ajax.reload(null, false);   
+                }
+                else {
+                    alert("Cannot perform this operation");
+                }
+            },
+            error: function () {
+                alert("Server error");
+            }
+        });
+
+
+    }
+</script>

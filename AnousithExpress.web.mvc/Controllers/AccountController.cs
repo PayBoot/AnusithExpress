@@ -47,6 +47,7 @@ namespace AnousithExpress.web.mvc.Controllers
             var model = _customer.Login(phonenumber, password);
             if (model != null)
             {
+
                 Session["UserId"] = model.Id;
                 Session["Username"] = model.Name;
                 Session["Role"] = 9;
@@ -70,6 +71,7 @@ namespace AnousithExpress.web.mvc.Controllers
             var user = _account.UserLogin(username, password);
             if (user != null)
             {
+
                 Session["UserId"] = user.Id;
                 Session["Username"] = user.Username;
                 Session["Role"] = user.Role.Id;
