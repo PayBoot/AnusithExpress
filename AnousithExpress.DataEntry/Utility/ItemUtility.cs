@@ -92,6 +92,8 @@ namespace AnousithExpress.DataEntry.Utility
                 .Include(i => i.Item.Customer)
                 .Include(i => i.Route)
                 .Include(i => i.Time)
+                .Include(i => i.DeliveryMan)
+                .Include(i => i.Item.Status)
                 .Where(i => i.Item.isDeleted == false)
                 .OrderByDescending(i => i.Id);
         }
@@ -172,12 +174,28 @@ namespace AnousithExpress.DataEntry.Utility
                     ItemId = r.Item.Id,
                     DateToDeliver = r.DateToDeliver.ToString("dd-MM-yyyy"),
                     ItemName = r.Item.ItemName,
-                    ItemTrackingNumber = r.Item.TrackingNumber,
+                    TrackingNumber = r.Item.TrackingNumber,
+                    CustomerId = r.Item.Customer.Id,
+                    CustomerName = r.Item.Customer.Name,
+                    ReceiverName = r.Item.ReceiverName,
+                    ReceipverPhone = r.Item.ReceipverPhone,
+                    ReceiverAddress = r.Item.ReceiverAddress,
+                    Description = r.Item.Descripttion,
+                    CustomerPhonenumber = r.Item.Customer.Phonenumber,
+                    ItemValue_Kip = r.Item.ItemValue_Kip,
+                    ItemValue_Baht = r.Item.ItemValue_Baht,
+                    ItemValue_Dollar = r.Item.ItemValue_Dollar,
+                    Status = r.Item.Status.Status,
+                    CreatedDate = r.Item.CreatedDate == null ? "" : r.Item.CreatedDate?.ToString("dd-MM-yyyy"),
+                    ConfrimDate = r.Item.ConfrimDate == null ? "" : r.Item.ConfrimDate?.ToString("dd-MM-yyyy"),
+                    ReceiveDate = r.Item.ReceiveDate == null ? "" : r.Item.ReceiveDate?.ToString("dd-MM-yyyy"),
+                    SendingDate = r.Item.SendingDate == null ? "" : r.Item.SendingDate?.ToString("dd-MM-yyyy"),
+                    SentDate = r.Item.SentDate == null ? "" : r.Item.SentDate?.ToString("dd-MM-yyyy"),
+                    Id = r.Id,
+                    StatusId = r.Item.Status.Id,
                     Route = r.Route.Route,
                     Time = r.Time.Time,
-                    Description = r.Item.Descripttion,
-                    ReceiverName = r.Item.ReceiverName,
-                    ReceiverPhonenumber = r.Item.ReceipverPhone
+                    UserName = r.DeliveryMan == null ? "" : r.DeliveryMan.Username
                 }).ToList();
             }
             else

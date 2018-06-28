@@ -64,6 +64,10 @@
     <Compile Include="Migrations\201806180436572_initial.Designer.cs">
       <DependentUpon>201806180436572_initial.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201806260512181_addDeliveryMan.cs" />
+    <Compile Include="Migrations\201806260512181_addDeliveryMan.Designer.cs">
+      <DependentUpon>201806260512181_addDeliveryMan.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\TbConsolidatedItems.cs" />
     <Compile Include="Models\TbConsolidateList.cs" />
@@ -85,6 +89,7 @@
     <Compile Include="ViewModels\Admin\AccountModel.cs" />
     <Compile Include="ViewModels\Admin\CustomerItemsModel.cs" />
     <Compile Include="ViewModels\Admin\CustomerModel.cs" />
+    <Compile Include="ViewModels\Admin\ItemBarCodeModel.cs" />
     <Compile Include="ViewModels\Customer\ConsolidationItemModel.cs" />
     <Compile Include="ViewModels\Customer\ConsolidationListModel.cs" />
     <Compile Include="ViewModels\Customer\ConsolidationModel.cs" />
@@ -102,6 +107,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201806180436572_initial.resx">
       <DependentUpon>201806180436572_initial.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201806260512181_addDeliveryMan.resx">
+      <DependentUpon>201806260512181_addDeliveryMan.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

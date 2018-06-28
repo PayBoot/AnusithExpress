@@ -1,0 +1,100 @@
+﻿@model AnousithExpress.DataEntry.ViewModels.Customer.ItemsModel
+<div class="animated fadeIn">
+    <div class="col-sm-12">
+        <form id="itemAdminForm">
+            <div class="form-horizontal">
+                <input type="hidden" value="@ViewBag.CustomerId" id="customerId" />
+                @Html.HiddenFor(m => m.Id)
+                <div class="row form-group">
+                    <div class="col col-md-3">
+                        <label for="hf-email" class=" form-control-label font-weight-bold">ປະເພດສີນຄ້າ</label>
+                    </div>
+                    <div class="col-12 col-md-9">
+                        @Html.TextBoxFor(m => m.ItemName, new { @class = "form-control", @placeholder = "ປະເພດສີນຄ້າ" })
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <div class="col col-md-3">
+                        <label for="hf-email" class=" form-control-label font-weight-bold">ຊື່ຜູ້ຮັບ</label>
+                    </div>
+                    <div class="col-12 col-md-9">
+                        @Html.TextBoxFor(m => m.ReceiverName, new { @class = "form-control", @placeholder = "ຊື່ຜູ້ຮັບ" })
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <div class="col col-md-3">
+                        <label for="hf-email" class=" form-control-label font-weight-bold">ເບີໂທຜູ້ຮັບ</label>
+                    </div>
+                    <div class="col-12 col-md-9">
+                        @Html.TextBoxFor(m => m.ReceipverPhone, new { @class = "form-control", @placeholder = "ເບີໂທຜູ້ຮັບ", @type = "number" })
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <div class="col col-md-3">
+                        <label for="hf-email" class=" form-control-label font-weight-bold">ທີ່ຢູ່ຜູ້ຮັບ</label>
+                    </div>
+                    <div class="col-12 col-md-9">
+                        @Html.TextBoxFor(m => m.ReceiverAddress, new { @class = "form-control", @placeholder = "ທີ່ຢູ່ຜູ້ຮັບ" })
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <div class="col col-md-3">
+                        <label for="hf-email" class=" form-control-label font-weight-bold">ລາຍລະອຽດເພີ່ມເຕີມ</label>
+                    </div>
+                    <div class="col-12 col-md-9">
+                        @Html.TextAreaFor(m => m.Description, new { @class = "form-control", @placeholder = "ລາຍລະອຽດເພີ່ມເຕີມ" })
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <div class="col col-md-3">
+                        <label for="hf-email" class=" form-control-label font-weight-bold">ເກັບເງີນປາຍທາງ</label>
+                    </div>
+                    <div class="col-12 col-md-9 float-left">
+                        <label for="checkbox1" class="form-check-label float-left">
+                            <input type="checkbox" id="collectMoneyBox" name="collectMoneyBox" onchange="CollectMoneyCheck(this)" class="form-check-input float-left">ເກັບ
+                        </label>
+                    </div>
+                </div>
+                <div id="CollectingMoney" class="collapse">
+                    <div class="row form-group">
+                        <div class="col col-md-3">
+                            <label for="hf-email" class=" form-control-label font-weight-bold">ເກັບເງີນປາຍທາງ ສະກຸນເງີນກີບ</label>
+                        </div>
+                        <div class="col-12 col-md-9">
+                            @Html.TextBoxFor(m => m.ItemValue_Kip, new { @class = "form-control", @placeholder = "ເກັບເງີນປາຍທາງ ສະກຸນເງີນກີບ", @type = "number" })
+                        </div>
+                    </div>
+                    <div class="row form-group">
+                        <div class="col col-md-3">
+                            <label for="hf-email" class=" form-control-label font-weight-bold">ເກັບເງີນປາຍທາງ ສະກຸນເງີນບາດ</label>
+                        </div>
+                        <div class="col-12 col-md-9">
+                            @Html.TextBoxFor(m => m.ItemValue_Baht, new { @class = "form-control", @placeholder = "ເກັບເງີນປາຍທາງ ສະກຸນເງີນບາດ", @type = "number" })
+                        </div>
+                    </div>
+                    <div class="row form-group">
+                        <div class="col col-md-3">
+                            <label for="hf-email" class=" form-control-label font-weight-bold">ເກັບເງີນປາຍທາງ ສະກຸນເງີນໂດລ້າ</label>
+                        </div>
+                        <div class="col-12 col-md-9">
+                            @Html.TextBoxFor(m => m.ItemValue_Dollar, new { @class = "form-control", @placeholder = "ເກັບເງີນປາຍທາງ ສະກຸນເງີນໂດລ້າ", @type = "number" })
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+     
+
+    </div>
+</div>
+<script>
+    function CollectMoneyCheck(source) {
+        if (source.checked) {
+            jQuery("#CollectingMoney").removeClass("collapse");
+        }
+        else {
+            jQuery("#CollectingMoney").addClass("collapse");
+        }
+    }
+   
+</script>

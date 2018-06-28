@@ -42,7 +42,8 @@ namespace AnousithExpress.DataEntry.Implimentation
                         new TbItemStatus{Id = 5, Status = "ເຄື່ອງກຳລັງສົ່ງ"},
                         new TbItemStatus{Id = 6, Status = "ສີນຄ້າຖືກສົ່ງໃຫ້ປາຍທາງແລ້ວ"},
                         new TbItemStatus{Id = 7, Status = "ບໍ່ສາມາດຕິຕໍ່ກັບປາຍທາງໄດ້"},
-                        new TbItemStatus{Id = 8, Status = "ສົ່ງກັບຄືນ" }
+                        new TbItemStatus{Id = 8, Status = "ສົ່ງກັບຄືນແລ້ວ" },
+                        new TbItemStatus{Id = 9, Status= "ເຄື່ອງກຳລັງສົ່ງກັບຄືນ" }
                         };
                         db.tbItemStatuses.AddRange(itemstatus);
                         db.SaveChanges();

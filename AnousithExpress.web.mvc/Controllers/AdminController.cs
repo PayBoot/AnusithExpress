@@ -1,8 +1,13 @@
 ﻿using AnousithExpress.DataEntry.Implimentation;
 using AnousithExpress.DataEntry.ViewModels.Admin;
 using AnousithExpress.DataEntry.ViewModels.Customer;
+using AnousithExpress.web.mvc.Reports;
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Linq.Dynamic;
 using System.Web.Mvc;
+
 
 namespace AnousithExpress.web.mvc.Controllers
 {
@@ -12,53 +17,442 @@ namespace AnousithExpress.web.mvc.Controllers
         private ProductService _product;
         private CustomerService _customer;
         private AllocationService _allocation;
-        public AdminController(ProductService product, CustomerService customer, AllocationService allocation)
+        private AccountService _account;
+        public AdminController(ProductService product, CustomerService customer, AllocationService allocation, AccountService account)
         {
             _product = product;
             _customer = customer;
             _allocation = allocation;
+            _account = account;
+        }
+        private void DatatableInitiator(out string draw, out int start, out int length, out string searchValue, out string sortColumnName, out string sortDir)
+        {
+            draw = Request["draw"];
+            start = Convert.ToInt32(Request["start"]);
+            length = Convert.ToInt32(Request["length"]);
+            searchValue = Request["search[value]"];
+            sortColumnName = Request["columns[" + Request["order[0][column]"] + "][name]"];
+            sortDir = Request["order[0][dir]"];
         }
         public ActionResult Index()
         {
-            return View();
+            if (Session["Role"] != null)
+            {
+                if (Session["Role"].ToString() == "1" || Session["Role"].ToString() == "2")
+                {
+                    return View();
+                }
+                else
+                {
+                    return RedirectToAction("ULogin", "Account");
+                }
+            }
+            else
+            {
+                return RedirectToAction("ULogin", "Account");
+            }
+
         }
-        public ActionResult GetNotification()
+
+        public ActionResult Account()
         {
-            double result = _product.GetNotification();
+            if (Session["Role"] != null)
+            {
+                if (Session["Role"].ToString() == "1")
+                {
+                    return View();
+                }
+                else
+                {
+                    return RedirectToAction("Index", "Admin");
+                }
+            }
+            else
+            {
+                return RedirectToAction("ULogin", "Account");
+            }
+
+
+        }
+
+        public ActionResult AccountTable()
+        {
+            string draw, searchValue, sortColumnName, sortDir;
+            int start, length;
+            int UserId = 0;
+            if (Session["UserId"] != null)
+            {
+                UserId = (int)Session["UserId"];
+            }
+
+            DatatableInitiator(out draw, out start, out length, out searchValue, out sortColumnName, out sortDir);
+            List<AccountModel> AllList = new List<AccountModel>();
+            AllList = _account.GetAll();
+            int totalRecord = AllList.Count;
+            if (!String.IsNullOrEmpty(searchValue)) // filter
+            {
+                AllList = AllList.Where(x =>
+                        x.Username.Contains(searchValue) ||
+                        x.Status.Contains(searchValue) ||
+                        x.Role.Contains(searchValue) ||
+                        x.Phonenumber.Contains(searchValue)).ToList();
+            }
+            int totalRowAfterFilter = AllList.Count;
+            //sorting
+
+            if (!String.IsNullOrEmpty(sortColumnName) && !String.IsNullOrEmpty(sortDir))
+            {
+                AllList = AllList.OrderBy(sortColumnName + " " + sortDir).ToList();
+            }
+
+            //paging
+
+            AllList = AllList.Skip(start).Take(length).OrderBy(x => x.Status).ToList();
+
+            return Json(new
+            {
+                draw = draw,
+                recordsTotal = totalRecord,
+                recordsFiltered = totalRowAfterFilter,
+                data = AllList
+            }, JsonRequestBehavior.AllowGet);
+
+
+        }
+
+        public ActionResult AccountDelete(int userId)
+        {
+            bool result = _account.DeleteAccount(userId);
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 
+        public ActionResult AccountCreateUpdate(int userId = 0)
+        {
+            var roles = _account.GetRoles();
+            var status = _account.GetStatus();
+            ViewBag.Roles = new SelectList(roles, "Role", "Role");
+            ViewBag.Statuses = new SelectList(status, "Status", "Status");
+            var model = _account.GetSingle(userId);
+            return PartialView("AccountCreateUpdate", model);
+        }
+
+        public ActionResult AccountCreateUpdateAction(AccountModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                if (model.Id > 0)
+                {
+                    if (!_account.CheckExistingAccount(model.Username, (int)model.Id))
+                    {
+                        int result = _account.UpdateAccount(model);
+                        return Json(result, JsonRequestBehavior.AllowGet);
+                    }
+                    else
+                    {
+                        return Json("Existed", JsonRequestBehavior.AllowGet);
+                    }
+
+
+                }
+                else
+                {
+                    if (!_account.CheckExistingAccount(model.Username))
+                    {
+                        int result = _account.CreateAccount(model);
+                        return Json(result, JsonRequestBehavior.AllowGet);
+                    }
+                    else
+                    {
+                        return Json("Existed", JsonRequestBehavior.AllowGet);
+                    }
+
+                }
+            }
+            else
+            {
+                var errorList = (from user in ModelState.Values
+                                 from error in user.Errors
+                                 select error.ErrorMessage).ToList();
+                return Json(errorList, JsonRequestBehavior.AllowGet);
+            }
+
+        }
         /// <summary>
         /// Account
         /// </summary>
         /// <returns></returns>
-        public ActionResult Account()
+
+        public ActionResult ScanBarCode()
         {
             return View();
-        }
-        public ActionResult AccountCreateUpdate()
-        {
-            return View();
-        }
-        [HttpPost]
-        public ActionResult AccountCreateUpdate(AccountModel model)
-        {
-            return View();
-        }
-        public ActionResult AccountDelete(int accountId)
-        {
-            return RedirectToAction("Account", "Admin");
         }
 
+        public ActionResult ScanBarCodeReceiveItem()
+        {
+            return View();
+        }
+        public ActionResult ScanBarCodeSendingItem()
+        {
+            return View();
+        }
+        public ActionResult ScanBarCodeItemUnableToSend()
+        {
+            return View();
+        }
+        public ActionResult ScanBarCodeItemReturn()
+        {
+            return View();
+        }
+        public ActionResult ScanBarCodeItemIn(string itemTrackingNumber)
+        {
+            ItemsModel model = new ItemsModel();
+            model = _product.ScanBarCodeItemReceive(itemTrackingNumber);
+            if (model != null)
+            {
+
+                return Json(model, JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                return Json("Invalid", JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        public ActionResult ScanBarCodeItemOut(string itemTrackingNumber)
+        {
+            ItemsModel model = new ItemsModel();
+            model = _product.ScanBarCodeItemToSend(itemTrackingNumber);
+            if (model != null)
+            {
+
+                return Json(model, JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                return Json("Invalid", JsonRequestBehavior.AllowGet);
+            }
+        }
+        public ActionResult ScanBarCodeItemUnableToContact(string itemTrackingNumber)
+        {
+            ItemsModel model = new ItemsModel();
+            model = _product.ScanBarCodeItemUnableToContact(itemTrackingNumber);
+            if (model != null)
+            {
+
+                return Json(model, JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                return Json("Invalid", JsonRequestBehavior.AllowGet);
+            }
+        }
+        public ActionResult ScanBarCodeItemToReturnBack(string itemTrackingNumber)
+        {
+            ItemsModel model = new ItemsModel();
+            model = _product.ScanBarCodeItemToReturn(itemTrackingNumber);
+            if (model != null)
+            {
+
+                return Json(model, JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                return Json("Invalid", JsonRequestBehavior.AllowGet);
+            }
+        }
         ////////////////////////////////////////////////////
         //////
         /////////////// Customer
 
         public ActionResult Customer()
         {
-            var model = _customer.CustomerList();
-            return View(model);
+
+            return View();
         }
+
+        public ActionResult CustomerList(string sortBy)
+        {
+            var model = _customer.CustomerList();
+            if (!string.IsNullOrEmpty(sortBy))
+            {
+                if (sortBy == "1")
+                {
+                    model = model.OrderBy("NumberOfConfirmItem DESC").ToList();
+                }
+                else if (sortBy == "2")
+                {
+                    model = model.OrderBy("NumberOfInProcessItem DESC").ToList();
+                }
+
+            }
+            return Json(model, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult CustomerItemList(int customerId, int tabIndex)
+        {
+            ViewBag.CustomerId = customerId.ToString().PadLeft(4, '0');
+            ViewBag.TabIndex = tabIndex.ToString();
+            return View();
+        }
+
+        public ActionResult CustomerItemConfirm(int customerId)
+        {
+            var model = _product.GetProductToPickUpByCustomerId(customerId);
+            return PartialView("CustomerItemConfirm", model);
+        }
+
+        public ActionResult CustomerItemInProcess(int customerId)
+        {
+            ViewBag.CustomerId = customerId;
+            return PartialView("CustomerItemInProcess");
+        }
+
+        public ActionResult CustomerItemInProcessTable(int customerId)
+        {
+            string draw, searchValue, sortColumnName, sortDir;
+            int start, length;
+
+
+            DatatableInitiator(out draw, out start, out length, out searchValue, out sortColumnName, out sortDir);
+            List<ItemsModel> AllList = new List<ItemsModel>();
+            AllList = _product.GetProductInProcessPerCustomerAdminUser(customerId);
+
+            int totalRecord = AllList.Count;
+            if (!String.IsNullOrEmpty(searchValue)) // filter
+            {
+                AllList = AllList.Where(x =>
+                        x.TrackingNumber.Contains(searchValue) ||
+                        x.ItemName.Contains(searchValue) ||
+                        x.ReceiverName.Contains(searchValue) ||
+                        x.CreatedDate.Contains(searchValue)).ToList();
+            }
+            int totalRowAfterFilter = AllList.Count;
+            //sorting
+
+            if (!String.IsNullOrEmpty(sortColumnName) && !String.IsNullOrEmpty(sortDir))
+            {
+                AllList = AllList.OrderBy(sortColumnName + " " + sortDir).ToList();
+            }
+
+            //paging
+
+            AllList = AllList.ToList();
+
+            return Json(new
+            {
+                draw = draw,
+                recordsTotal = totalRecord,
+                recordsFiltered = totalRowAfterFilter,
+                data = AllList
+            }, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult AllocateItemFirstStage(int itemId)
+        {
+            var route = _product.GetRoute();
+            var time = _product.GetTime();
+            ViewBag.Routes = new SelectList(route, "Id", "Route");
+            ViewBag.Times = new SelectList(time, "Id", "Time");
+            var model = _product.GetSingle(itemId);
+            return PartialView("AllocateItemFirstStage", model);
+        }
+
+        public ActionResult AllocateItemFirstSageFunction(int itemId, int routeId, int timeId, DateTime? dateToDeliver, string description)
+        {
+            if (routeId > 0 && timeId > 0 && dateToDeliver != null)
+            {
+                bool result1 = _product.AllocateRouteAndTime(itemId, routeId, timeId, (DateTime)dateToDeliver);
+                bool result2 = _product.UpdateItemDescription(itemId, description);
+                return Json(new { first = result1, second = result2 }, JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                string errorList = "";
+                if (dateToDeliver == null)
+                {
+                    errorList += "ກະລຸນາເລືອກວັນທີສົ່ງ";
+                }
+                return Json(errorList, JsonRequestBehavior.AllowGet);
+            }
+
+        }
+        public ActionResult CannotContactCustomer(int itemId, string description)
+        {
+            bool result1 = _product.CannotContactCustomer(itemId);
+            bool result2 = _product.UpdateItemDescription(itemId, description);
+            return Json(new { first = result1, second = result2 }, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult CreateUpdateUpdateItemDetailPage(int itemId, int customerId)
+        {
+            ViewBag.CustomerId = customerId;
+            var item = _product.GetSingle(itemId);
+            return PartialView("CreateUpdateUpdateItemDetailPage", item);
+        }
+
+        [HttpPost]
+        public ActionResult CreateUpdateItemFunction(ItemsModel model, int customerId)
+        {
+            model.CustomerId = customerId;
+            if (ModelState.IsValid)
+            {
+                if (model.Id > 0)
+                {
+                    int result = _product.Update(model);
+                    return Json(result, JsonRequestBehavior.AllowGet);
+                }
+                else
+                {
+                    int result = _product.CreateByAdmin(model);
+                    return Json(result, JsonRequestBehavior.AllowGet);
+                }
+            }
+            else
+            {
+                var errorList = (from item in ModelState.Values
+                                 from error in item.Errors
+                                 select error.ErrorMessage).ToList();
+                return Json(errorList, JsonRequestBehavior.AllowGet);
+            }
+        }
+        public ActionResult DeleteItem(int itemId)
+        {
+            bool result = _product.Delete(itemId);
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult ItemsTransporting(int customerId)
+        {
+            var model = _product.GetProductTransportingPerCustomerAdminUser(customerId);
+            return PartialView("ItemsTransporting", model);
+        }
+
+        public ActionResult BarCodeReport(int itemId)
+        {
+            ItemBarCodeModel model = _product.GetBarCodeModel(itemId);
+            ItemBarcodeDataSet barcodeDS = new ItemBarcodeDataSet();
+            if (model != null)
+            {
+                barcodeDS.ItemTable.AddItemTableRow(
+                model.Itemname,
+                model.Trackingnumber,
+                model.SenderName,
+                model.SenderPhonenumber,
+                model.ReceiverName,
+                model.ReceiverPhoenumber,
+                model.ReceiverAddress,
+                model.Barcode);
+            }
+
+            Session["barcodeModel"] = barcodeDS;
+            return PartialView("BarCodeReport");
+        }
+
+
+
+
+
+
 
         public ActionResult CustomerItems(int customerId, int statusId = 2, DateTime? fromDate = null, DateTime? toDate = null)
         {
@@ -116,8 +510,8 @@ namespace AnousithExpress.web.mvc.Controllers
                 else
                 {
                     ViewBag.Message = "ສຳເລັດ";
-                    bool result = _product.CreateByAdmin(model);
-                    if (result == true)
+                    int result = _product.CreateByAdmin(model);
+                    if (result == 1)
                     {
                         ViewBag.Message = "ສຳເລັດ";
                         ModelState.Clear();
@@ -151,6 +545,11 @@ namespace AnousithExpress.web.mvc.Controllers
         {
 
             bool result = true;
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+        public ActionResult GetNotification()
+        {
+            double result = _product.GetNotification();
             return Json(result, JsonRequestBehavior.AllowGet);
         }
     }

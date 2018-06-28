@@ -13,5 +13,6 @@ namespace AnousithExpress.DataEntry.Utility
                 .Include(u => u.Status)
                 .Where(u => u.isDelete == false);
         }
+
     }
 }

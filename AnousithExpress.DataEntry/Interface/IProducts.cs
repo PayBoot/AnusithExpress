@@ -50,11 +50,11 @@ namespace AnousithExpress.DataEntry.Interface
         /// 
         List<ItemsModel> GetProductToPickUpByCustomerId(int CustomerId);
 
-        List<ItemsAllocationModel> GetProductToSend(int routeId, int timeId, DateTime? date);
+        List<ItemsAllocationModel> GetProductToSend(int routeId, int timeId, DateTime? date, int userId);
 
         bool PickUp(int[] itemId);
 
-        bool Send(int itemId);
+        bool Send(int itemId, int statusId);
 
         List<TbRoute> GetRoute();
         List<TbTime> GetTime();
@@ -64,11 +64,21 @@ namespace AnousithExpress.DataEntry.Interface
         /// //////////////
         /// ///////////////////
         /// 
+        ItemsModel ScanBarCodeItemReceive(string itemTrackingNumber);
+        ItemsModel ScanBarCodeItemToSend(string itemTrackingNumber);
+        ItemsModel ScanBarCodeItemUnableToContact(string itemTrackingNumber);
+        ItemsModel ScanBarCodeItemToReturn(string itemTrackingNumber);
+
         Double GetNotification();
         List<CustomerItemsModel> GetProductByCustomerId(int customerId, int statusId, DateTime? fromDate, DateTime? toDate);
-        bool CreateByAdmin(ItemsModel model);
+        int CreateByAdmin(ItemsModel model);
+        List<ItemsModel> GetProductInProcessPerCustomerAdminUser(int CustomerId);
+        List<ItemsModel> GetProductTransportingPerCustomerAdminUser(int CustomerId);
+        bool CannotContactCustomer(int itemId);
+        bool UpdateItemDescription(int itemId, string description);
+        bool AllocateRouteAndTime(int itemId, int routeId, int timeId, DateTime dateToDeliver);
 
-
+        ItemBarCodeModel GetBarCodeModel(int itemId);
 
     }
 }

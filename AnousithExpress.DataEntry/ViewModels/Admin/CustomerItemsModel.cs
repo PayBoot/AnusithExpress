@@ -5,6 +5,7 @@ namespace AnousithExpress.DataEntry.ViewModels.Admin
     public class CustomerItemsModel
     {
         public int? Id { get; set; }
+
         public string TrackingNumber { get; set; }
 
         [Required(ErrorMessage = "ກະລຸນາຕື່ມປະເພດສີນຄ້າ")]

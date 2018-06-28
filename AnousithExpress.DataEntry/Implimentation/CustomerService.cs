@@ -123,14 +123,23 @@ namespace AnousithExpress.DataEntry.Implimentation
         {
             using (var db = new EntityContext())
             {
-                var source = _item.GetAll(db)
-                    .Where(i => i.Status.Id == 2)
-                    .GroupBy(i => i.Customer.Id).Select(r => new CustomerModel
+                var source = _customer.GetAll(db).ToList();
+                List<CustomerModel> model = new List<CustomerModel>();
+                foreach (var customer in source)
+                {
+                    var cust = new CustomerModel
                     {
-                        CustomerId = r.Key,
-                        NumberOfConfirmItem = r.Count()
-                    }).ToList();
-                return source;
+                        CustomerId = customer.Id,
+                        CustomerName = customer.Name,
+                        NumberOfConfirmItem = _item.GetAll(db).Count(i => i.Customer.Id == customer.Id && i.Status.Id == 2),
+                        NumberOfInProcessItem = _item.GetAll(db).Count(i => i.Customer.Id == customer.Id && (i.Status.Id == 4 || i.Status.Id == 7)),
+                        NumberOfProcessedItem = _item.GetAll(db).Count(i => i.Customer.Id == customer.Id && (i.Status.Id == 6 || i.Status.Id == 8)),
+                        NumberOfItemSending = _item.GetAll(db).Count(i => i.Customer.Id == customer.Id && (i.Status.Id == 5 || i.Status.Id == 3 || i.Status.Id == 9))
+                    };
+                    model.Add(cust);
+                }
+
+                return model;
 
             }
         }

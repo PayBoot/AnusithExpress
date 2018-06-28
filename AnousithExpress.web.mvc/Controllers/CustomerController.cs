@@ -23,7 +23,22 @@ namespace AnousithExpress.web.mvc.Controllers
         }
         public ActionResult Index()
         {
-            return View();
+            if (Session["Role"] != null)
+            {
+                if (Session["Role"].ToString() == "9")
+                {
+                    return View();
+                }
+                else
+                {
+                    return RedirectToAction("CLogin", "Account");
+                }
+            }
+            else
+            {
+                return RedirectToAction("CLogin", "Account");
+            }
+
         }
 
 

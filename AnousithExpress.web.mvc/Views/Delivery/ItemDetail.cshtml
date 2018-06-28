@@ -1,0 +1,83 @@
+﻿
+@model AnousithExpress.DataEntry.ViewModels.Customer.ItemsModel
+<div class="col-lg-12">
+    <div class="card">
+        <div class="card-header text-center">
+            <strong>ລາຍລະອຽດ</strong>
+        </div>
+        <div class="card-body card-block">
+            <div class="row">
+                <div class="col-md-12">
+                    <table class="table">
+                        <tr>
+                            <td style="font-weight:bolder; width:50%;">ເລກຕິດຕາມ</td>
+                            <td style="width:50%;">@Model.TrackingNumber</td>
+                        </tr>
+                        <tr>
+                            <td style="font-weight:bolder; width:50%;">ປະເພດສີນຄ້າ</td>
+                            <td style="width:50%;">@Model.ItemName</td>
+                        </tr>
+                        <tr>
+                            <td style="font-weight:bolder; width:50%;">ສະຖານະ</td>
+                            <td style="width:50%;">@Model.Status</td>
+                        </tr>
+                        <tr>
+                            <td style="font-weight:bolder; width:50%;">(ວັນເດືອນປີ) ສ້າງລາຍການ</td>
+                            <td style="width:50%;">@Model.CreatedDate</td>
+                        </tr>
+                        <tr>
+                            <td style="font-weight:bolder; width:50%;">(ວັນເດືອນປີ) ວັນທີສົ່ງສີນຄ້າ</td>
+                            <td style="width:50%;">@Model.ReceiveDate</td>
+                        </tr>
+                        <tr>
+                            <td style="font-weight:bolder; width:50%;">ຊື່ຜູ້ສົ່ງ</td>
+                            <td style="width:50%;">@Model.CustomerName</td>
+                        </tr>
+
+                        <tr>
+                            <td style="font-weight:bolder; width:50%;">ເບີໂທຜູ້ສົ່ງ</td>
+                            <td style="width:50%;">@Model.CustomerPhonenumber</td>
+                        </tr>
+                        <tr>
+                            <td style="font-weight:bolder; width:50%;">ຊື່ຜູ້ຮັບ</td>
+                            <td style="width:50%;">@Model.ReceiverName</td>
+                        </tr>
+                        <tr>
+                            <td style="font-weight:bolder; width:50%;">ເບີໂທຜູ້ຮັບ</td>
+                            <td style="width:50%;">@Model.CustomerPhonenumber</td>
+                        </tr>
+                        <tr>
+                            <td style="font-weight:bolder; width:50%;">ທີ່ຢູ່ຜູ້ຮັບ</td>
+                            <td style="width:50%;">@Model.ReceiverAddress</td>
+                        </tr>
+                        <tr>
+                            <td style="font-weight:bolder; width:50%;">ເກັບເງີນປາຍທາງ</td>
+                            <td style="width:50%;">@{
+
+                                if (Model.ItemValue_Kip!=null)
+                                {
+                                <div>Model.ItemValue_Kip ກີບ</div>
+                                }
+                                if (Model.ItemValue_Baht!=null)
+                                {
+                                <div>Model.ItemValue_Baht ບາດ</div>
+                                }
+                                if (Model.ItemValue_Dollar!=null)
+                                {
+                                <div>Model.ItemValue_Dollar ໂດລາ</div>  
+                                }
+                                if (Model.ItemValue_Kip == null && Model.ItemValue_Baht==null && Model.ItemValue_Dollar==null)
+                                {
+                                <div>ບໍ່ມີ</div>
+                                }
+                            }</td>
+                        </tr>
+
+
+                    </table>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

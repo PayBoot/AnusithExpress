@@ -62,7 +62,7 @@
                            
                         </div>
                         <div class="card-footer text-center">
-                            <input type="button" class="btn btn-warning btn-flat w-75" name="name" onclick="submitReceive()" value="ຢືນຢັນການຮັບສີນຄ້າ" />
+                            <input type="button" class="btn btn-warning btn-flat w-75" name="name" onclick="confirmDialog()" value="ຢືນຢັນການຮັບສີນຄ້າ" />
                         </div>
                     </div>
                 </div>
@@ -72,11 +72,11 @@
     </div><!-- .content -->
 </div>
 <div class="modal fade" id="modal1" role="dialog">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-body">
                 <div id="content" class="text-center">
-                    <strong id="popupmessage">ທ່ານແນ່ໃຈທີ່ຈະລືບລາຍການ?</strong>
+                    <strong id="popupmessage"></strong>
                 </div>
                 <div id="modalButton" class="text-center">
                     <button class="btn btn-primary btn-flat mb-1 w-75" data-dismiss="modal">ອອກ</button>
@@ -85,7 +85,21 @@
         </div>
     </div>
 </div>
-
+<div class="modal fade" id="modal2" role="dialog">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div id="content" class="text-center">
+                    <strong id="confirmMessage">ຢືນຢັນການຮັບສີນຄ້າ</strong>
+                </div>
+                <div id="modalButton" class="text-center">
+                    <button class="btn btn-warning btn-flat mb-1 w-75" onclick="submitReceive()" data-dismiss="modal" data-target="#modal2" >ຢືນຢັນ</button>
+                    <button class="btn btn-primary btn-flat mb-1 w-75" data-dismiss="modal">ອອກ</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
 
 
@@ -98,7 +112,7 @@
             itemTable();
         });
         function toggle(source) {
-            let checkboxes = document.getElementsByName("itemsId");
+            let checkboxes = document.getElementsByName("checkId");
             for (var i = 0, n = checkboxes.length; i < n; i++) {
                 checkboxes[i].checked = source.checked;
             }
@@ -165,6 +179,11 @@
         }
         function searchItems() {
             table.ajax.reload(false,null);
+        }
+
+        function confirmDialog() {
+           
+            jQuery("#modal2").modal("show");
         }
 
         function submitReceive() {

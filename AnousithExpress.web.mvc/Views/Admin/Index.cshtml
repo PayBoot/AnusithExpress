@@ -1,49 +1,156 @@
 ﻿
 @{
-    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_CustomerLayout.cshtml";
+    ViewBag.Title = "ຫນ້າຫລັກ";
 }
 
-<h2>Index</h2>
-<a href="@Url.Action("Account","Admin")" class="panel">
-    <div class="panel col-lg-3 panelhover" style="margin:10px;">
-        <div class="panel-body">
-            <strong>ບັນຊີຜູ້ໃຊ້ງານ</strong>
+<div class="breadcrumbs">
+    <div class="col-sm-4">
+        <div class="page-header float-left">
+            <div class="page-title">
+
+            </div>
         </div>
     </div>
-</a>
-<a href="@Url.Action("Customer","Admin")" class="panel">
-    <div class="panel col-lg-3 panelhover" style="margin:10px;">
-        <div class="panel-body">
-            <strong>ລຸກຄ້າ</strong><span class="badge"><div id="Notification"></div></span>
+    <div class="col-sm-8">
+        <div class="page-header float-right">
+            <div class="page-title">
+                <ol class="breadcrumb text-right">
+                    <li class="active">ຫນ້າຫລັກ</li>
+                </ol>
+            </div>
         </div>
     </div>
-</a>
-<a href="@Url.Action("ItemsCreateUpdate","Admin")" class="panel">
-    <div class="panel col-lg-3 panelhover" style="margin:10px;">
-        <div class="panel-body">
-            <strong>ສ້າງສີນຄ້າ</strong>
-        </div>
+</div>
+<div class="container">
+    <div class="content mt-3">
+        <div class="animated">
+            @{
+                if (Session["Role"].ToString() == "1")
+                {
+                    <a href="@Url.Action("Account","Admin")">
+                        <div class="col-sm-6 col-lg-3">
+                            <div class="card text-white bg-flat-color-1">
+                                <div class="card-body pb-0">
+                                    <div class="dropdown float-right">
+                                        <i class="fa fa-cog"></i>
+                                    </div>
+                                    <h4 class="mb-0">
+                                        <span class="count"> </span>
+                                    </h4>
+                                    <p class="text-light">ບັນຊີຜູ້ໃຊ້</p>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                }
+                else
+                {
+                    <a href="#" data-toggle="modal" data-target="#modalLayout" >
+                        <div class="col-sm-6 col-lg-3">
+                            <div class="card text-white bg-flat-color-1">
+                                <div class="card-body pb-0">
+                                    <div class="dropdown float-right">
+                                        <i class="fa fa-cog"></i>
+                                    </div>
+                                    <h4 class="mb-0">
+                                        <span class="count"> </span>
+                                    </h4>
+                                    <p class="text-light">ບັນຊີຜູ້ໃຊ້</p>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                }
+            }
+
+            <a href="@Url.Action("Customer","Admin")">
+                <div class="col-sm-6 col-lg-3">
+                    <div class="card text-white bg-flat-color-2">
+                        <div class="card-body pb-0">
+                            <div class="dropdown float-right">
+                                <i class="fa fa-cog"></i>
+                            </div>
+                            <h4 class="mb-0">
+                                <span class="count"> </span>
+                            </h4>
+                            <p class="text-light">ລຸກຄ້າ</p>
+                        </div>
+                    </div>
+                </div>
+            </a>
+            <a href="@Url.Action("ItemsInProcess","Customer")">
+                <div class="col-sm-6 col-lg-3">
+                    <div class="card text-white bg-flat-color-3">
+                        <div class="card-body pb-0">
+                            <div class="dropdown float-right">
+                                <i class="fa fa-cog"></i>
+                            </div>
+                            <h4 class="mb-0">
+                                <span class="count"> </span>
+                            </h4>
+                            <p class="text-light">ສີນຄ້າທີ່ຈະສົ່ງ</p>
+                        </div>
+                    </div>
+                </div>
+            </a>
+            <a href="@Url.Action("ScanBarCode","Admin")">
+                <div class="col-sm-6 col-lg-3">
+                    <div class="card text-white bg-flat-color-5">
+                        <div class="card-body pb-0">
+                            <div class="dropdown float-right">
+                                <i class="fa fa-cog"></i>
+                            </div>
+                            <h4 class="mb-0">
+                                <span class="count"> </span>
+                            </h4>
+                            <p class="text-light">ສະແກນສີນຄ້າ</p>
+                        </div>
+                    </div>
+                </div>
+            </a>
+
+            <a href="@Url.Action("Consolidation","Customer")">
+                <div class="col-sm-6 col-lg-3">
+                    <div class="card text-white bg-flat-color-5">
+                        <div class="card-body pb-0">
+                            <div class="dropdown float-right">
+                                <i class="fa fa-cog"></i>
+                            </div>
+                            <h4 class="mb-0">
+                                <span class="count"> </span>
+                            </h4>
+                            <p class="text-light">ຈຳນວນສີນຄ້າສົ່ງຂອງລຸກຄ້າ</p>
+                        </div>
+                    </div>
+                </div>
+            </a>
+
+
+            <a href="@Url.Action("ULogout","Account")">
+                <div class="col-sm-6 col-lg-3">
+                    <div class="card text-white bg-flat-color-4">
+                        <div class="card-body pb-0">
+                            <div class="dropdown float-right">
+                                <i class="fa fa-cog"></i>
+                            </div>
+                            <h4 class="mb-0">
+                                <span class="count"> </span>
+                            </h4>
+                            <p class="text-light">ອອກຈາກລະບົບ</p>
+                        </div>
+                    </div>
+                </div>
+            </a>
+        </div><!-- .animated -->
     </div>
-</a>
-<a href="@Url.Action("Allocation","Admin")" class="panel">
-    <div class="panel col-lg-3 panelhover" style="margin:10px;">
-        <div class="panel-body">
-            <strong>ສີນຄ້າທີ່ຕ້ອງໄປສົ່ງ</strong>
-        </div>
-    </div>
-</a>
-<a href="@Url.Action("Consolidation","Admin")" class="panel">
-    <div class="panel col-lg-3 panelhover" style="margin:10px;">
-        <div class="panel-body">
-            <strong>ສັງລວມ</strong>
-        </div>
-    </div>
-</a>
+</div>
+
 @section scripts{
     <script>
         $(document).ready(
             function () {
-    
+
                 setInterval(function () {
                     $.ajax({
                         url: "/Admin/GetNotification",
