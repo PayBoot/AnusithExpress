@@ -17,7 +17,7 @@ namespace AnousithExpress.Data.Models
         public string ReceipverPhone { get; set; }
         public string ReceiverAddress { get; set; }
         public bool isDeleted { get; set; }
-
+        public byte[] BarCodeImage { get; set; }
         public string Descripttion { get; set; }
 
         [Column(TypeName = "date")]
