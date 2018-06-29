@@ -1,0 +1,50 @@
+﻿
+@model AnousithExpress.DataEntry.ViewModels.Customer.CustomerProfileItemsModel
+<div class="card">   
+    <div class="card-body card-block text-center">
+        <div class="row">
+            <div class="col-md-2"></div>
+            <div class="col-md-offset-4 col-md-8 col-sm-12">
+                <table class="table " style="width:100%;">
+                    <tr>
+                        <td style="width:50%;"><strong>ຊື່ ແລະ ນາມສະກຸນ: </strong></td>
+                        <td style="width:50%;">@Model.Profile.Name</td>
+                    </tr>
+                    <tr>
+                        <td style="width:50%;"><strong>ເບີໂທລະສັບ: </strong></td>
+                        <td style="width:50%;">@Model.Profile.Phonenumber</td>
+                    </tr>
+                    <tr>
+                        <td style="width:50%;"><strong>ສະຖານະ: </strong></td>
+                        <td style="width:50%;">@Model.Profile.Status</td>
+                    </tr>
+                    <tr>
+                        <td style="width:50%;"><strong>ທີ່ຢູ່: </strong></td>
+                        <td style="width:50%;">@Model.Profile.Address</td>
+                    </tr>
+                    <tr>
+                        <td style="width:50%;"><strong>ເລກບັນຊີເງິນກີບ:</strong></td>
+                        <td style="width:50%;">@Model.Profile.BCEL_Kip</td>
+                    </tr>
+                    <tr>
+                        <td style="width:50%;"><strong>ເລກບັນຊີເງິນບາດ:</strong></td>
+                        <td style="width:50%;">@Model.Profile.BCEL_Baht</td>
+                    </tr>
+                    <tr>
+                        <td style="width:30%;"><strong>ເລກບັນຊີເງິນໂດລາ:</strong></td>
+                        <td style="width:70%;">@Model.Profile.BCEL_Dollar</td>
+                    </tr>
+                </table>
+
+            </div>
+        </div>
+    </div>
+    <div class="card-footer text-center">
+        <button type="button" onclick='window.location="@Url.Action("CustomerProfileDetail","Admin", new {customerId= Model.Profile.Id })"' class="btn btn-warning col-sm-5 mb-1">
+            <i class="fa fa-dot-circle-o"></i> ປ່ຽນແປງ
+        </button>
+        <button type="button" onclick='window.location ="@Url.Action("Index","Admin")"' class="btn btn-info  col-sm-5 mb-1">
+            <i class="fa fa-backward"></i> ກັບໄປຫນ້າຫລັກ
+        </button>
+    </div>
+</div>

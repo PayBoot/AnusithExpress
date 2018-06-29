@@ -1,4 +1,6 @@
-﻿namespace AnousithExpress.DataEntry.ViewModels.Admin
+﻿using System.Drawing;
+
+namespace AnousithExpress.DataEntry.ViewModels.Admin
 {
     public class ItemBarCodeModel
     {
@@ -9,6 +11,6 @@
         public string ReceiverName { get; set; }
         public string ReceiverPhoenumber { get; set; }
         public string ReceiverAddress { get; set; }
-        public byte[] Barcode { get; set; }
+        public Image Barcode { get; set; }
     }
 }

@@ -11,10 +11,11 @@
 <body>
     <form id="form1" runat="server">
         <div>
-            sey heelllo
-           <%--  <CR:CrystalReportViewer ID="CRViewer" runat="server"  Width="100%" Height="100%"  AutoDataBind="True" ToolPanelView="None" EnableParameterPrompt="false"  />
-        <CR:CrystalReportViewer />--%>
-            <CR:CrystalReportViewer ID="CRViewer" runat="server" AutoDataBind="true" />
+
+      
+            <CR:CrystalReportViewer ID="BarcodeCRP" runat="server" AutoDataBind="true" ToolPanelView="None" />
+
+      
         </div>
     </form>
 </body>

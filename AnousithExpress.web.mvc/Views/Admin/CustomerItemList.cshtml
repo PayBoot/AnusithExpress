@@ -38,8 +38,8 @@
                                         <a class="nav-item nav-link" onclick="ConfirmItemList()" id="ConfirmItemTab" data-toggle="tab" href="#tabDataContent" role="tab">ສີນຄ້າຢືນຢັນໃຫມ່</a>
                                         <a class="nav-item nav-link" onclick="InProcessItemList()" id="InProcessItemTab" data-toggle="tab" href="#tabDataContent" role="tab">ສີນຄ້າກຳລັງດຳເນີນການ</a>
                                         <a class="nav-item nav-link" onclick="TransportingItemList()" id="SendingItemTab" data-toggle="tab" href="#tabDataContent" role="tab">ສີນຄ້າກຳລັງເຂື່ອນຍ້າຍ</a>
-                                        <a class="nav-item nav-link" id="ProcessedItemTab" data-toggle="tab" href="#tabDataContent" role="tab">ສີນຄ້າສົ່ງແລ້ວ</a>
-                                        <a class="nav-item nav-link" id="CustomerProfileTab" data-toggle="tab" href="#tabDataContent" role="tab">ຂໍ້ມູນລຸກຄ້າ</a>
+                                        <a class="nav-item nav-link" onclick="SentItemList()" id="ProcessedItemTab" data-toggle="tab" href="#tabDataContent" role="tab">ສີນຄ້າສົ່ງແລ້ວ</a>
+                                        <a class="nav-item nav-link" onclick="CustomerProfile()" id="CustomerProfileTab" data-toggle="tab" href="#tabDataContent" role="tab">ຂໍ້ມູນລຸກຄ້າ</a>
                                         <a class="nav-item nav-link" id="ConsolidateTab" data-toggle="tab" href="#tabDataContent" role="tab">ສັງລວມ</a>
 
                                     </div>
@@ -62,7 +62,7 @@
     <div class="modal-dialog  modal-lg">
         <div class="modal-content">
             <div class="modal-body">
-                <div id="content3" class="text-center">
+                <div id="content3" class="text-center printableArea">
                     <form id="model3Form"></form>
                 </div>
                 <div id="modalButton3" class="form-horizontal text-center">
@@ -118,8 +118,17 @@
                 jQuery("#SendingItemTab").tab('show');
                 TransportingItemList();
             }
-            else {
+            else if (TabIndex === "4") {
                 jQuery("#ProcessedItemTab").tab('show');
+                SentItemList();
+            }
+            else if (TabIndex === "5") {
+                jQuery("#CustomerProfileTab").tab('show');
+                CustomerProfile();
+            }
+            else {
+                jQuery("#CustomerProfileTab").tab('show');
+                CustomerProfile();
             }
 
 
@@ -167,7 +176,35 @@
                 }
             });
         }
-
+        
+        function SentItemList() {
+            jQuery.ajax({
+                url: "/Admin/CustomerSentItems",
+                data: { customerId: '@ViewBag.CustomerId' },
+                type: "GET",
+                datatype: "json",
+                success: function (r) {
+                    jQuery("#confirmItemTabContent").html(r);
+                },
+                error: function () {
+                    alert("Server error");
+                }
+            });
+        }
+         function CustomerProfile() {
+            jQuery.ajax({
+                url: "/Admin/CustomerProfile",
+                data: { customerId: '@ViewBag.CustomerId' },
+                type: "GET",
+                datatype: "json",
+                success: function (r) {
+                    jQuery("#confirmItemTabContent").html(r);
+                },
+                error: function () {
+                    alert("Server error");
+                }
+            });
+        }
     </script>
 }
 

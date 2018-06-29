@@ -360,8 +360,17 @@ namespace AnousithExpress.web.mvc.Controllers
         }
         public ActionResult ProfileUpdate()
         {
-            var model = _customer.GetCustomerProfile(1);
-            return View(model);
+            if (Session["UserId"] != null)
+            {
+                int UserId = (int)Session["UserId"];
+                var model = _customer.GetCustomerProfile(UserId);
+                return View(model);
+            }
+            else
+            {
+                return RedirectToAction("Index", "Account");
+            }
+
         }
 
         [HttpPost]

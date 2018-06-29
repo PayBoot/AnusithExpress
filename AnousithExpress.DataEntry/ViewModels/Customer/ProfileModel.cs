@@ -12,6 +12,7 @@ namespace AnousithExpress.DataEntry.ViewModels.Customer
         public string Phonenumber { get; set; }
         [Required(ErrorMessage = "ກະລຸນາໄສ່ລະຫັດຢ່າງຫນ້ອຍ 6 ຕົວເລກ"), MinLength(6, ErrorMessage = "ກະລຸນາໄສ່ລະຫັດຢ່າງຫນ້ອຍ 6 ຕົວເລກ")]
         public string Password { get; set; }
+        public string Status { get; set; }
         [Required(ErrorMessage = "ກະລຸນາຕື່ມທີ່ຢູ່")]
         public string Address { get; set; }
         public string BCEL_Kip { get; set; }

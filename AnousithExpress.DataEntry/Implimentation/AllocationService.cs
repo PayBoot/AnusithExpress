@@ -1,5 +1,6 @@
 ﻿using AnousithExpress.DataEntry.Interface;
 using AnousithExpress.DataEntry.Utility;
+using AnousithExpress.DataEntry.ViewModels.Admin;
 using AnousithExpress.DataEntry.ViewModels.Delivery;
 using System;
 using System.Collections.Generic;
@@ -17,6 +18,14 @@ namespace AnousithExpress.DataEntry.Implimentation
                 var source = _item.GetAllAllocation(db).ToList();
                 var result = _item.AssignItemsAllocation(source);
                 return result;
+            }
+        }
+
+        public List<ItemsAllocationModelWithDelivery> GetAllocationForAdmin(int routeId, int timeId, DateTime? sendingDate)
+        {
+            using (var db = new EntityContext())
+            {
+                return null;
             }
         }
 

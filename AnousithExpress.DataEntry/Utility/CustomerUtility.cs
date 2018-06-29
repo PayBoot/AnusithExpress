@@ -17,6 +17,7 @@ namespace AnousithExpress.DataEntry.Utility
                 BCEL_Baht = customer.BCEL_Baht,
                 BCEL_Dollar = customer.BCEL_Dollar,
                 BCEL_Kip = customer.BCEL_Kip,
+                Status = customer.Status.Status,
                 Phonenumber = customer.Phonenumber,
                 Password = customer.Password
             };

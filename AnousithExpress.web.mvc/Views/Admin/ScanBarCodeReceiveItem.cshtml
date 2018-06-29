@@ -16,6 +16,7 @@
             <div class="page-title">
                 <ol class="breadcrumb text-right">
                     <li><a href="@Url.Action("Index","Admin")">ຫນ້າຫລັກ</a></li>
+                    <li><a href="@Url.Action("ScanBarCode","Admin")">ສະແກນສີນຄ້າ</a></li>
                     <li class="active">@ViewData["Title"]</li>
                 </ol>
             </div>
@@ -92,6 +93,7 @@
                         success: function (r) {
                             if (r==="Invalid") {
                                 jQuery("#modal1").modal("show");
+                                jQuery('input[name="barcodeText"]').val("");
                             }
                             else {
                                 let money='';
@@ -121,6 +123,7 @@
                                 html += '<td>' + money + '</td>';
                                 html += '</tr>';
                                 jQuery("#tableBody").append(html);
+                                jQuery('input[name="barcodeText"]').val("");
                             }
                         }
                     });

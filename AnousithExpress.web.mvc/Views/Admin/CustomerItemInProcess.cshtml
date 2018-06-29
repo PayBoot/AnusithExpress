@@ -90,7 +90,7 @@
                             let html = '';
                             html += '<button type="button" onclick="deleteItemDialog(' + data + ')" class="btn btn-flat btn-danger btn-sm mr-2 ml-2"><i class="fa fa-trash"></i> ລືບ</button>';
                             html += '<button type="button" onclick="updateItemDialog(' + data + ')" class="btn btn-flat btn-warning btn-sm mr-2 ml-2"><i class="fa fa-edit"></i> ປ່ຽນແປງ</button>';
-
+                            html += '<button type="button" onclick="itemDetail(' + data + ')" class="btn btn-flat btn-warning btn-sm">ລາຍລະອຽດ</button>';
                             html += '';
 
 
@@ -266,5 +266,10 @@
         });
 
 
+    }
+     function itemDetail(id) {
+       
+        window.location = "@Url.Action("ItemsDetail","Admin")?itemId="+id;
+       
     }
 </script>

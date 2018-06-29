@@ -4,8 +4,11 @@ using AnousithExpress.DataEntry.ViewModels.Customer;
 using AnousithExpress.web.mvc.Reports;
 using System;
 using System.Collections.Generic;
+using System.Drawing.Imaging;
+using System.IO;
 using System.Linq;
 using System.Linq.Dynamic;
+using System.Text;
 using System.Web.Mvc;
 
 
@@ -290,6 +293,7 @@ namespace AnousithExpress.web.mvc.Controllers
 
         public ActionResult CustomerItemList(int customerId, int tabIndex)
         {
+
             ViewBag.CustomerId = customerId.ToString().PadLeft(4, '0');
             ViewBag.TabIndex = tabIndex.ToString();
             return View();
@@ -386,6 +390,8 @@ namespace AnousithExpress.web.mvc.Controllers
         public ActionResult CreateUpdateUpdateItemDetailPage(int itemId, int customerId)
         {
             ViewBag.CustomerId = customerId;
+            var status = _product.GetStatus();
+            ViewBag.Statuses = new SelectList(status, "Status", "Status");
             var item = _product.GetSingle(itemId);
             return PartialView("CreateUpdateUpdateItemDetailPage", item);
         }
@@ -415,6 +421,7 @@ namespace AnousithExpress.web.mvc.Controllers
                 return Json(errorList, JsonRequestBehavior.AllowGet);
             }
         }
+
         public ActionResult DeleteItem(int itemId)
         {
             bool result = _product.Delete(itemId);
@@ -430,23 +437,219 @@ namespace AnousithExpress.web.mvc.Controllers
         public ActionResult BarCodeReport(int itemId)
         {
             ItemBarCodeModel model = _product.GetBarCodeModel(itemId);
-            ItemBarcodeDataSet barcodeDS = new ItemBarcodeDataSet();
+
             if (model != null)
             {
-                barcodeDS.ItemTable.AddItemTableRow(
-                model.Itemname,
-                model.Trackingnumber,
-                model.SenderName,
-                model.SenderPhonenumber,
-                model.ReceiverName,
-                model.ReceiverPhoenumber,
-                model.ReceiverAddress,
-                model.Barcode);
+                Zen.Barcode.BarcodeDraw barcodeObject = Zen.Barcode.BarcodeDrawFactory.Code128WithChecksum;
+                System.Drawing.Image barcodeImage = barcodeObject.Draw(model.Trackingnumber, 60);
+                ViewBag.Trackingnumber = model.Trackingnumber;
+                ItemBarcodeDataSet barcodeDS = new ItemBarcodeDataSet();
+                if (model != null)
+                {
+                    barcodeDS.ItemTable.AddItemTableRow(
+                    model.Itemname,
+                    model.Trackingnumber,
+                    model.SenderName,
+                    model.SenderPhonenumber,
+                    model.ReceiverName,
+                    model.ReceiverPhoenumber,
+                    model.ReceiverAddress,
+                    model.Barcode);
+                }
+                HttpContext.Session["barcodeModel"] = barcodeDS;
+                return PartialView("BarCodeReport");
+            }
+            else
+            {
+                return Content("No item identity is found, please access this page in a proper manner");
             }
 
-            Session["barcodeModel"] = barcodeDS;
-            return PartialView("BarCodeReport");
         }
+        public ActionResult GetBarCode(string trackingnumber)
+        {
+            FileContentResult result;
+
+            Zen.Barcode.Code128BarcodeDraw barcodeObject = Zen.Barcode.BarcodeDrawFactory.Code128WithChecksum;
+            System.Drawing.Image barcodeImage = barcodeObject.Draw(trackingnumber, 60);
+            MemoryStream ms = new MemoryStream();
+            barcodeImage.Save(ms, ImageFormat.Png);
+            result = this.File(ms.GetBuffer(), "image/jpeg");
+            return result;
+        }
+
+
+
+        public ActionResult CustomerSentItems(int customerId)
+        {
+            ViewBag.CustomerId = customerId;
+            return PartialView("CustomerSentItems");
+        }
+
+        public ActionResult ItemsProcessedTable(int UserId, DateTime? fromDate = null, DateTime? toDate = null)
+        {
+            string draw, searchValue, sortColumnName, sortDir;
+            int start, length;
+
+
+
+            DatatableInitiator(out draw, out start, out length, out searchValue, out sortColumnName, out sortDir);
+            List<ItemsModel> AllList = new List<ItemsModel>();
+            AllList = _product.GetProductProcessedPerCustomer(UserId, fromDate, toDate);
+
+            int totalRecord = AllList.Count;
+            if (!String.IsNullOrEmpty(searchValue)) // filter
+            {
+                AllList = AllList.Where(x =>
+                        x.TrackingNumber.Contains(searchValue) ||
+                        x.ItemName.Contains(searchValue) ||
+                        x.ReceiverName.Contains(searchValue) ||
+                        x.CreatedDate.Contains(searchValue)).ToList();
+            }
+            int totalRowAfterFilter = AllList.Count;
+            //sorting
+
+            if (!String.IsNullOrEmpty(sortColumnName) && !String.IsNullOrEmpty(sortDir))
+            {
+                AllList = AllList.OrderBy(sortColumnName + " " + sortDir).ToList();
+            }
+
+            //paging
+
+            AllList = AllList.Skip(start).Take(length).ToList();
+
+            return Json(new
+            {
+                draw = draw,
+                recordsTotal = totalRecord,
+                recordsFiltered = totalRowAfterFilter,
+                data = AllList
+            }, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult ItemsCount(int customerId, DateTime? fromDate = null, DateTime? toDate = null)
+        {
+
+            var source = _product.GetItemsCount(customerId, fromDate, toDate);
+            return Json(new { l = source.totalItemReceive, t = source.totalItem, s = source.totalSuccess, f = source.totalSendBack }, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult ItemsDetail(int itemId)
+        {
+
+            var model = _product.GetSingle(itemId);
+            ViewBag.CustomerId = model.CustomerId.ToString().PadLeft(4, '0');
+            ViewBag.Trackingnumber = model.TrackingNumber;
+            return View(model);
+        }
+
+        public ActionResult CustomerProfile(int customerId)
+        {
+
+            var model = _customer.GetCustomerProfileItems(customerId);
+
+            return PartialView("CustomerProfile", model);
+        }
+
+        public ActionResult CustomerProfileDetail(int customerId)
+        {
+
+            var model = _customer.GetCustomerProfile(customerId);
+            var status = _account.GetStatus();
+            ViewBag.Statuses = new SelectList(status, "Status", "Status");
+            ViewBag.CustomerId = model.Id.ToString().PadLeft(4, '0');
+            return View(model);
+        }
+
+        public ActionResult ProfileUpdateFunction(ProfileModel model)
+        {
+
+            StringBuilder errorList = new StringBuilder();
+            if (_customer.CheckExistingPhonenumber(model.Phonenumber, model.Id))
+            {
+                errorList.Append("ເບີໂທດັ່ງກ່າວຖືກນຳໃຊ້ແລ້ວ <br/>");
+            }
+            if (model.Name == null)
+            {
+                errorList.Append("ກະລຸນາໃສ່ຊື່ <br/>");
+            }
+            if (model.Phonenumber == null || model.Phonenumber.Length != 8)
+            {
+                errorList.Append("ກະລຸນາໃສ່ເບີໂທ 8 ໂຕເລກ <br/>");
+            }
+            if (!string.IsNullOrEmpty(model.Password))
+            {
+                if (model.Password.Length < 6)
+                {
+                    errorList.Append("ລະຫັດຕ້ອງຢ່າງຫນ້ອຍ 6 ໂຕເລກ <br/>");
+                }
+            }
+            if (model.Address == null)
+            {
+                errorList.Append("ກະລຸນາໃສ່ທີ່ຢູ່ຂອງທ່ານ <br/>");
+            }
+            if (string.IsNullOrEmpty(errorList.ToString()))
+            {
+                bool result = _customer.Update(model);
+                return Json(result, JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                return Json(errorList.ToString(), JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        public ActionResult ItemHistoryListOfCustomer()
+        {
+            return View();
+        }
+
+        public ActionResult ItemHistoryTable(DateTime? fromDate, DateTime? toDate)
+        {
+            string draw, searchValue, sortColumnName, sortDir;
+            int start, length;
+
+
+            DatatableInitiator(out draw, out start, out length, out searchValue, out sortColumnName, out sortDir);
+            List<ItemHistoryModel> AllList = new List<ItemHistoryModel>();
+            AllList = _product.GetItemHistory(fromDate, toDate);
+
+            int totalRecord = AllList.Count;
+            if (!String.IsNullOrEmpty(searchValue)) // filter
+            {
+                AllList = AllList.Where(x =>
+                        x.CustomerIdForshow.Contains(searchValue) ||
+                        x.TotalItemReturnForShow == searchValue ||
+                        x.TotalItemReceiveForShow == searchValue ||
+                        x.TotalItemSentForShow == searchValue ||
+                        x.TotalItemInProcessForShow == searchValue).ToList();
+            }
+            int totalRowAfterFilter = AllList.Count;
+            //sorting
+
+            if (!String.IsNullOrEmpty(sortColumnName) && !String.IsNullOrEmpty(sortDir))
+            {
+                AllList = AllList.OrderBy(sortColumnName + " " + sortDir).ToList();
+            }
+
+            //paging
+
+            AllList = AllList.ToList();
+
+            return Json(new
+            {
+                draw = draw,
+                recordsTotal = totalRecord,
+                recordsFiltered = totalRowAfterFilter,
+                data = AllList
+            }, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult AllocateDeliveryMan()
+        {
+            return View();
+        }
+
+
 
 
 

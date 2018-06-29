@@ -1,0 +1,50 @@
+﻿
+@{
+    ViewBag.Title = "ຈັດສີນຄ້າສົ່ງ";
+    Layout = "~/Views/Shared/_CustomerLayout.cshtml";
+}
+
+<div class="breadcrumbs">
+    <div class="col-sm-4">
+        <div class="page-header float-left">
+            <div class="page-title">
+
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-8">
+        <div class="page-header float-right">
+            <div class="page-title">
+                <ol class="breadcrumb text-right">
+                    <li><a href="@Url.Action("Index","Admin")">ຫນ້າຫລັກ</a></li>
+                    <li class="active">@ViewData["Title"]</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container" id="containerResize">
+    <div class="content mt-3">
+        <div class="animated fadeIn">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="form-horizontal text-center">
+                                <label style="font-weight:bold;">ລຽງຕາມ</label>
+                                <div class="form-check-inline form-check">
+                                    <label for="inline-radio1" class="form-check-label ">
+                                        <input type="radio" id="newConfirmItem" name="inline-radios" onchange="getCustomerList()" value="option1" class="form-check-input"> ສີນຄ້າຢືນຢັນໃຫມ່
+                                    </label>
+                                    <label for="inline-radio2" class="form-check-label ">
+                                        <input type="radio" id="inProcessItem" name="inline-radios" onchange="getCustomerList()" value="option2" class="form-check-input ml-2"> ສີນຄ້າກຳລັບດຳເນີນການ
+                                    </label>
+                                </div>
+                            </div>
+                        </div>                  
+                    </div>
+                </div>
+            </div>
+        </div><!-- .animated -->
+    </div><!-- .content -->
+</div>

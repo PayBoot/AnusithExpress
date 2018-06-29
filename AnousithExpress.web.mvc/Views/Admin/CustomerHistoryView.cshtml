@@ -1,0 +1,198 @@
+﻿
+<div class="animated fadeIn">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+
+                <div class="card-body ">
+                    <div class="row">
+                        <div class="col-6">
+                            <label>ຈາກວັນທີສົ່ງ</label>
+                            @{
+                                if (ViewBag.fromDate != null)
+                                {
+                                    <input type="text" value="@ViewBag.fromDate" placeholder="ວັນ-ເດືອນ-ປີ" class="w-100" name="fromDate" readonly="readonly" onchange="searchByDate(this)" />
+
+                                }
+                                else
+                                {
+                                    <input type="text" placeholder="ວັນ-ເດືອນ-ປີ" class="w-100" name="fromDate" readonly="readonly" onchange="searchByDate(this)" />
+
+                                }
+
+                            }
+
+
+                        </div>
+                        <div class="col-6 horizontal">
+
+                            <label>ຫາວັນທີສົ່ງ</label>
+                            @{
+                                if (ViewBag.toDate != null)
+                                {
+                                    <input type="text" value="@ViewBag.toDate" placeholder="ວັນ-ເດືອນ-ປີ" class="w-100" name="toDate" readonly="readonly" onchange="searchByDate(this)" />
+
+                                }
+                                else
+                                {
+                                    <input type="text" placeholder="ວັນ-ເດືອນ-ປີ" class="w-100" name="toDate" readonly="readonly" onchange="searchByDate(this)" />
+
+                                }
+                            }
+
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col text-center" style="vertical-align:middle;">
+                            <table class="table" style="width:75%;margin-left:auto;margin-right:auto">
+                                <tr>
+                                    <td style="width:50%;">ຈຳນວນເຄື່ອງສົ່ງທັງຫມົດ</td>
+                                    <td style="width:50%;" id="totalNumber"></td>
+                                </tr>
+                                <tr>
+                                    <td style="width:50%;">ຈຳນວນເຄື່ອງສົ່ງຮອດປາຍທາງ</td>
+                                    <td style="width:50%;" id="totalSuccess"></td>
+                                </tr>
+                                <tr>
+                                    <td style="width:50%;">ຈຳນວນເຄື່ອງສົ່ງກັບຄືນ</td>
+                                    <td style="width:50%;" id="totalFailure"></td>
+                                </tr>
+
+                            </table>
+                        </div>
+                    </div>
+                    <div class="table-responsive">
+                        <table id="itemDataTable" class="table table-striped table-bordered" style="width:100%;white-space:nowrap;">
+                            <thead>
+                                <tr>
+                                    <th class="control">ເລກຕິດຕາມ</th>
+                                    <th class="control">ປະເພດສີນຄ້າ</th>
+                                    <th class="control">ສະຖານະ</th>
+                                    <th>ຊື່ຜູ້ຮັບ</th>
+                                    <th>ເບີໂທຜູ້ຮັບ</th>
+                                    <th>ທີ່ຢູ່ຜູ້ຮັບ</th>
+                                    <th>ມື້ສົ່ງ</th>
+                                    <th>ມື້ມອບເຄື່ອງ</th>
+                                    <th>ເກັບເງິນປາຍທາງ</th>
+                                    <th class="control">ຝັງຊັ້ນ</th>
+                                </tr>
+                            </thead>
+
+                        </table>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div><!-- .animated -->
+
+<script>
+    var sentItemTable;
+    jQuery(document).ready(
+        function () {
+
+            itemCount();
+            itemTable();
+            jQuery("input[name='fromDate']").datepicker({
+                language: 'la'
+            });
+
+            jQuery("input[name='toDate']").datepicker({
+                language: 'la'
+            });
+            
+        }
+    );
+
+    function itemTable() {
+        sentItemTable = jQuery("#itemDataTable").DataTable({
+            serverSide: true,
+            responsive: true,
+            searching: false,
+            language: LaoLangage,
+            order: [[1, 'desc']],
+            ajax: {
+                url: "/Admin/ItemsProcessedTable",
+                type: "POST",
+                datatype: "json",
+                data: function (d) {
+                    d.UserId = '@ViewBag.CustomerId';
+                    d.fromDate = jQuery("input[name='fromDate']").val() || null;
+                    d.toDate = jQuery("input[name='toDate']").val() || null;
+                }
+            },
+            columns: [
+                { data: "TrackingNumber", name: "TrackingNumber" },
+                { data: "ItemName", name: "ItemName" },
+                { data: "Status", name: "Status" },
+                { data: "ReceiverName", name: "ReceiverName" },
+                { data: "ReceipverPhone", name: "ReceipverPhone" },
+                { data: "ReceiverAddress", name: "ReceiverAddress" },
+                { data: "ReceiveDate", name: "ReceiveDate" },
+                { data: "SentDate", name: "SentDate" },
+                {
+                    data: "Id", render: function (data, type, full, meta) {
+                        let html = '';
+                        if (full.ItemValue_Kip !== null) {
+                            html += full.ItemValue_Kip + "ກີບ<br/>";
+                        }
+                        if (full.ItemValue_Baht !== null) {
+                            html += full.ItemValue_Baht + "ບາດ<br/>";
+                        }
+                        if (full.ItemValue_Dollar !== null) {
+                            html += full.ItemValue_Dollar + "ໂດລ້າ";
+                        }
+                        if (full.ItemValue_Kip === null && full.ItemValue_Baht === null && full.ItemValue_Dollar === null) {
+                            html = 'ບໍ່ມີ';
+                        }
+                        return '<p>' + html + '</p>';
+                    }
+                },
+                {
+                    data: "Id", render: function (data, type, full, meta) {
+                        let html = '';
+                        html += '<button type="button" onclick="itemDetail(' + data + ')" class="btn btn-flat btn-warning btn-sm">ລາຍລະອຽດ</button>';
+                        html += '';
+
+
+                        return html;
+                    }
+                }
+            ]
+        });
+    }
+    function itemCount() {
+        jQuery.ajax({
+            url: "/Admin/ItemsCount",
+            type: "POST",
+            data: {
+                customerId : '@ViewBag.CustomerId',
+                fromDate: jQuery("input[name='fromDate']").val() || null,
+                toDate: jQuery("input[name='toDate']").val() || null
+            },
+            datatype: "json",
+            success: function (r) {
+                jQuery("#totalNumber").html(r.t + " ອັນ");
+                jQuery("#totalSuccess").html(r.s + " ອັນ");
+                jQuery("#totalFailure").html(r.f + " ອັນ");
+            },
+            error: function () {
+                alert("Server error");
+            }
+        });
+    }
+    function searchByDate(source) {
+        sentItemTable.ajax.reload(null, false);
+        jQuery(source).datepicker('hide');
+        itemCount();
+    }
+
+    function itemDetail(id) {
+
+        window.location = "@Url.Action("ItemsDetail","Admin")?itemId="+id;
+
+    }
+
+</script>

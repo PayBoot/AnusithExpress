@@ -1,0 +1,223 @@
+﻿
+@{
+    ViewBag.Title = "ລາຍລະອຽດສີນຄ້າ";
+    Layout = "~/Views/Shared/_CustomerLayout.cshtml";
+}
+@model AnousithExpress.DataEntry.ViewModels.Customer.ItemsModel
+<div class="breadcrumbs">
+    <div class="col-sm-4">
+        <div class="page-header float-left">
+            <div class="page-title">
+
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-8">
+        <div class="page-header float-right">
+            <div class="page-title">
+                <ol class="breadcrumb text-right">
+                    <li><a href="@Url.Action("Index", "Admin")">ຫນ້າຫລັກ</a></li>
+                    <li><a href="@Url.Action("Customer", "Admin")">ລຸກຄ້າ</a></li>
+                    <li><a href="@Url.Action("CustomerItemList", "Admin", new { customerId = ViewBag.CustomerId, tabIndex = 2 })">@ViewBag.CustomerId</a></li>
+                    <li class="active">@ViewBag.Trackingnumber</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container" id="containerResize">
+    <div class="content mt-3">
+        <div class="animated fadeIn">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card">
+
+
+                        <div class="card-body ">
+                            <div class="col-md-12">
+                                <table class="table table-bordered">
+                                    <tr>
+                                        <td style="font-weight:bolder;width:50%;">ເລກຕິດຕາມ</td>
+                                        <td>@Model.TrackingNumber</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="font-weight:bolder;width:50%;">ປະເພດສີນຄ້າ</td>
+                                        <td>@Model.ItemName</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="font-weight:bolder;width:50%;">ສະຖານະ</td>
+                                        <td>@Model.Status</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="font-weight:bolder;width:50%;">(ວັນເດືອນປີ) ສ້າງລາຍການ</td>
+                                        <td>@Model.CreatedDate</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="font-weight:bolder;width:50%;">(ວັນເດືອນປີ) ວັນທີສົ່ງສີນຄ້າ</td>
+                                        <td>@Model.ReceiveDate</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="font-weight:bolder;width:50%;">(ວັນເດືອນປີ) ວັນທີ່ປາຍທາງຮັບສີນຄ້າ</td>
+                                        <td>@Model.SendingDate</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="font-weight:bolder;width:50%;">ລາຍລະອຽດເພີ່ມເຕີມ</td>
+                                        <td>@Model.Description</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="font-weight:bolder;width:50%;">ຊື່ຜູ້ສົ່ງ</td>
+                                        <td>@Model.CustomerName</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="font-weight:bolder;width:50%;">ເບີໂທຜູ້ສົ່ງ</td>
+                                        <td>@Model.CustomerPhonenumber</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="font-weight:bolder;width:50%;">ຊື່ຜູ້ຮັບ</td>
+                                        <td>@Model.ReceiverName</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="font-weight:bolder;width:50%;">ເບີໂທຜູ້ຮັບ</td>
+                                        <td>@Model.CustomerPhonenumber</td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="card-footer text-center">
+
+                            <button class="btn btn-warning w-25" onclick="updateItemDialog(@Model.Id)"><i class="fa fa-edit "></i> ປ່ຽນແປງ</button>
+                            <button class="btn btn-danger w-25" onclick="deleteItemDialog(@Model.Id)"><i class="fa fa-trash "></i> ລືບ</button>
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div><!-- .animated -->
+    </div><!-- .content -->
+</div>
+<div class="modal fade" id="modal3" role="dialog">
+    <div class="modal-dialog  modal-lg">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div id="content3" class="text-center printableArea">
+                    <form id="model3Form"></form>
+                </div>
+                <div id="modalButton3" class="form-horizontal text-center">
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="modal1" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div id="content" class="text-center">
+
+                </div>
+                <div id="modalButton" class="text-center">
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="modal2" role="dialog">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div id="content2" class="text-center">
+
+                </div>
+                <div id="modalButton2" class="text-center">
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@section scripts{
+    <script>
+        function updateItemDialog(id) {
+        let itemId = id;
+        jQuery.ajax({
+            url: "/Admin/CreateUpdateUpdateItemDetailPage",
+            data: { itemId: itemId, customerId: '@ViewBag.CustomerId' },
+            type: "POST",
+            datatype: "json",
+            success: function (r) {
+                let htmlButton = '';
+                htmlButton += '<button class="btn btn-warning btn-flat mb-1 w-25 mr-1 ml-1" onclick = "saveItem()"><i class="fa fa-dot-circle-o"></i> ບັນທຶກ</button>';
+                htmlButton += '<button class="btn btn-primary btn-flat mb-1 w-25 mr-1 ml-1" data-dismiss="modal"> <i class="fa fa-ban"></i> ອອກ</button>';
+                jQuery("#model3Form").html(r);
+                jQuery("#modalButton3").html(htmlButton);
+                jQuery("#modal3").modal('show');
+            }
+        });
+    }
+    function saveItem() {
+
+         jQuery.ajax({
+             url: "/Admin/CreateUpdateItemFunction",
+
+             data: jQuery("#itemAdminForm").serialize() + '&customerId= ' + jQuery("#customerId").val(),
+             datatype: "json",
+             type: "POST",
+             success: function (r) {
+                if (!isNaN(r)) {
+                    let htmlButton = '';
+                    htmlButton += '<button class="btn btn-primary btn-flat mb-1 w-100 mr-1 ml-1" data-dismiss="modal" onclick="location.reload()" data-target ="#modal2">ອອກ</button>';
+                    jQuery("#content2").html("ສຳເລັດ");
+                    jQuery("#modalButton2").html(htmlButton);
+                    jQuery("#modal2").modal('show');
+                    jQuery("#modal3").modal("hide");
+           
+                }
+                else {
+                    let htmlButton = '';
+                    htmlButton += '<button class="btn btn-primary btn-flat mb-1 w-100 mr-1 ml-1" data-dismiss="modal" data-target ="#modal2">ອອກ</button>';
+                    jQuery("#content2").html(""+r);
+                    jQuery("#modalButton2").html(htmlButton);
+                    jQuery("#modal2").modal('show');
+
+                }
+            }
+        });
+    }
+    function deleteItemDialog(id) {
+        let itemId = id;
+        let html = '';
+
+        html += '<button class="btn btn-danger btn-flat mb-1 w-100" onclick="deleteItem(' + itemId + ')" data-dismiss="modal">ລືບ</button>';
+        html += '<button class="btn btn-primary btn-flat mb-1 w-100" data-dismiss="modal">ອອກ</button>';
+        jQuery("#content2").html("ຢືນຢັນທີ່ຈະລືບ");
+        jQuery("#modalButton2").html(html);
+        jQuery("#modal2").modal('show');
+    }
+    function deleteItem(id) {
+        let itemId = id;
+
+        jQuery.ajax({
+            url: "/Admin/DeleteItem",
+            data: { itemId: itemId },
+            type: "POST",
+            datatype: "json",
+            success: function (r) {
+                if (r === true) {
+                    window.location = "@Url.Action("CustomerItemList", "Admin")?customerId=" + '@ViewBag.CustomerId' +"&tabIndex=2";
+                }
+                else {
+                    alert("Cannot perform this operation");
+                }
+            },
+            error: function () {
+                alert("Server error");
+            }
+        });
+
+
+    }
+    </script>
+}

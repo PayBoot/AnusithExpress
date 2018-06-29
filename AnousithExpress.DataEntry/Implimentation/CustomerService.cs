@@ -89,6 +89,11 @@ namespace AnousithExpress.DataEntry.Implimentation
                     {
                         customer.Password = model.Password;
                     };
+                    if (!string.IsNullOrEmpty(model.Status))
+                    {
+                        customer.Status = db.tbStatuses.FirstOrDefault(s => s.Status == model.Status);
+                    };
+
                     customer.Phonenumber = model.Phonenumber;
                     customer.Address = model.Address;
                     customer.BCEL_Baht = model.BCEL_Baht;

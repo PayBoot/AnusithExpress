@@ -80,5 +80,7 @@ namespace AnousithExpress.DataEntry.Interface
 
         ItemBarCodeModel GetBarCodeModel(int itemId);
 
+        List<ItemHistoryModel> GetItemHistory(DateTime? fromDate, DateTime? toDate);
+
     }
 }

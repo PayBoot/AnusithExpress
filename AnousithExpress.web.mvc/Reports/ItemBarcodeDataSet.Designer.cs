@@ -281,7 +281,7 @@ namespace AnousithExpress.web.mvc.Reports {
             
             private global::System.Data.DataColumn columnItemname;
             
-            private global::System.Data.DataColumn columnTrackingNumber;
+            private global::System.Data.DataColumn columnTrackingnumber;
             
             private global::System.Data.DataColumn columnSenderName;
             
@@ -338,9 +338,9 @@ namespace AnousithExpress.web.mvc.Reports {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
-            public global::System.Data.DataColumn TrackingNumberColumn {
+            public global::System.Data.DataColumn TrackingnumberColumn {
                 get {
-                    return this.columnTrackingNumber;
+                    return this.columnTrackingnumber;
                 }
             }
             
@@ -429,11 +429,11 @@ namespace AnousithExpress.web.mvc.Reports {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
-            public ItemTableRow AddItemTableRow(string Itemname, string TrackingNumber, string SenderName, string SenderPhonenumber, string ReceiverName, string ReceiverPhonenumber, string ReceiverAddress, byte[] Barcode) {
+            public ItemTableRow AddItemTableRow(string Itemname, string Trackingnumber, string SenderName, string SenderPhonenumber, string ReceiverName, string ReceiverPhonenumber, string ReceiverAddress, object Barcode) {
                 ItemTableRow rowItemTableRow = ((ItemTableRow)(this.NewRow()));
                 object[] columnValuesArray = new object[] {
                         Itemname,
-                        TrackingNumber,
+                        Trackingnumber,
                         SenderName,
                         SenderPhonenumber,
                         ReceiverName,
@@ -463,7 +463,7 @@ namespace AnousithExpress.web.mvc.Reports {
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
             internal void InitVars() {
                 this.columnItemname = base.Columns["Itemname"];
-                this.columnTrackingNumber = base.Columns["TrackingNumber"];
+                this.columnTrackingnumber = base.Columns["Trackingnumber"];
                 this.columnSenderName = base.Columns["SenderName"];
                 this.columnSenderPhonenumber = base.Columns["SenderPhonenumber"];
                 this.columnReceiverName = base.Columns["ReceiverName"];
@@ -477,8 +477,8 @@ namespace AnousithExpress.web.mvc.Reports {
             private void InitClass() {
                 this.columnItemname = new global::System.Data.DataColumn("Itemname", typeof(string), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnItemname);
-                this.columnTrackingNumber = new global::System.Data.DataColumn("TrackingNumber", typeof(string), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnTrackingNumber);
+                this.columnTrackingnumber = new global::System.Data.DataColumn("Trackingnumber", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnTrackingnumber);
                 this.columnSenderName = new global::System.Data.DataColumn("SenderName", typeof(string), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnSenderName);
                 this.columnSenderPhonenumber = new global::System.Data.DataColumn("SenderPhonenumber", typeof(string), null, global::System.Data.MappingType.Element);
@@ -489,7 +489,7 @@ namespace AnousithExpress.web.mvc.Reports {
                 base.Columns.Add(this.columnReceiverPhonenumber);
                 this.columnReceiverAddress = new global::System.Data.DataColumn("ReceiverAddress", typeof(string), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnReceiverAddress);
-                this.columnBarcode = new global::System.Data.DataColumn("Barcode", typeof(byte[]), null, global::System.Data.MappingType.Element);
+                this.columnBarcode = new global::System.Data.DataColumn("Barcode", typeof(object), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnBarcode);
             }
             
@@ -649,17 +649,17 @@ namespace AnousithExpress.web.mvc.Reports {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
-            public string TrackingNumber {
+            public string Trackingnumber {
                 get {
                     try {
-                        return ((string)(this[this.tableItemTable.TrackingNumberColumn]));
+                        return ((string)(this[this.tableItemTable.TrackingnumberColumn]));
                     }
                     catch (global::System.InvalidCastException e) {
-                        throw new global::System.Data.StrongTypingException("The value for column \'TrackingNumber\' in table \'ItemTable\' is DBNull.", e);
+                        throw new global::System.Data.StrongTypingException("The value for column \'Trackingnumber\' in table \'ItemTable\' is DBNull.", e);
                     }
                 }
                 set {
-                    this[this.tableItemTable.TrackingNumberColumn] = value;
+                    this[this.tableItemTable.TrackingnumberColumn] = value;
                 }
             }
             
@@ -745,10 +745,10 @@ namespace AnousithExpress.web.mvc.Reports {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
-            public byte[] Barcode {
+            public object Barcode {
                 get {
                     try {
-                        return ((byte[])(this[this.tableItemTable.BarcodeColumn]));
+                        return ((object)(this[this.tableItemTable.BarcodeColumn]));
                     }
                     catch (global::System.InvalidCastException e) {
                         throw new global::System.Data.StrongTypingException("The value for column \'Barcode\' in table \'ItemTable\' is DBNull.", e);
@@ -773,14 +773,14 @@ namespace AnousithExpress.web.mvc.Reports {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
-            public bool IsTrackingNumberNull() {
-                return this.IsNull(this.tableItemTable.TrackingNumberColumn);
+            public bool IsTrackingnumberNull() {
+                return this.IsNull(this.tableItemTable.TrackingnumberColumn);
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
-            public void SetTrackingNumberNull() {
-                this[this.tableItemTable.TrackingNumberColumn] = global::System.Convert.DBNull;
+            public void SetTrackingnumberNull() {
+                this[this.tableItemTable.TrackingnumberColumn] = global::System.Convert.DBNull;
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]

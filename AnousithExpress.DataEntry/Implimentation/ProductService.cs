@@ -7,6 +7,7 @@ using AnousithExpress.DataEntry.ViewModels.Delivery;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.Drawing;
 using System.Linq;
 
 namespace AnousithExpress.DataEntry.Implimentation
@@ -417,6 +418,7 @@ namespace AnousithExpress.DataEntry.Implimentation
         {
             using (var db = new EntityContext())
             {
+                var totalItemReceive = _item.GetAll(db).Where(i => i.Customer.Id == CustomerId && i.ReceiveDate != null).ToList();
                 var totalItem = _item.GetAll(db).Where(i => i.Customer.Id == CustomerId
                 && (i.Status.Id == 6 || i.Status.Id == 8)).ToList();
                 var totalSuccess = _item.GetAll(db).Where(i => i.Customer.Id == CustomerId
@@ -425,18 +427,21 @@ namespace AnousithExpress.DataEntry.Implimentation
                && i.Status.Id == 8).ToList();
                 if (fromReceiveDate != null)
                 {
+                    totalItemReceive = totalItemReceive.Where(i => i.ReceiveDate >= fromReceiveDate).ToList();
                     totalItem = totalItem.Where(i => i.ReceiveDate >= fromReceiveDate).ToList();
                     totalSuccess = totalSuccess.Where(i => i.ReceiveDate >= fromReceiveDate).ToList();
                     totalFailture = totalFailture.Where(i => i.ReceiveDate >= fromReceiveDate).ToList();
                 }
                 if (toReceiveDate != null)
                 {
+                    totalItemReceive = totalItemReceive.Where(i => i.ReceiveDate <= toReceiveDate).ToList();
                     totalItem = totalItem.Where(i => i.ReceiveDate <= toReceiveDate).ToList();
                     totalSuccess = totalSuccess.Where(i => i.ReceiveDate <= toReceiveDate).ToList();
                     totalFailture = totalFailture.Where(i => i.ReceiveDate <= toReceiveDate).ToList();
                 }
                 ItemsCountModel result = new ItemsCountModel
                 {
+                    totalItemReceive = totalItemReceive.Count(),
                     totalItem = totalItem.Count(),
                     totalSuccess = totalSuccess.Count(),
                     totalSendBack = totalFailture.Count()
@@ -646,7 +651,13 @@ namespace AnousithExpress.DataEntry.Implimentation
         {
             using (var db = new EntityContext())
             {
+                Zen.Barcode.Code128BarcodeDraw objBarcode = Zen.Barcode.BarcodeDrawFactory.Code128WithChecksum;
+
                 var item = _item.GetSingle(db, itemId);
+
+
+                Image bcImage = GenCode128.Code128Rendering.MakeBarcodeImage(item.TrackingNumber, 2, true);
+
                 ItemBarCodeModel result = new ItemBarCodeModel
                 {
                     Itemname = item.ItemName,
@@ -656,9 +667,78 @@ namespace AnousithExpress.DataEntry.Implimentation
                     ReceiverName = item.ReceiverName,
                     ReceiverPhoenumber = item.ReceipverPhone,
                     ReceiverAddress = item.ReceiverAddress,
-                    Barcode = null
+                    Barcode = bcImage
                 };
                 return result;
+            }
+        }
+
+        public List<ItemHistoryModel> GetItemHistory(DateTime? fromDate, DateTime? toDate)
+        {
+            using (var db = new EntityContext())
+            {
+                var customers = _customer.GetAll(db).ToList();
+                List<ItemHistoryModel> model = new List<ItemHistoryModel>();
+                if (customers == null)
+                {
+                    return new List<ItemHistoryModel>();
+                };
+                if (fromDate == null && toDate == null)
+                {
+                    foreach (var customer in customers)
+                    {
+                        ItemHistoryModel history = new ItemHistoryModel
+                        {
+                            CustomerId = customer.Id,
+                            TotalItemSent = _item.GetAll(db)
+                            .Where(i => i.Customer.Id == customer.Id
+                                && i.Status.Id == 6
+                                  ).Count(),
+                            TotalItemInProcess = _item.GetAll(db)
+                            .Where(i => i.Customer.Id == customer.Id
+                                && (i.Status.Id == 3 || i.Status.Id == 4 || i.Status.Id == 5 || i.Status.Id == 7 || i.Status.Id == 9)
+                                 ).Count(),
+                            TotalItemReceive = _item.GetAll(db)
+                            .Where(i => i.Customer.Id == customer.Id
+                                   ).Count(),
+                            TotalItemReturn = _item.GetAll(db)
+                            .Where(i => i.Customer.Id == customer.Id
+                                && i.Status.Id == 8
+                                  ).Count()
+
+                        };
+                        model.Add(history);
+                    }
+                }
+                else
+                {
+                    foreach (var customer in customers)
+                    {
+                        ItemHistoryModel history = new ItemHistoryModel
+                        {
+                            CustomerId = customer.Id,
+                            TotalItemSent = _item.GetAll(db)
+                            .Where(i => i.Customer.Id == customer.Id
+                                && i.Status.Id == 6
+                                    && i.ReceiveDate >= fromDate && i.ReceiveDate <= toDate).Count(),
+                            TotalItemInProcess = _item.GetAll(db)
+                            .Where(i => i.Customer.Id == customer.Id
+                                && (i.Status.Id == 3 || i.Status.Id == 4 || i.Status.Id == 5 || i.Status.Id == 7 || i.Status.Id == 9)
+                                    && i.ReceiveDate >= fromDate && i.ReceiveDate <= toDate).Count(),
+                            TotalItemReceive = _item.GetAll(db)
+                            .Where(i => i.Customer.Id == customer.Id
+                                    && i.ReceiveDate >= fromDate && i.ReceiveDate <= toDate).Count(),
+                            TotalItemReturn = _item.GetAll(db)
+                            .Where(i => i.Customer.Id == customer.Id
+                                && i.Status.Id == 8
+                                    && i.ReceiveDate >= fromDate && i.ReceiveDate <= toDate).Count()
+
+                        };
+                        model.Add(history);
+                    }
+                }
+
+                return model;
             }
         }
     }
