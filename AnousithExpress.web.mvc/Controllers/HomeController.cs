@@ -1,30 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+﻿using AnousithExpress.DataEntry.Implimentation;
 using System.Web.Mvc;
 
 namespace AnousithExpress.web.mvc.Controllers
 {
     public class HomeController : Controller
     {
-        public ActionResult Index()
+        private DatabaseInit data;
+        public HomeController(DatabaseInit d)
         {
-            return View();
+            data = d;
+
         }
-
-        public ActionResult About()
+        public ActionResult Datainit()
         {
-            ViewBag.Message = "Your application description page.";
+            bool s = data.InitiateData();
+            return View(s);
 
-            return View();
-        }
-
-        public ActionResult Contact()
-        {
-            ViewBag.Message = "Your contact page.";
-
-            return View();
         }
     }
 }

@@ -1,6 +1,6 @@
 ﻿
 @{
-    ViewBag.Title = "ItemHistoryListOfCustomer";
+    ViewBag.Title = "ປະຫວັດການສົ່ງເຄື່ອງ";
     Layout = "~/Views/Shared/_CustomerLayout.cshtml";
 }
 @model List<AnousithExpress.DataEntry.ViewModels.Admin.ItemHistoryModel>
@@ -44,12 +44,16 @@
                                     <input type="text" placeholder="ວັນ-ເດືອນ-ປີ" class="w-100" name="toDateH" readonly="readonly"  />
 
                                 </div>
-                                <div class="col-5 horizontal">
-                                    <button class="btn btn-warning" onclick="searchCustomerHistory()">ຄົ້ນຫາ</button>
-
+                              
                                     
+
+                        
+                            </div>    
+                            <div class="row">
+                                <div class="col text-center">
+                                    <button class="btn btn-warning col-1" onclick="searchCustomerHistory()">ຄົ້ນຫາ</button>
                                 </div>
-                            </div>                            
+                            </div>
                             <div class="table-responsive">
                                 <table id="customerDataTable" class="table table-striped table-bordered" style="width:100%;white-space:nowrap;">
                                     <thead>
