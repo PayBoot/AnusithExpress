@@ -1,0 +1,200 @@
+﻿
+@{
+    ViewBag.Title = "ສ້າງລາຍການ";
+    Layout = "~/Views/Shared/_CustomerLayout.cshtml";
+}
+@model AnousithExpress.DataEntry.ViewModels.Customer.ConsolidationListModel
+<div class="breadcrumbs">
+    <div class="col-sm-4">
+        <div class="page-header float-left">
+            <div class="page-title">
+
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-8">
+        <div class="page-header float-right">
+            <div class="page-title">
+                <ol class="breadcrumb text-right">
+                    <li><a href="@Url.Action("Index","Admin")">ຫນ້າຫລັກ</a></li>
+                    <li><a href='@Url.Action("CustomerItemList","Admin", new {customerId=@ViewBag.CustomerId, tabIndex=6 })'>@ViewBag.CustomerId</a></li>
+                    <li class="active">ສ້່ງລາຍການ</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container">
+    <div class="content mt-3">
+        <div class="animated">
+            <div class="row">
+                <div class="col-md-3 form-horizontal">
+                    <label>ລາຄາຕໍ່ຫົວຫນ່ວຍ</label>
+                    <input type="text" id="PricePerUnit" oninput="calculateFee()" class="form-control" />
+                </div>
+                <div class="col-md-3 form-horizontal">
+                    <label>ຈຳນວນ</label>
+                    <input type="text" id="amount" readonly="readonly" class="form-control" />
+                </div>
+                <div class="col-md-3 form-horizontal">
+                    <label>ຄ່າຂົນສົ່ງທັງຫມົດ</label>
+                    <input type="text" id="TotalFee" readonly="readonly" class="form-control" />
+                </div>
+                <div class="col-md-3 form-horizontal">
+                    
+                    <button class="btn btn-warning" onclick="CreateConsolidation()" style="margin-top:30px;">ສ້າງລາຍການ</button>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <table id="itemDataTable" class="table mt-2" style="width:100%;white-space:nowrap;">
+                        <thead>
+                            <tr>
+                                <th></th>
+                                <th>ປະເພດສີນຄ້າ</th>
+                                <th>ເລກຕິດຕາມ</th>
+                                <th>ສະຖານະ</th>
+                                <th>ມື້ສົ່ງສີນຄ້າ</th>                               
+                                <th>ເກັບເງິນປາຍທາງ</th>
+                            </tr>
+                        </thead>
+                        
+                    </table>
+                </div>
+            </div>
+        </div><!-- .animated -->
+    </div>
+</div>
+<div class="modal fade" id="modal1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="text-center" id="modalMessage">
+
+                </div>
+            </div>
+            <div class="modal-footer justify-content-between" id="footerButton">
+                <button class="btn btn-warning w-100"  data-dismiss="modal" data-target="#modal1">ຕົກລົງ</button>
+            </div>
+        </div>
+    </div>
+</div>
+@section scripts{
+    <script>
+        var table;
+        jQuery(document).ready(function () {
+            itemTable();
+        });
+        function itemTable() {
+            table = jQuery("#itemDataTable").DataTable({
+                serverSide: true,
+                responsive: true,
+                searching: false,
+                language: LaoLangage,
+                order: [[1, 'desc']],
+                ajax: {
+                    url: "/Admin/ConsolidationItemTable",
+                    type: "POST",
+                    datatype: "json",
+                    data: { customerId: '@ViewBag.CustomerId'}
+                    
+                },
+                columns: [
+                    {
+                        data: "Id", render: function (data, type, full, meta) {
+                            return '<input type="checkbox" id="checkId" onclick="countItem()" name="checkId" value="' + data + '" />';
+                        }
+                    },
+                    {
+                        data: "ItemName", name:"ItemName"
+                    },
+                    {
+                        data: "TrackingNumber", name:"TrackingNumber"
+                    },
+                    {
+                        data: "Status", name:"Status"
+                    },
+                    {
+                        data: "SentDate", name:"SentDate"
+                    },
+                    {
+                        data: "Id", render: function (data, type, full, meta) {
+                            let html = '';
+                            if (full.ItemValue_Kip !== null) {
+                                html += full.ItemValue_Kip + "ກີບ<br/>";
+                            }
+                            if (full.ItemValue_Baht !== null) {
+                                html += full.ItemValue_Baht + "ບາດ<br/>";
+                            }
+                            if (full.ItemValue_Dollar !== null) {
+                                html += full.ItemValue_Dollar + "ໂດລ້າ";
+                            }
+                            if (full.ItemValue_Kip === null && full.ItemValue_Baht === null && full.ItemValue_Dollar === null) {
+                                html = 'ບໍ່ມີ';
+                            }
+                            return '' + html + '';
+                        }
+                    }
+                ]
+            });
+        }
+        function countItem() {
+            var i = 0;
+            i = jQuery("#itemDataTable").find('#checkId:checked').length;
+            jQuery("#amount").val(i);
+            jQuery.ajax({
+                url: "/Admin/GetPrice",
+                data: { condition: i },
+                datatype: "json",
+                type: "GET",
+                success: function (r) {
+                    jQuery("#PricePerUnit").val(r);
+                    calculateFee();
+                },
+                error: function () {
+                    alert("Server error");
+                }
+            });
+        }
+        function calculateFee() {
+            let p = jQuery("#PricePerUnit").val();
+            let a = jQuery("#amount").val();
+            let result=0;
+            if (!isNaN(p)&&!isNaN(a)) {
+                result = p * a;
+            }
+            jQuery("#TotalFee").val(result);
+        }
+
+        function CreateConsolidation() {
+            let CheckboxArray = [];
+            jQuery("#checkId:checked").each(function () {
+                CheckboxArray.push(jQuery(this).val());
+            });
+            jQuery.ajax({
+                url: "/Admin/ConsolidationCreateFunction",
+                data: {
+                    cusomterId: '@ViewBag.CustomerId',
+                    amount: jQuery("#amount").val(),
+                    fee: jQuery("#TotalFee").val(),
+                    itemId: CheckboxArray
+                },
+                type: "POST",
+                datatype: "json",
+                success: function (r) {
+                    if (r===true) {
+                        jQuery("#modalMessage").html("ສຳເລັດ");
+                        table.draw();
+                        jQuery("#TotalFee").val('');
+                        jQuery("#PricePerUnit").val('');
+                        jQuery("#amount").val('');
+                        jQuery("#modal1").modal("show");
+                    }
+                },
+                error: function () {
+                    alert("Server error");
+                }
+            });
+        }
+    </script>
+    }

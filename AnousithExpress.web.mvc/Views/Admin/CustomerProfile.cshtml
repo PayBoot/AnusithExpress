@@ -43,8 +43,60 @@
         <button type="button" onclick='window.location="@Url.Action("CustomerProfileDetail","Admin", new {customerId= Model.Profile.Id })"' class="btn btn-warning col-sm-5 mb-1">
             <i class="fa fa-dot-circle-o"></i> ປ່ຽນແປງ
         </button>
+        <button type="button" onclick='updateItemDialog(@Model.Profile.Id)' class="btn btn-warning col-sm-5 mb-1">
+            <i class="fa fa-plus"></i> ສ້າງລາຍການສີນຄ້າ
+        </button>
         <button type="button" onclick='window.location ="@Url.Action("Index","Admin")"' class="btn btn-info  col-sm-5 mb-1">
             <i class="fa fa-backward"></i> ກັບໄປຫນ້າຫລັກ
         </button>
     </div>
 </div>
+
+<script>
+    function updateItemDialog(id) {
+       
+        jQuery.ajax({
+            url: "/Admin/CreateUpdateUpdateItemDetailPage",
+            data: { itemId: 0, customerId: '@Model.Profile.Id'},
+            type: "POST",
+            datatype: "json",
+            success: function (r) {
+                let htmlButton = '';
+                htmlButton += '<button class="btn btn-warning btn-flat mb-1 w-25 mr-1 ml-1" onclick = "saveItem()"><i class="fa fa-dot-circle-o"></i> ບັນທຶກ</button>';
+                htmlButton += '<button class="btn btn-primary btn-flat mb-1 w-25 mr-1 ml-1" data-dismiss="modal"> <i class="fa fa-ban"></i> ອອກ</button>';
+                jQuery("#model3Form").html(r);
+                jQuery("#modalButton3").html(htmlButton);
+                jQuery("#modal3").modal('show');
+            }
+        });
+    }
+    function saveItem() {
+      
+         jQuery.ajax({
+             url: "/Admin/CreateUpdateItemFunction",
+             
+             data: jQuery("#itemAdminForm").serialize() + '&customerId= ' + '@Model.Profile.Id',
+             datatype: "json",
+             type: "POST",
+             success: function (r) {
+                if (!isNaN(r)) {
+                    let htmlButton = '';
+                    htmlButton += '<button class="btn btn-primary btn-flat mb-1 w-100 mr-1 ml-1" data-dismiss="modal" data-target ="#modal2">ອອກ</button>';
+                    jQuery("#content2").html("ສຳເລັດ");
+                    jQuery("#modalButton2").html(htmlButton);
+                    jQuery("#modal2").modal('show');
+                    jQuery("#modal3").modal("hide");
+                    
+                }
+                else {
+                    let htmlButton = '';
+                    htmlButton += '<button class="btn btn-primary btn-flat mb-1 w-100 mr-1 ml-1" data-dismiss="modal" data-target ="#modal2">ອອກ</button>';
+                    jQuery("#content2").html(""+r);
+                    jQuery("#modalButton2").html(htmlButton);
+                    jQuery("#modal2").modal('show');
+
+                }
+            }
+        });
+    }
+</script>

@@ -9,6 +9,11 @@ namespace AnousithExpress.DataEntry.Interface
         //customer
         List<ConsolidationListModel> GetConsolidationListByCustomerId(int customerId, DateTime? searchFrom, DateTime? searchTo);
         ConsolidationModel GetConsolidationDetailByConsolidationId(int consolidationId);
+        bool CreateConsolidation(int cusomterId, double amount, double fee, int[] itemId);
+        List<ItemsModel> GetUnConlidateItems(int customerId);
 
+        double GetPrice(double condition);
+
+        bool deleteConsolidation(int consolidationId);
     }
 }

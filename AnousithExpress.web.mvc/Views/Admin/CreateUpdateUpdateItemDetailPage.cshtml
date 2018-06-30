@@ -37,14 +37,21 @@
                         @Html.TextBoxFor(m => m.ReceiverAddress, new { @class = "form-control", @placeholder = "ທີ່ຢູ່ຜູ້ຮັບ" })
                     </div>
                 </div>
-                <div class="row form-group">
-                    <div class="col col-md-3">
-                        <label for="hf-email" class=" form-control-label font-weight-bold">ສະຖານະເຄື່ອງ</label>
-                    </div>
-                    <div class="col-12 col-md-9">
-                        @Html.DropDownListFor(m=>m.Status, ViewBag.Statuses as  SelectList, new { @class = "form-control" })
-                    </div>
-                </div>
+                @{
+                    if (Model != null)
+                    {
+                        <div class="row form-group">
+                            <div class="col col-md-3">
+                                <label for="hf-email" class=" form-control-label font-weight-bold">ສະຖານະເຄື່ອງ</label>
+                            </div>
+                            <div class="col-12 col-md-9">
+                                @Html.DropDownListFor(m => m.Status, ViewBag.Statuses as SelectList, new { @class = "form-control" })
+                            </div>
+                        </div>
+                    }
+
+                }
+
                 <div class="row form-group">
                     <div class="col col-md-3">
                         <label for="hf-email" class=" form-control-label font-weight-bold">ລາຍລະອຽດເພີ່ມເຕີມ</label>

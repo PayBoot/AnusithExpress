@@ -16,6 +16,9 @@ namespace AnousithExpress.DataEntry.Interface
 
         List<CustomerModel> CustomerList();
         TbCustomer Login(string phonenumber, string password);
-
+        int GetCustomerId(string phonenumber);
+        int CheckCustomerId(string Id);
+        
+        
     }
 }

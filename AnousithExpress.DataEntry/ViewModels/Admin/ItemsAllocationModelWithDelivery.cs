@@ -4,7 +4,9 @@
     {
         public int Id { get; set; }
         public int ItemId { get; set; }
+        public string ItemName { get; set; }
         public string Trackingnumber { get; set; }
+        public string ItemStatus { get; set; }
         public int RouteId { get; set; }
         public string RouteName { get; set; }
         public int TimeId { get; set; }

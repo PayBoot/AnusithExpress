@@ -1889,6 +1889,11 @@
     <Content Include="Views\Admin\ItemHistoryListOfCustomer.cshtml" />
     <Content Include="Views\Admin\CustomerHistoryView.cshtml" />
     <Content Include="Views\Admin\AllocateDeliveryMan.cshtml" />
+    <Content Include="Views\Admin\ConsolidationListPerCustomer.cshtml" />
+    <Content Include="Views\Admin\ConsolidationDetail.cshtml" />
+    <Content Include="Views\Admin\ConsolidationCreate.cshtml" />
+    <Content Include="Views\Admin\CreateCustomer.cshtml" />
+    <Content Include="Views\Admin\ItemHistory.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

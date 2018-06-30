@@ -142,7 +142,7 @@ namespace AnousithExpress.DataEntry.Implimentation
                 };
                 db.Entry(item).State = EntityState.Modified;
                 item.Status = db.tbItemStatuses.FirstOrDefault(s => s.Id == 2);
-                item.ConfrimDate = DateTime.Now;
+                item.ConfrimDate = DateTime.Now.Date;
                 db.SaveChanges();
                 return true;
             }
@@ -223,7 +223,7 @@ namespace AnousithExpress.DataEntry.Implimentation
                     };
                     db.Entry(source).State = EntityState.Modified;
                     source.Status = db.tbItemStatuses.FirstOrDefault(s => s.Id == 3);
-                    source.ReceiveDate = DateTime.Now;
+                    source.ReceiveDate = DateTime.Now.Date;
                 }
                 db.SaveChanges();
                 return true;
@@ -250,7 +250,7 @@ namespace AnousithExpress.DataEntry.Implimentation
                 }
                 db.Entry(source).State = EntityState.Modified;
                 source.Status = db.tbItemStatuses.FirstOrDefault(s => s.Id == status);
-                source.SentDate = DateTime.Now;
+                source.SentDate = DateTime.Now.Date;
                 db.SaveChanges();
                 return true;
             }
@@ -319,6 +319,9 @@ namespace AnousithExpress.DataEntry.Implimentation
                         model.CustomerId = db.tbCustomers.FirstOrDefault(c => c.Phonenumber == c.Phonenumber).Id;
                     }
                     TbItems item = _item.CreateProduct(model, db, itemstatus);
+                    db.Entry(item).State = EntityState.Modified;
+                    item.ReceiveDate = DateTime.Now.Date;
+                    db.SaveChanges();
                     dbtransact.Commit();
                     return item.Id;
                 }
@@ -458,7 +461,7 @@ namespace AnousithExpress.DataEntry.Implimentation
                 if (item != null)
                 {
                     db.Entry(item).State = EntityState.Modified;
-                    item.ReceiveDate = DateTime.Now;
+                    item.ReceiveDate = DateTime.Now.Date;
                     item.Status = db.tbItemStatuses.FirstOrDefault(s => s.Id == 4);
                     db.SaveChanges();
                     var result = _item.AssignItem(item);
@@ -739,6 +742,77 @@ namespace AnousithExpress.DataEntry.Implimentation
                 }
 
                 return model;
+            }
+        }
+
+        public List<ItemsModel> GetItemsHistoryList(DateTime? fromDate, DateTime? toDate, int condition)
+        {
+            using (var db = new EntityContext())
+            {
+                var source = _item.GetAll(db).ToList();
+
+                //1 item receive
+                //2 item sent
+                if (condition == 1)
+                {
+                    if (fromDate != null)
+                    {
+                        source = source.Where(x => x.ReceiveDate >= fromDate).ToList();
+                    }
+                    if (toDate != null)
+                    {
+                        source = source.Where(x => x.ReceiveDate <= toDate).ToList();
+                    }
+
+
+                }
+                else if (condition == 2)
+                {
+                    source = source.Where(x => x.Status.Id == 6).ToList();
+                    if (fromDate != null)
+                    {
+                        source = source.Where(x => x.SentDate >= fromDate).ToList();
+                    }
+                    if (toDate != null)
+                    {
+                        source = source.Where(x => x.SentDate <= toDate).ToList();
+                    }
+                }
+                else if (condition == 3)
+                {
+                    source = source.Where(x => x.Status.Id == 8).ToList();
+                    if (fromDate != null)
+                    {
+                        source = source.Where(x => x.SentDate >= fromDate).ToList();
+                    }
+                    if (toDate != null)
+                    {
+                        source = source.Where(x => x.SentDate <= toDate).ToList();
+                    }
+                }
+                else
+                {
+                    source = source.ToList();
+                }
+                var result = _item.AssignItemsList(source);
+                return result;
+
+            }
+        }
+
+        public int GetProductId(string trackingnumber)
+        {
+            using (var db = new EntityContext())
+            {
+                var source = _item.GetAll(db).FirstOrDefault(i => i.TrackingNumber == trackingnumber);
+                if (source != null)
+                {
+                    return source.Id;
+                }
+                else
+                {
+                    return 0;
+                }
             }
         }
     }

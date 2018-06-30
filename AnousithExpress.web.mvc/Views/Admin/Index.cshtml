@@ -46,7 +46,7 @@
                 }
                 else
                 {
-                    <a href="#" data-toggle="modal" data-target="#modalLayout" >
+                    <a href="#" data-toggle="modal" data-target="#modalLayout">
                         <div class="col-sm-6 col-lg-3">
                             <div class="card text-white bg-flat-color-1">
                                 <div class="card-body pb-0">
@@ -79,7 +79,7 @@
                     </div>
                 </div>
             </a>
-            <a href="@Url.Action("ItemsInProcess","Customer")">
+            <a href="@Url.Action("AllocateDeliveryMan","Admin")">
                 <div class="col-sm-6 col-lg-3">
                     <div class="card text-white bg-flat-color-3">
                         <div class="card-body pb-0">
@@ -120,7 +120,22 @@
                             <h4 class="mb-0">
                                 <span class="count"> </span>
                             </h4>
-                            <p class="text-light">ຈຳນວນສີນຄ້າສົ່ງຂອງລຸກຄ້າ</p>
+                            <p class="text-light">ຈຳນວນເຄື່ອງສົ່ງ</p>
+                        </div>
+                    </div>
+                </div>
+            </a>
+            <a href="@Url.Action("ItemHistory","Admin")">
+                <div class="col-sm-6 col-lg-3">
+                    <div class="card text-white bg-flat-color-5">
+                        <div class="card-body pb-0">
+                            <div class="dropdown float-right">
+                                <i class="fa fa-cog"></i>
+                            </div>
+                            <h4 class="mb-0">
+                                <span class="count"> </span>
+                            </h4>
+                            <p class="text-light">ປະຫວັດການສົ່ງເຄື່ອງ</p>
                         </div>
                     </div>
                 </div>
@@ -147,24 +162,27 @@
 </div>
 
 @section scripts{
-    <script>
-        $(document).ready(
-            function () {
+<script>
+    var itemNum = 0;
+    jQuery(document).ready(function () {
+        notificationNum();
+        setInterval(notificationNum, 10000);
+    });
+    function notificationNum() {
+        jQuery.ajax({
+            url: "/Admin/GetNotification",
+            type: "GET",
+            datatype: "json",
+            success: function (r) {
+                if (r > itemNum) {
 
-                setInterval(function () {
-                    $.ajax({
-                        url: "/Admin/GetNotification",
-                        type: "GET",
-                        datatype: "json",
-                        success: function (result) {
-                            $("#Notification").html(result);
-                        },
-                        error: function () {
-                            alert("Server error");
-                        }
-                    });
-                }, 2000);  //Delay here = 5 seconds
-            });
-
-    </script>
+                    jQuery("#numberofItem").html(r - itemNum);
+                    jQuery("#modalNotification").modal("show");
+                }
+                jQuery("#notificationNumber").html(r);
+                itemNum = r;
+            }
+        });
+    }
+</script>
 }
