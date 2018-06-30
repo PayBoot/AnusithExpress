@@ -1406,6 +1406,7 @@
     <Content Include="assets\fonts\icomoon\index.html" />
     <Content Include="assets\fonts\index.html" />
     <Content Include="assets\fonts\themify.svg" />
+    <Content Include="assets\Image\anoutsithlogo.png" />
     <Content Include="assets\Image\logo.png" />
     <Content Include="assets\Image\user-male-icon.png" />
     <Content Include="assets\js\bootstrap-datepicker.js" />
@@ -1936,6 +1937,21 @@
     <Content Include="Views\Admin\ConsolidationCreate.cshtml" />
     <Content Include="Views\Admin\CreateCustomer.cshtml" />
     <Content Include="Views\Admin\ItemHistory.cshtml" />
+    <Content Include="Views\Prices\Create.cshtml" />
+    <Content Include="Views\Prices\Delete.cshtml" />
+    <Content Include="Views\Prices\Details.cshtml" />
+    <Content Include="Views\Prices\Edit.cshtml" />
+    <Content Include="Views\Prices\Index.cshtml" />
+    <Content Include="Views\Routes\Create.cshtml" />
+    <Content Include="Views\Routes\Delete.cshtml" />
+    <Content Include="Views\Routes\Details.cshtml" />
+    <Content Include="Views\Routes\Edit.cshtml" />
+    <Content Include="Views\Routes\Index.cshtml" />
+    <Content Include="Views\Times\Create.cshtml" />
+    <Content Include="Views\Times\Delete.cshtml" />
+    <Content Include="Views\Times\Details.cshtml" />
+    <Content Include="Views\Times\Edit.cshtml" />
+    <Content Include="Views\Times\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
