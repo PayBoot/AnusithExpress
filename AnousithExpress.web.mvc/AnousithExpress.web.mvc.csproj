@@ -1406,6 +1406,7 @@
     <Content Include="assets\fonts\icomoon\index.html" />
     <Content Include="assets\fonts\index.html" />
     <Content Include="assets\fonts\themify.svg" />
+    <Content Include="assets\Image\anoutsithlogo.png" />
     <Content Include="assets\Image\logo.png" />
     <Content Include="assets\Image\user-male-icon.png" />
     <Content Include="assets\js\bootstrap-datepicker.js" />
