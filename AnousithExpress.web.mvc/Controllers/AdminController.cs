@@ -2,7 +2,6 @@
 using AnousithExpress.DataEntry.ViewModels.Admin;
 using AnousithExpress.DataEntry.ViewModels.Customer;
 using AnousithExpress.web.mvc.Reports;
-using GenCode128;
 using System;
 using System.Collections.Generic;
 using System.Drawing.Imaging;
@@ -11,7 +10,6 @@ using System.Linq;
 using System.Linq.Dynamic;
 using System.Text;
 using System.Web.Mvc;
-using System.Drawing;
 
 namespace AnousithExpress.web.mvc.Controllers
 {
@@ -480,7 +478,7 @@ namespace AnousithExpress.web.mvc.Controllers
             result = this.File(ms.GetBuffer(), "image/jpeg");
             return result;
         }
-        
+
         public ActionResult CustomerSentItems(int customerId)
         {
             ViewBag.CustomerId = customerId;
@@ -975,27 +973,27 @@ namespace AnousithExpress.web.mvc.Controllers
                         con.Fee);
                 }
                 Session["ConsolidateRerpotDataSet"] = dataSet;
-                if (fromDate == null )
+                if (fromDate == null)
                 {
-                    Session["dt1"] = "ບໍ່ກໍານົດ";                   
+                    Session["dt1"] = "ບໍ່ກໍານົດ";
 
                 }
 
                 else
                 {
                     Session["dt1"] = fromDate?.ToString("dd/MM/yyyy");
-                   
+
                 }
                 if (toDate == null)
                 {
-                  
+
                     Session["dt2"] = "ບໍ່ກໍານົດ";
 
                 }
 
                 else
                 {
-                   
+
                     Session["dt2"] = toDate?.ToString("dd/MM/yyyy");
 
                 }
