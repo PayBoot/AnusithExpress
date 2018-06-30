@@ -419,7 +419,7 @@ namespace AnousithExpress.web.mvc.Reports {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
-            public ConsolidationListRow AddConsolidationListRow(string ConsolidationNumber, string CustomerId, string CustomerName, string CustomerPhonenumber, string ConsolidateDate, string Amount, string Fee) {
+            public ConsolidationListRow AddConsolidationListRow(string ConsolidationNumber, string CustomerId, string CustomerName, string CustomerPhonenumber, string ConsolidateDate, string Amount, double Fee) {
                 ConsolidationListRow rowConsolidationListRow = ((ConsolidationListRow)(this.NewRow()));
                 object[] columnValuesArray = new object[] {
                         ConsolidationNumber,
@@ -475,7 +475,7 @@ namespace AnousithExpress.web.mvc.Reports {
                 base.Columns.Add(this.columnConsolidateDate);
                 this.columnAmount = new global::System.Data.DataColumn("Amount", typeof(string), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnAmount);
-                this.columnFee = new global::System.Data.DataColumn("Fee", typeof(string), null, global::System.Data.MappingType.Element);
+                this.columnFee = new global::System.Data.DataColumn("Fee", typeof(double), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnFee);
             }
             
@@ -717,10 +717,10 @@ namespace AnousithExpress.web.mvc.Reports {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
-            public string Fee {
+            public double Fee {
                 get {
                     try {
-                        return ((string)(this[this.tableConsolidationList.FeeColumn]));
+                        return ((double)(this[this.tableConsolidationList.FeeColumn]));
                     }
                     catch (global::System.InvalidCastException e) {
                         throw new global::System.Data.StrongTypingException("The value for column \'Fee\' in table \'ConsolidationList\' is DBNull.", e);
