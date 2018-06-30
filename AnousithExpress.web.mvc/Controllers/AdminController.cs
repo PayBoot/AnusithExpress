@@ -458,7 +458,7 @@ namespace AnousithExpress.web.mvc.Controllers
                     model.Barcode);
                 }
                 HttpContext.Session["barcodeModel"] = barcodeDS;
-                return PartialView("BarCodeReport");
+                return PartialView("BarCodeReport", model);
             }
             else
             {
