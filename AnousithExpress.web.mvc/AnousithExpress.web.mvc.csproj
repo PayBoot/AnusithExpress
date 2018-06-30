@@ -1936,6 +1936,23 @@
     <Content Include="Views\Admin\ConsolidationCreate.cshtml" />
     <Content Include="Views\Admin\CreateCustomer.cshtml" />
     <Content Include="Views\Admin\ItemHistory.cshtml" />
+    <Content Include="Views\TbPrices\Create.cshtml" />
+    <Content Include="Views\TbPrices\Delete.cshtml" />
+    <Content Include="Views\TbPrices\Details.cshtml" />
+    <Content Include="Views\TbPrices\Edit.cshtml" />
+    <Content Include="Views\TbPrices\Index.cshtml" />
+    <Content Include="Views\TbRoutes\Create.cshtml" />
+    <Content Include="Views\TbRoutes\Delete.cshtml" />
+    <Content Include="Views\TbRoutes\Details.cshtml" />
+    <Content Include="Views\TbRoutes\Edit.cshtml" />
+    <Content Include="Views\TbRoutes\Index.cshtml" />
+    <Content Include="Views\TbTimes\Create.cshtml" />
+    <Content Include="Views\TbTimes\Delete.cshtml" />
+    <Content Include="Views\TbTimes\Details.cshtml" />
+    <Content Include="Views\TbTimes\Edit.cshtml" />
+    <Content Include="Views\TbTimes\Index.cshtml" />
+    <Content Include="Views\Admin\ConsolidationAllReport.cshtml" />
+    <Content Include="Views\Admin\ConsolidateAllConsolidate.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

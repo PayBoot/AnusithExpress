@@ -977,8 +977,7 @@ namespace AnousithExpress.web.mvc.Controllers
                 Session["ConsolidateRerpotDataSet"] = dataSet;
                 if (fromDate == null )
                 {
-                    Session["dt1"] = "ບໍ່ກໍານົດ";
-                   
+                    Session["dt1"] = "ບໍ່ກໍານົດ";                   
 
                 }
 
