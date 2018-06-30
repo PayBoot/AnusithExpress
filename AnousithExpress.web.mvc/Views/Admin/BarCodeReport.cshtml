@@ -1,3 +1,35 @@
-﻿<p>sdfsdfdsfsd</p>
-<div><img src='@Url.Action("GetBarCode", new {trackingnumber= ViewBag.Trackingnumber })' /> </div>
+﻿
+@model AnousithExpress.DataEntry.ViewModels.Customer.ItemsModel
+
+
+<div class="row">
+    <div class="col-md-4"></div>
+    <div class="col-md-4">
+        <div style="width:80mm; height:100mm; border:1px solid" align="center">
+            <img style="align-items:center" src="~/Images/logo.png" width="100px" height="50px;" />
+            <div style="text-align:left; padding-left:10px;">ເລກທີ:</div>
+            <div style="text-align:left; padding-left:10px;">ຜູ້ຝາກ:</div>
+            <div style="text-align:left; padding-left:10px;">ຜູ້ຮັບ</div>
+            <div style="text-align:left; padding-left:10px;">ເບີໂທ:</div>
+            <div style="text-align:left; padding-left:10px;">ທີຢູ່</div>
+
+            <br />
+
+            <div style="text-align:center"><img height="30px" width="200px;" src='@Url.Action("GetBarCode", new {trackingnumber= ViewBag.Trackingnumber })' /> </div>
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <div style="text-align:center">ຂອບໃຈທີມາອຸດໜູນ</div>
+        </div>
+
+    </div>
+    <div class="col-md-4"></div>
+</div>
+
+    
+
+
+
 @*<iframe id="barcodeFrame" style="width:100%;height:500px;border:none;" src="~/Reports/BarCodePage.aspx"></iframe>*@
