@@ -972,7 +972,7 @@ namespace AnousithExpress.web.mvc.Controllers
                         con.CustomerPhonenumber,
                         con.ConsolidatedDate,
                         con.AmountOfItem.ToString(),
-                        con.Fee.ToString());
+                        con.Fee);
                 }
                 Session["ConsolidateRerpotDataSet"] = dataSet;
                 if (fromDate == null )
