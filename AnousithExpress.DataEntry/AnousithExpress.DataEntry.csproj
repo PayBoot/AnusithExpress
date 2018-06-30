@@ -74,6 +74,14 @@
     <Compile Include="Migrations\201806260512181_addDeliveryMan.Designer.cs">
       <DependentUpon>201806260512181_addDeliveryMan.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201806291439222_addprice.cs" />
+    <Compile Include="Migrations\201806291439222_addprice.Designer.cs">
+      <DependentUpon>201806291439222_addprice.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201806291440069_addprice1.cs" />
+    <Compile Include="Migrations\201806291440069_addprice1.Designer.cs">
+      <DependentUpon>201806291440069_addprice1.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\TbConsolidatedItems.cs" />
     <Compile Include="Models\TbConsolidateList.cs" />
@@ -82,6 +90,7 @@
     <Compile Include="Models\TbItemLog.cs" />
     <Compile Include="Models\TbItems.cs" />
     <Compile Include="Models\TbItemStatus.cs" />
+    <Compile Include="Models\TbPrice.cs" />
     <Compile Include="Models\TbRole.cs" />
     <Compile Include="Models\TbRoute.cs" />
     <Compile Include="Models\TbStatus.cs" />
@@ -93,6 +102,7 @@
     <Compile Include="Utility\ItemUtility.cs" />
     <Compile Include="Utility\UserUtility.cs" />
     <Compile Include="ViewModels\Admin\AccountModel.cs" />
+    <Compile Include="ViewModels\Admin\ConsolidationModel.cs" />
     <Compile Include="ViewModels\Admin\CustomerItemsModel.cs" />
     <Compile Include="ViewModels\Admin\CustomerModel.cs" />
     <Compile Include="ViewModels\Admin\ItemBarCodeModel.cs" />
@@ -118,6 +128,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201806260512181_addDeliveryMan.resx">
       <DependentUpon>201806260512181_addDeliveryMan.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201806291439222_addprice.resx">
+      <DependentUpon>201806291439222_addprice.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201806291440069_addprice1.resx">
+      <DependentUpon>201806291440069_addprice1.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

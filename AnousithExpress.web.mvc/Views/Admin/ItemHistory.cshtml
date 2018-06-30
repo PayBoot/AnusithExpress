@@ -1,0 +1,150 @@
+﻿
+@{
+    ViewBag.Title = "ປະຫວັດສີນຄ້າ";
+    Layout = "~/Views/Shared/_CustomerLayout.cshtml";
+}
+<div class="breadcrumbs">
+    <div class="col-sm-4">
+        <div class="page-header float-left">
+            <div class="page-title">
+
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-8">
+        <div class="page-header float-right">
+            <div class="page-title">
+                <ol class="breadcrumb text-right">
+                    <li><a href="@Url.Action("Index","Admin")">ຫນ້າຫລັກ</a></li>
+                  
+                    <li class="active">@ViewData["Title"]</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container" id="containerResize">
+    <div class="content mt-3">
+        <div class="animated fadeIn">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <strong class="card-title text-center form-horizontal">
+                                <label>ຊອກຕາມ</label>
+                                @Html.DropDownList("condition", ViewBag.Condition as SelectList, new { @id="condition"})
+                                <label>ຈາກວັນທີ</label>
+                                <input type="text" id="fromDate" readonly="readonly" />
+                                <label>ຫາວັນທີ</label>
+                                <input type="text" id="toDate" readonly="readonly" />
+                                <button class="btn btn-warning" onclick="searchTableNow()">ຄົ້ນຫາ</button>
+                            </strong>
+                        </div>
+                        <div class="card-body ">                            
+                            <div class="table-responsive">
+                                <table id="itemHistoryTable" class="table table-striped table-bordered nowarp" style="width:100%;white-space:nowrap;">
+                                    <thead>
+                                        <tr>
+                                            <th>ເລກຕິດຕາມ</th>
+                                            <th>ປະເພດສີນຄ້າ</th>
+                                            <th>ສະຖານະ</th>
+                                            <th>ມື້ຮັບສີນຄ້າ</th>
+                                            <th>ມື້ສົ່ງສີນຄ້າ</th>
+                                            <th>ຊື່ລຸກຄ້າ</th>
+                                            <th>ເບີໂທລຸກຄ້າ</th>
+                                            <th>ຊື່ຜູ້ຮັບ</th>
+                                            <th>ເບີໂທຜູ້ຮັບ</th>
+                                            <th>ທີ່ຢູ່ຜູ້ຮັບ</th>
+                                            <th>ເກັບເງີປາຍທາງ</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="tableBody"></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div><!-- .animated -->
+    </div><!-- .content -->
+</div>
+<div class="modal fade" role="dialog" id="modal1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header"></div>
+            <div class="modal-body">
+                <strong>ບໍ່ມີສີນຄ້າຕາມເລກຕິດຕາມດັ່ງກ່າວ</strong>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary w-100 mr-5 ml-5" data-dismiss="modal" data-target="#modal1"><i class=""></i> ອອກ</button>
+            </div>
+        </div>
+    </div>
+</div>
+@section scripts{
+    <script>
+        var itemHistoryDataTable;
+        jQuery(document).ready(function () {
+            jQuery("#fromDate").datepicker({
+                language: 'la'
+            });
+            jQuery("#toDate").datepicker({
+                language:'la'
+            });
+            itemHistoryTable()
+        });
+        function searchTableNow() {
+            itemHistoryDataTable.ajax.reload(null,false);
+        }
+        function itemHistoryTable() {
+            itemHistoryDataTable = jQuery("#itemHistoryTable").DataTable({
+                serverSide: true,
+                responsive: true,
+                searching: false,
+                language: LaoLangage,
+                order: [[1, 'desc']],
+                ajax: {
+                    url: "/Admin/ItemHistoryDataTable",
+                    type: "POST",
+                    datatype: "json",
+                    data: function (d) {
+                        d.fromDate = jQuery("#fromDate").val() || null,
+                        d.toDate = jQuery("#toDate").val() || null,
+                        d.condition = jQuery("#condition").val()
+                        }
+                    },
+                columns: [
+                { data: "TrackingNumber", name: "TrackingNumber" },
+                { data: "ItemName", name: "ItemName" },
+                { data: "Status", name: "Status" },
+                { data: "ReceiveDate", name: "ReceiveDate" },
+                { data: "SentDate", name: "SentDate" },
+                { data: "CustomerName", name: "CustomerName" },
+                { data: "CustomerPhonenumber", name: "CustomerPhonenumber" },
+                    { data: "ReceiverName", name: "ReceiverName" },
+                { data: "ReceipverPhone", name: "ReceipverPhone" },
+                { data: "ReceiverAddress", name: "ReceiverAddress" },       
+        
+                {
+                    data: "Id", render: function (data, type, full, meta) {
+                        let html = '';
+                        if (full.ItemValue_Kip !== null) {
+                            html += full.ItemValue_Kip + "ກີບ<br/>";
+                        }
+                        if (full.ItemValue_Baht !== null) {
+                            html += full.ItemValue_Baht + "ບາດ<br/>";
+                        }
+                        if (full.ItemValue_Dollar !== null) {
+                            html += full.ItemValue_Dollar + "ໂດລ້າ";
+                        }
+                        if (full.ItemValue_Kip === null && full.ItemValue_Baht === null && full.ItemValue_Dollar === null) {
+                            html = 'ບໍ່ມີ';
+                        }
+                        return '<p>' + html + '</p>';
+                    }
+                }
+            ]
+        });
+    }
+    </script>
+}

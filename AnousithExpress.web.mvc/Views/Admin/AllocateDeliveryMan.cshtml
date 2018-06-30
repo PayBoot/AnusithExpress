@@ -16,7 +16,7 @@
         <div class="page-header float-right">
             <div class="page-title">
                 <ol class="breadcrumb text-right">
-                    <li><a href="@Url.Action("Index","Admin")">ຫນ້າຫລັກ</a></li>
+                    <li><a href="@Url.Action("Index", "Admin")">ຫນ້າຫລັກ</a></li>
                     <li class="active">@ViewData["Title"]</li>
                 </ol>
             </div>
@@ -31,20 +31,159 @@
                     <div class="card">
                         <div class="card-header">
                             <div class="form-horizontal text-center">
-                                <label style="font-weight:bold;">ລຽງຕາມ</label>
-                                <div class="form-check-inline form-check">
-                                    <label for="inline-radio1" class="form-check-label ">
-                                        <input type="radio" id="newConfirmItem" name="inline-radios" onchange="getCustomerList()" value="option1" class="form-check-input"> ສີນຄ້າຢືນຢັນໃຫມ່
-                                    </label>
-                                    <label for="inline-radio2" class="form-check-label ">
-                                        <input type="radio" id="inProcessItem" name="inline-radios" onchange="getCustomerList()" value="option2" class="form-check-input ml-2"> ສີນຄ້າກຳລັບດຳເນີນການ
-                                    </label>
-                                </div>
+                                
                             </div>
                         </div>                  
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col">
+                                <div class="form-horizontal">
+                                    <label>ສາຍທາງ</label>
+                                    @Html.DropDownList("Route", ViewBag.Routes as SelectList, new { @id = "routeId" })
+                                    <label>ເວລາສົ່ງ</label>
+                                    @Html.DropDownList("Time", ViewBag.Times as SelectList, new { @id= "timeId"})
+                                    <label>ວັນທີ</label>
+                                    <input type="text" id="sendingDate" readonly="readonly"  />
+                                    <button class="btn btn-warning" onclick="search()">ຄົ້ນຫາ</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="table-responsive">
+                            <table id="itemAllocationTable" class="table table-hover " style="width:100%;white-space:nowrap;">
+                                <thead>
+                                    <tr>
+                                        <th class="control">ເລກຕິດຕາມ</th>
+                                        <th class="control">ປະເພດສີນຄ້າ</th>
+                                        <th class="control">ສະຖານະ</th>                 
+                                        <th class="none">ມື້ທີ່ຈະສົ່ງ</th>
+                                        <th class="none">ສາຍສົ່ງ</th>
+                                        <th class="none">ເວລາສົ່ງ</th>
+                                        <th class="control">ຜູ້ສົ່ງ</th>
+  
+                                    </tr>
+                                </thead>
+
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
         </div><!-- .animated -->
     </div><!-- .content -->
 </div>
+<div class="modal fade" id="modal1" role="dialog">
+    <div class="modal-dialog  modal-lg">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div id="content1" class="text-center printableArea">
+                    <label>ຜູ້ສົ່ງ</label>
+                    @Html.DropDownList("DeliveryMan", ViewBag.delivery as SelectList, new { @class ="form-control", @id="deliveryId" })
+                </div>
+                <div id="modalButton1" class="form-horizontal text-center">
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="modal2" role="dialog">
+    <div class="modal-dialog  modal-lg">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div id="content2" class="text-center printableArea">
+                   <strong id="successMessage"></strong>
+                </div>
+                <div id="modalButton2" class="form-horizontal text-center">
+                    <button class="btn btn-warning">ຕົກລົງ</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@section scripts{
+<script>
+    var table;
+    jQuery(document).ready(function () {
+        jQuery("#sendingDate").datepicker({
+            language: 'la'
+        });
+        itemTable();
+        
+    });
+    function search() {
+        table.ajax.reload(null,false);
+    }
+    function itemTable() {
+        table = jQuery("#itemAllocationTable").DataTable({
+            serverSide: true,
+            responsive: true,
+            paging: false,
+            searching: false,
+            language: LaoLangage,
+            order: [[1, 'desc']],
+            ajax: {
+                url: "/Admin/AllocationTable",
+                type: "POST",
+                datatype: "json",
+                data: function (d) {
+                    d.routeId = jQuery("#routeId").val(),
+                    d.timeId = jQuery("#timeId").val(),
+                    d.dateToDeliver = jQuery("#sendingDate").val()
+                }
+            },
+            columns: [
+                { data: "Trackingnumber", name: "Trackingnumber" },
+                { data: "ItemName", name: "ItemName" },
+                { data: "ItemStatus", name: "ItemStatus" },
+                { data: "DateToDeliver", name: "DateToDeliver" },
+                { data: "RouteName", name: "RouteName" },
+                { data: "TimeName", name: "TimeName" },
+                {
+                    data: "DeliveryMan", render: function (data, type, full, meta) {
+                        var html = '';
+                        if (data !== null && data!=="") {
+                            html += data;
+                            html += ' <button type="button" onclick="SelectDeliveryMan(' + full.ItemId + ')" class="btn btn-flat btn-warning btn-sm">ປ່ຽນຄົນສົ່ງ</button>';
+                        }
+                        else {
+                            html = '<button type="button" onclick="SelectDeliveryMan('+full.ItemId+')" class="btn btn-flat btn-warning btn-sm">ຈັດຄົນສົ່ງ</button>';
+                        }
+                      
+                        return '<div>' + html + '</div>';
+                    }
+                }
+               
+            ]
+        });
+    }
+    function SelectDeliveryMan(id) {
+        var item = id;
+      
+        var htmlbutton = ''; 
+        htmlbutton += '<button type="button" onclick="SelectPerSon(' + item + ')" class="btn btn-flat btn-warning w-25 mr-1 ml-1 mt-1">ຕົກລົງ</button>';
+        htmlbutton += '<button type="button" class="btn btn-flat btn-primary w-25 mr-1 ml-1 mt-1" data-dismiss="modal">ອອກ</button>';
+        jQuery("#modalButton1").html(htmlbutton);
+        jQuery("#modal1").modal("show");
+
+    }
+    function SelectPerSon(item, person) {
+
+        var id = item;
+        jQuery.ajax({
+            url: "/Admin/AllocateFunction",
+            data: { itemId: id, deliveryManId: jQuery('#deliveryId').val() },
+            datatype: "json",
+            type: "POST",
+            success: function (r) {
+                jQuery("#successMessage").html("ສຳເລັດ");
+                table.ajax.reload(null, false);
+                jQuery("#modal1").modal("hide");
+            },
+            error: function () {
+                alert("Server error");
+            }
+        });
+    }
+    </script>    
+}

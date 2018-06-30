@@ -1,0 +1,120 @@
+﻿
+@{
+    ViewBag.Title = "ສ້າງບັນຊີລຸກຄ້າ";
+    Layout = "~/Views/Shared/_CustomerLayout.cshtml";
+}
+@model AnousithExpress.DataEntry.ViewModels.Customer.ProfileModel
+<div class="breadcrumbs">
+    <div class="col-sm-4">
+        <div class="page-header float-left">
+            <div class="page-title">
+
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-8">
+        <div class="page-header float-right">
+            <div class="page-title">
+                <ol class="breadcrumb text-right">
+                    <li><a href="@Url.Action("Index","Admin")">ຫນ້າຫລັກ</a></li>
+                    <li><a href="@Url.Action("Customer","Admin")">ລຸກຄ້າ</a></li>
+                    <li class="active">@ViewData["Title"]</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container" id="containerResize">
+    <div class="content mt-3">
+        <div class="animated fadeIn">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card">
+
+                        <div class="card-body ">
+                            <div class="login-form">
+                                <form id="registrationForm">
+                                    <div class="form-group">
+                                        <label>ຊື່ ແລະ ນາມສະກຸນ</label>
+                                        @Html.TextBoxFor(m => m.Name, new { @class = "form-control", @placeholder = "ຊື່ ແລະ ນາມສະກຸນ" })
+                                    </div>
+                                    <div class="form-group">
+                                        <label>ເບີໂທ</label>
+                                        @Html.TextBoxFor(m => m.Phonenumber, new { @class = "form-control", @placeholder = "ເບີໂທ" })
+                                    </div>
+                                    <div class="form-group">
+                                        <label>ລະຫັດ (ຢ່າງຫນ້ອຍ 6 ຕົວເລກ)</label>
+                                        @Html.PasswordFor(m => m.Password, new { @class = "form-control", @placeholder = "ລະຫັດ" })
+                                    </div>
+                                    <div class="form-group">
+                                        <label>ທີ່ຢູ່</label>
+                                        @Html.TextBoxFor(m => m.Address, new { @class = "form-control", @placeholder = "ທີ່ຢູ່" })
+                                    </div>
+                                    <div class="form-group">
+                                        <label>"ເລກບັນຊີ BCEL ສະກຸນເງີນກີບ (ບໍ່ໄສ່ກໍໄດ້)</label>
+                                        @Html.TextBoxFor(m => m.BCEL_Kip, new { @class = "form-control", @placeholder = "ເລກບັນຊີ" })
+                                    </div>
+                                    <div class="form-group">
+                                        <label>ເລກບັນຊີ BCEL ສະກຸນເງີນບາດ (ບໍ່ໄສ່ກໍໄດ້)</label>
+                                        @Html.TextBoxFor(m => m.BCEL_Baht, new { @class = "form-control", @placeholder = "ເລກບັນຊີ" })
+                                    </div>
+                                    <div class="form-group">
+                                        <label>ເລກບັນຊີ BCEL ສະກຸນເງີນໂດລາ (ບໍ່ໄສ່ກໍໄດ້)</label>
+                                        @Html.TextBoxFor(m => m.BCEL_Dollar, new { @class = "form-control", @placeholder = "ເລກບັນຊີ" })
+                                    </div>
+                                    <button type="button" onclick="Registration()" class="btn btn-primary btn-flat m-b-30 m-t-30">ລົງທະບຽນ</button>
+
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div><!-- .animated -->
+    </div><!-- .content -->
+</div>
+<div class="modal fade" id="modal1" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div id="content" class="text-center">
+                    <strong id="modalmessage"></strong>
+                </div>
+                <div>
+                    <button class="btn btn-primary btn-flat m-b-15 w-100" data-dismiss="modal">ອອກ</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+@section scripts{
+    <script>
+
+        function Registration() {
+            jQuery.ajax({
+                url: "/Account/RegisterCustomer",
+                data: jQuery("#registrationForm").serialize(),
+                datatype: "json",
+                type: "POST",
+                success: function (r) {
+                    if (r=== true) {
+                        jQuery("#modalmessage").html("ສຳເລັດ");
+                        jQuery("#registrationForm")[0].reset();
+                        jQuery('#modal1').modal("show");
+                    }
+                    else if (r === "DuplicatePhonenumber") {
+                        jQuery("#modalmessage").html("ເບີໂທຂອງທ່ານໄດ້ຖືກລົງທະບຽນແລ້ວ ກະລຸນາກວດໃຫມ່ອີກຄັ້ງ");
+                        jQuery('#modal1').modal("show");
+                    }
+                    else {
+                        jQuery("#modalmessage").html("ຂໍ້ມູນຂອງທ່ານບໍ່ຖືກຕ້ອງ ກະລຸນາກວດໃຫມ່ອີກຄັ້ງ <br/> "+r);
+                        jQuery('#modal1').modal("show");
+                    }
+                }
+            });
+
+        }
+    </script>
+
+}

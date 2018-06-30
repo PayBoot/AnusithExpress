@@ -156,5 +156,46 @@ namespace AnousithExpress.DataEntry.Implimentation
                 return _customer.CheckExistingPhonenumber(db, phonenumber, userId);
             }
         }
+
+        public int GetCustomerId(string phonenumber)
+        {
+            using (var db = new EntityContext())
+            {
+                var source = _customer.GetAll(db).FirstOrDefault(c => c.Phonenumber == phonenumber);
+                if (source != null)
+                {
+                    return source.Id;
+                }
+                else
+                {
+                    return 0;
+                }
+
+            }
+        }
+
+        public int CheckCustomerId(string Id)
+        {
+            using (var db = new EntityContext())
+            {
+                int number;
+                bool result = int.TryParse(Id, out number);
+                if (result)
+                {
+                    if (_customer.GetAll(db).Any(c => c.Id == number))
+                    {
+                        return number;
+                    }
+                    else
+                    {
+                        return 0;
+                    }
+                }
+                else
+                {
+                    return 0;
+                }
+            }
+        }
     }
 }

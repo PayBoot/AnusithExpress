@@ -113,6 +113,7 @@ namespace AnousithExpress.DataEntry.Utility
                     ItemValue_Dollar = r.ItemValue_Dollar,
                     ItemValue_Kip = r.ItemValue_Kip,
                     CustomerPhonenumber = r.Customer.Phonenumber,
+                    CustomerName = r.Customer.Name,
                     Description = r.Descripttion,
                     ReceiverName = r.ReceiverName,
                     ReceipverPhone = r.ReceipverPhone,

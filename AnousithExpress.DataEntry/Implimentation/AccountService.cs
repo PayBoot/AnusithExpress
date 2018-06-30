@@ -90,6 +90,15 @@ namespace AnousithExpress.DataEntry.Implimentation
             }
         }
 
+        public List<TbUser> GetDeliveryMan()
+        {
+            using (var db = new EntityContext())
+            {
+                var source = _user.GetAll(db).Where(u => u.Role.Id == 3);
+                return source.ToList();
+            }
+        }
+
         public List<TbRole> GetRoles()
         {
             using (var db = new EntityContext())

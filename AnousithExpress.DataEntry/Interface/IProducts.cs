@@ -82,5 +82,8 @@ namespace AnousithExpress.DataEntry.Interface
 
         List<ItemHistoryModel> GetItemHistory(DateTime? fromDate, DateTime? toDate);
 
+        List<ItemsModel> GetItemsHistoryList(DateTime? fromDate, DateTime? toDate, int condition);
+
+        int GetProductId(string trackingnumber);
     }
 }

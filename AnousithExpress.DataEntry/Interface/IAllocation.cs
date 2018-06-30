@@ -11,5 +11,6 @@ namespace AnousithExpress.DataEntry.Interface
         List<ItemsAllocationModel> GetBySorting(int? customerId, int? routeId, int? timeId, DateTime? sendingDateFrom, DateTime? sendingDateTo);
 
         List<ItemsAllocationModelWithDelivery> GetAllocationForAdmin(int routeId, int timeId, DateTime? sendingDate);
+        bool updateDeliveryman(int itemId, int DeliveryManId);
     }
 }

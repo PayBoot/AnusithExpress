@@ -40,7 +40,7 @@
                                         <a class="nav-item nav-link" onclick="TransportingItemList()" id="SendingItemTab" data-toggle="tab" href="#tabDataContent" role="tab">ສີນຄ້າກຳລັງເຂື່ອນຍ້າຍ</a>
                                         <a class="nav-item nav-link" onclick="SentItemList()" id="ProcessedItemTab" data-toggle="tab" href="#tabDataContent" role="tab">ສີນຄ້າສົ່ງແລ້ວ</a>
                                         <a class="nav-item nav-link" onclick="CustomerProfile()" id="CustomerProfileTab" data-toggle="tab" href="#tabDataContent" role="tab">ຂໍ້ມູນລຸກຄ້າ</a>
-                                        <a class="nav-item nav-link" id="ConsolidateTab" data-toggle="tab" href="#tabDataContent" role="tab">ສັງລວມ</a>
+                                        <a class="nav-item nav-link" onclick="CustomerConsolidationList()" id="ConsolidateTab" data-toggle="tab" href="#tabDataContent" role="tab">ສັງລວມ</a>
 
                                     </div>
                                 </nav>
@@ -126,11 +126,14 @@
                 jQuery("#CustomerProfileTab").tab('show');
                 CustomerProfile();
             }
-            else {
-                jQuery("#CustomerProfileTab").tab('show');
-                CustomerProfile();
+            else if (TabIndex === "6") {
+                jQuery("#ConsolidateTab").tab('show');
+                CustomerConsolidationList();
             }
-
+            else {
+                jQuery("#ConsolidateTab").tab('show');
+                CustomerConsolidationList();
+            }
 
         });
         function ConfirmItemList() {
@@ -194,6 +197,20 @@
          function CustomerProfile() {
             jQuery.ajax({
                 url: "/Admin/CustomerProfile",
+                data: { customerId: '@ViewBag.CustomerId' },
+                type: "GET",
+                datatype: "json",
+                success: function (r) {
+                    jQuery("#confirmItemTabContent").html(r);
+                },
+                error: function () {
+                    alert("Server error");
+                }
+            });
+        }
+        function CustomerConsolidationList() {
+            jQuery.ajax({
+                url: "/Admin/ConsolidationListPerCustomer",
                 data: { customerId: '@ViewBag.CustomerId' },
                 type: "GET",
                 datatype: "json",

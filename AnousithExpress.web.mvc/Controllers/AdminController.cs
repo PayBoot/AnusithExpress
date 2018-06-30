@@ -21,12 +21,14 @@ namespace AnousithExpress.web.mvc.Controllers
         private CustomerService _customer;
         private AllocationService _allocation;
         private AccountService _account;
-        public AdminController(ProductService product, CustomerService customer, AllocationService allocation, AccountService account)
+        private ConsolidationService _consolidation;
+        public AdminController(ConsolidationService consolidationService, ProductService product, CustomerService customer, AllocationService allocation, AccountService account)
         {
             _product = product;
             _customer = customer;
             _allocation = allocation;
             _account = account;
+            _consolidation = consolidationService;
         }
         private void DatatableInitiator(out string draw, out int start, out int length, out string searchValue, out string sortColumnName, out string sortDir)
         {
@@ -646,15 +648,269 @@ namespace AnousithExpress.web.mvc.Controllers
 
         public ActionResult AllocateDeliveryMan()
         {
+            var delivery = _account.GetDeliveryMan();
+            ViewBag.delivery = new SelectList(delivery, "Id", "Username");
+            var route = _product.GetRoute();
+            var time = _product.GetTime();
+            ViewBag.Routes = new SelectList(route, "Id", "Route");
+            ViewBag.Times = new SelectList(time, "Id", "Time");
+            return View();
+        }
+
+        public ActionResult AllocationTable(int routeId, int timeId, DateTime? dateToDeliver)
+        {
+            string draw, searchValue, sortColumnName, sortDir;
+            int start, length;
+
+
+            DatatableInitiator(out draw, out start, out length, out searchValue, out sortColumnName, out sortDir);
+            List<ItemsAllocationModelWithDelivery> AllList = new List<ItemsAllocationModelWithDelivery>();
+            AllList = _allocation.GetAllocationForAdmin(routeId, timeId, dateToDeliver);
+
+            int totalRecord = AllList.Count;
+            if (!String.IsNullOrEmpty(searchValue)) // filter
+            {
+                AllList = AllList.Where(x =>
+                        x.Trackingnumber.Contains(searchValue) ||
+                        x.DeliveryMan.Contains(searchValue)).ToList();
+            }
+            int totalRowAfterFilter = AllList.Count;
+            //sorting
+
+            if (!String.IsNullOrEmpty(sortColumnName) && !String.IsNullOrEmpty(sortDir))
+            {
+                AllList = AllList.OrderBy(sortColumnName + " " + sortDir).ToList();
+            }
+
+            //paging
+
+            AllList = AllList.ToList();
+
+            return Json(new
+            {
+                draw = draw,
+                recordsTotal = totalRecord,
+                recordsFiltered = totalRowAfterFilter,
+                data = AllList
+            }, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult AllocateFunction(int itemId, int deliveryManId)
+        {
+            bool result = _allocation.updateDeliveryman(itemId, deliveryManId);
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
+
+        public ActionResult ConsolidationListPerCustomer(int customerId)
+        {
+            ViewBag.CustomerId = customerId;
+            return PartialView("ConsolidationListPerCustomer");
+        }
+        public ActionResult ConsolidateionListPerCustomerTable(int customerId, DateTime? fromDate, DateTime? toDate)
+        {
+            string draw, searchValue, sortColumnName, sortDir;
+            int start, length;
+
+
+            DatatableInitiator(out draw, out start, out length, out searchValue, out sortColumnName, out sortDir);
+            List<ConsolidationListModel> AllList = new List<ConsolidationListModel>();
+            AllList = _consolidation.GetConsolidationListByCustomerId(customerId, fromDate, toDate);
+
+            int totalRecord = AllList.Count;
+            if (!String.IsNullOrEmpty(searchValue)) // filter
+            {
+                AllList = AllList.Where(x =>
+                        x.CustomerName.Contains(searchValue) ||
+                        x.CustomerPhonenumber.Contains(searchValue)).ToList();
+            }
+            int totalRowAfterFilter = AllList.Count;
+            //sorting
+
+            if (!String.IsNullOrEmpty(sortColumnName) && !String.IsNullOrEmpty(sortDir))
+            {
+                AllList = AllList.OrderBy(sortColumnName + " " + sortDir).ToList();
+            }
+
+            //paging
+
+            AllList = AllList.ToList();
+
+            return Json(new
+            {
+                draw = draw,
+                recordsTotal = totalRecord,
+                recordsFiltered = totalRowAfterFilter,
+                data = AllList
+            }, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult ConsolidationDetail(int consolidationId)
+        {
+            var model = _consolidation.GetConsolidationDetailByConsolidationId(consolidationId);
+            return PartialView("ConsolidationDetail", model);
+        }
+
+        public ActionResult ConsolidationCreate(int customerId)
+        {
+            ViewBag.CustomerId = customerId.ToString().PadLeft(4, '0');
+
+
+            return View();
+        }
+        public ActionResult ConsolidationItemTable(int customerId)
+        {
+            string draw, searchValue, sortColumnName, sortDir;
+            int start, length;
+
+
+            DatatableInitiator(out draw, out start, out length, out searchValue, out sortColumnName, out sortDir);
+            List<ItemsModel> AllList = new List<ItemsModel>();
+            AllList = _consolidation.GetUnConlidateItems(customerId);
+
+            int totalRecord = AllList.Count;
+            if (!String.IsNullOrEmpty(searchValue)) // filter
+            {
+                AllList = AllList.Where(x =>
+                        x.CustomerName.Contains(searchValue) ||
+                        x.CustomerPhonenumber.Contains(searchValue)).ToList();
+            }
+            int totalRowAfterFilter = AllList.Count;
+            //sorting
+
+            if (!String.IsNullOrEmpty(sortColumnName) && !String.IsNullOrEmpty(sortDir))
+            {
+                AllList = AllList.OrderBy(sortColumnName + " " + sortDir).ToList();
+            }
+
+            //paging
+
+            AllList = AllList.ToList();
+
+            return Json(new
+            {
+                draw = draw,
+                recordsTotal = totalRecord,
+                recordsFiltered = totalRowAfterFilter,
+                data = AllList
+            }, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult GetPrice(double? condition)
+        {
+            double fee = 0;
+            if (condition != null)
+            {
+                fee = _consolidation.GetPrice((double)condition);
+            }
+            else
+            {
+                fee = 0;
+            }
+            return Json(fee, JsonRequestBehavior.AllowGet);
+
+        }
+
+        public ActionResult ConsolidationCreateFunction(int cusomterId, double amount, double fee, int[] itemId)
+        {
+            bool result = _consolidation.CreateConsolidation(cusomterId, amount, fee, itemId);
+            return Json(result, JsonRequestBehavior.AllowGet);
+
+        }
+
+        public ActionResult ConsolidationDelete(int consolidationId)
+        {
+            bool result = _consolidation.deleteConsolidation(consolidationId);
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult CreateCustomer()
+        {
             return View();
         }
 
 
+        public ActionResult GetNotification()
+        {
+            double result = _product.GetNotification();
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult ItemHistory()
+        {
+            List<SelectListItem> condition = new List<SelectListItem>();
+            condition.Add(new SelectListItem() { Text = "ສີນຄ້າຮັບມາ", Value = "1" });
+            condition.Add(new SelectListItem() { Value = "2", Text = "ສີນຄ້າສົ່ງຮອດປາຍທາງ" });
+            condition.Add(new SelectListItem() { Value = "3", Text = "ສີນຄ້າກັບຄືນ" });
+            ViewBag.Condition = condition;
+            return View();
+        }
+        public ActionResult ItemHistoryDataTable(DateTime? fromDate, DateTime? toDate, int condition)
+        {
+
+            string draw, searchValue, sortColumnName, sortDir;
+            int start, length;
 
 
+            DatatableInitiator(out draw, out start, out length, out searchValue, out sortColumnName, out sortDir);
+            List<ItemsModel> AllList = new List<ItemsModel>();
+            AllList = _product.GetItemsHistoryList(fromDate, toDate, condition);
+
+            int totalRecord = AllList.Count;
+            if (!String.IsNullOrEmpty(searchValue)) // filter
+            {
+                AllList = AllList.Where(x =>
+                        x.TrackingNumber.Contains(searchValue) ||
+                        x.ItemName.Contains(searchValue) ||
+                        x.ReceiverName.Contains(searchValue) ||
+                        x.CreatedDate.Contains(searchValue)).ToList();
+            }
+            int totalRowAfterFilter = AllList.Count;
+            //sorting
+
+            if (!String.IsNullOrEmpty(sortColumnName) && !String.IsNullOrEmpty(sortDir))
+            {
+                AllList = AllList.OrderBy(sortColumnName + " " + sortDir).ToList();
+            }
+
+            //paging
+
+            AllList = AllList.ToList();
+
+            return Json(new
+            {
+                draw = draw,
+                recordsTotal = totalRecord,
+                recordsFiltered = totalRowAfterFilter,
+                data = AllList
+            }, JsonRequestBehavior.AllowGet);
+        }
 
 
+        public ActionResult searchBox(string input)
+        {
+            if (input.Length == 8)
+            {
+                int customerId = _customer.GetCustomerId(input);
+                return Json(new { id = customerId, t = 1 }, JsonRequestBehavior.AllowGet);
+            }
+            else if (input.Length < 8)
+            {
+                int customerId = _customer.CheckCustomerId(input);
+                return Json(new { id = customerId, t = 1 }, JsonRequestBehavior.AllowGet);
+            }
+            else if (input.Length > 8)
+            {
+                int itemId = _product.GetProductId(input);
+                return Json(new { id = itemId, t = 2 }, JsonRequestBehavior.AllowGet);
 
+            }
+
+            else
+            {
+                return Json(0, JsonRequestBehavior.AllowGet);
+            }
+        }
 
 
         public ActionResult CustomerItems(int customerId, int statusId = 2, DateTime? fromDate = null, DateTime? toDate = null)
@@ -750,10 +1006,6 @@ namespace AnousithExpress.web.mvc.Controllers
             bool result = true;
             return Json(result, JsonRequestBehavior.AllowGet);
         }
-        public ActionResult GetNotification()
-        {
-            double result = _product.GetNotification();
-            return Json(result, JsonRequestBehavior.AllowGet);
-        }
+
     }
 }

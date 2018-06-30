@@ -25,7 +25,25 @@ namespace AnousithExpress.DataEntry.Implimentation
         {
             using (var db = new EntityContext())
             {
-                return null;
+
+                var source = _item.GetAllAllocation(db)
+                    .Where(x => x.Route.Id == routeId && x.Time.Id == timeId && x.DateToDeliver == sendingDate).ToList();
+                List<ItemsAllocationModelWithDelivery> model = new List<ItemsAllocationModelWithDelivery>();
+                model = source.Select(r => new ItemsAllocationModelWithDelivery
+                {
+                    Id = r.Id,
+                    DateToDeliver = r.DateToDeliver.ToString("dd/MM/yyyy"),
+                    DeliveryMan = r.DeliveryMan == null ? "" : r.DeliveryMan.Username,
+                    ItemId = r.Item.Id,
+                    ItemName = r.Item.ItemName,
+                    ItemStatus = r.Item.Status.Status,
+                    Trackingnumber = r.Item.TrackingNumber,
+                    TimeId = r.Time.Id,
+                    TimeName = r.Time.Time,
+                    RouteId = r.Route.Id,
+                    RouteName = r.Route.Route
+                }).ToList();
+                return model;
             }
         }
 
@@ -58,6 +76,20 @@ namespace AnousithExpress.DataEntry.Implimentation
                 }
                 var result = _item.AssignItemsAllocation(source);
                 return result;
+            }
+        }
+
+        public bool updateDeliveryman(int itemId, int DeliveryManId)
+        {
+            using (var db = new EntityContext())
+            {
+
+                var item = _item.GetAllAllocation(db).FirstOrDefault(x => x.Item.Id == itemId);
+                db.Entry(item).State = System.Data.Entity.EntityState.Modified;
+                item.DeliveryMan = db.tbUsers.FirstOrDefault(x => x.Id == DeliveryManId);
+                db.SaveChanges();
+                return true;
+
             }
         }
     }

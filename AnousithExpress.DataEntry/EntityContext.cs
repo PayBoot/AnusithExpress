@@ -26,5 +26,6 @@ namespace AnousithExpress.DataEntry
         public DbSet<TbCustomer> tbCustomers { get; set; }
         public DbSet<TbConsolidateList> tbConsolidateLists { get; set; }
         public DbSet<TbConsolidatedItems> tbConsolidatedItems { get; set; }
+        public DbSet<TbPrice> tbPrices { get; set; }
     }
 }
