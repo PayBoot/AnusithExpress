@@ -215,6 +215,24 @@
     <Compile Include="Reports\BarCodePage.aspx.designer.cs">
       <DependentUpon>BarCodePage.aspx</DependentUpon>
     </Compile>
+    <Compile Include="Reports\ConsolidationAllReport.aspx.cs">
+      <DependentUpon>ConsolidationAllReport.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Reports\ConsolidationAllReport.aspx.designer.cs">
+      <DependentUpon>ConsolidationAllReport.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Reports\ConsolidationDataSet.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ConsolidationDataSet.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="Reports\ConsolidationListReport.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ConsolidationListReport.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Reports\ItemBarCode.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -1486,6 +1504,7 @@
     <Content Include="LaoFont\phetsarath_ot.svg" />
     <Content Include="LaoFont\style.css" />
     <Content Include="Reports\BarCodePage.aspx" />
+    <Content Include="Reports\ConsolidationAllReport.aspx" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="ApplicationInsights.config">
@@ -1784,6 +1803,17 @@
     <Content Include="Reports\ItemBarcodeDataSet.xsc">
       <DependentUpon>ItemBarcodeDataSet.xsd</DependentUpon>
     </Content>
+    <Content Include="Reports\ConsolidationDataSet.xsc">
+      <DependentUpon>ConsolidationDataSet.xsd</DependentUpon>
+    </Content>
+    <None Include="Reports\ConsolidationDataSet.xsd">
+      <SubType>Designer</SubType>
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>ConsolidationDataSet.Designer.cs</LastGenOutput>
+    </None>
+    <Content Include="Reports\ConsolidationDataSet.xss">
+      <DependentUpon>ConsolidationDataSet.xsd</DependentUpon>
+    </Content>
     <None Include="Reports\ItemBarcodeDataSet.xsd">
       <SubType>Designer</SubType>
       <Generator>MSDataSetGenerator</Generator>
@@ -1906,21 +1936,6 @@
     <Content Include="Views\Admin\ConsolidationCreate.cshtml" />
     <Content Include="Views\Admin\CreateCustomer.cshtml" />
     <Content Include="Views\Admin\ItemHistory.cshtml" />
-    <Content Include="Views\TbRoutes\Create.cshtml" />
-    <Content Include="Views\TbRoutes\Delete.cshtml" />
-    <Content Include="Views\TbRoutes\Details.cshtml" />
-    <Content Include="Views\TbRoutes\Edit.cshtml" />
-    <Content Include="Views\TbRoutes\Index.cshtml" />
-    <Content Include="Views\TbPrices\Create.cshtml" />
-    <Content Include="Views\TbPrices\Delete.cshtml" />
-    <Content Include="Views\TbPrices\Details.cshtml" />
-    <Content Include="Views\TbPrices\Edit.cshtml" />
-    <Content Include="Views\TbPrices\Index.cshtml" />
-    <Content Include="Views\TbTimes\Create.cshtml" />
-    <Content Include="Views\TbTimes\Delete.cshtml" />
-    <Content Include="Views\TbTimes\Details.cshtml" />
-    <Content Include="Views\TbTimes\Edit.cshtml" />
-    <Content Include="Views\TbTimes\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -1946,6 +1961,10 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Reports\ConsolidationListReport.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>ConsolidationListReport.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Include="Reports\ItemBarCode.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
       <LastGenOutput>ItemBarCode.cs</LastGenOutput>

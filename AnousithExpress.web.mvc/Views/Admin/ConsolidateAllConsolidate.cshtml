@@ -1,0 +1,194 @@
+﻿
+@{
+    ViewBag.Title = "ສັງລວມທັງຫມົດ";
+    Layout = "~/Views/Shared/_CustomerLayout.cshtml";
+}
+<div class="breadcrumbs">
+    <div class="col-sm-4">
+        <div class="page-header float-left">
+            <div class="page-title">
+
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-8">
+        <div class="page-header float-right">
+            <div class="page-title">
+                <ol class="breadcrumb text-right">
+                    <li><a href="@Url.Action("Index","Admin")">ຫນ້າຫລັກ</a></li>
+                    <li class="active">@ViewData["Title"]</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container" id="containerResize">
+    <div class="content mt-3">
+        <div class="animated fadeIn">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <button class="btn btn-primary w-50" onclick="goToRerpot()" >ພີມລາຍງານ</button>
+                        </div>
+                        <div class="card-body ">
+                            <div class="row">
+                                <div class="col-6">
+                                    <label>ຈາກວັນທີ</label>
+                                    <input type="text" class="w-100" placeholder="ວັນ-ເດືອນ-ປີ" name="fromDate" onchange="searchByDate(this)" />
+
+
+                                </div>
+                                <div class="col-6 horizontal">
+
+                                    <label>ຫາວັນທີ</label>
+                                    <input type="text" class="w-100" placeholder="ວັນ-ເດືອນ-ປີ" name="toDate" onchange="searchByDate(this)" />
+
+                                </div>
+                            </div>
+
+                            <table id="itemDataTable" class="table table-striped table-bordered" style="width:100%;white-space:nowrap;">
+                                <thead>
+                                    <tr>
+                                        <th>ເລກສັງລວມ</th>
+                                        <th>ເລກບັນຊີ</th>
+                                        <th>ຊື່ລຸກຄ້າ</th>
+                                        <th>ຈຳນວນສີນຄ້າ</th>
+                                        <th>ຄ່າບໍລິການ</th>
+                                        <th>ວັນທີສັງລວມ</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div><!-- .animated -->
+    </div><!-- .content -->
+</div>
+<div class="modal fade" id="modal3" role="dialog">
+    <div class="modal-dialog  modal-lg">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div id="content3" class="text-center printableArea">
+                    <form id="model3Form"></form>
+                </div>
+                <div id="modalButton3" class="form-horizontal text-center">
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="modal1" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div id="content" class="text-center">
+
+                </div>
+                <div id="modalButton" class="text-center">
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="modal2" role="dialog">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div id="content2" class="text-center">
+
+                </div>
+                <div id="modalButton2" class="text-center">
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@section scripts{
+    <script>
+        var consolidateAllTable;
+        jQuery(document).ready(function () {
+            jQuery("input[name='fromDate']").datepicker({
+                language: 'la'
+            });
+
+            jQuery("input[name='toDate']").datepicker({
+                language: 'la'
+            });
+            consoleTable();
+        });
+        function goToRerpot() {
+            window.location = '@Url.Action("ConsolidationAllReport","Admin")?fromDate=' + jQuery("input[name='fromDate']").val() + '&toDate=' + jQuery("input[name='toDate']");
+        }
+        function consoleTable() {
+            consolidateAllTable = jQuery("#itemDataTable").DataTable({
+                serverSide: true,
+                responsive: true,
+                paging: false,
+                language: LaoLangage,
+                searching: false,
+                order: [[1, 'desc']],
+                ajax: {
+                    url: "/Admin/ConsolidateAllConsolidateTable",
+                    type: "POST",
+                    datatype: "json",
+                    data: function (d) {
+                        d.fromDate = jQuery("input[name='fromDate']").val() || null,
+                            d.toDate = jQuery("input[name='toDate']").val() || null
+                    }
+                },
+                columns: [
+                    
+                    { data: "ConsolidateNumber", name: "ConsolidateNumber" },
+                    { data: "CustomerIdForShow", name:"CustomerIdForShow"},
+                    { data: "CustomerName", name: "CustomerName" },
+                    { data: "AmountOfItem", name: "AmountOfItem" },                    
+                    { data: "Fee", name: "Fee" },
+                    { data: "ConsolidatedDate", name: "ConsolidatedDate" },
+                    {
+                        data: "Id", render: function (data, type, full, meta) {
+                            if (data===0) {
+                                return '';
+                            }
+                            else {
+                                return '<button class="btn btn-warning btn-sm" onclick="openDetail(' + data + ')">ລາຍລະອຽດ</button>';
+                            }
+                           
+                        }
+                    }
+                ]
+
+            });
+        }
+
+        function searchByDate(source) {
+            consolidateAllTable.ajax.reload(null, false);
+            jQuery(source).datepicker('hide');
+        }
+
+        function openDetail(id) {
+            let consolidationId = id;
+            jQuery.ajax({
+                url: "/Admin/ConsolidationDetail",
+                data: { consolidationId: consolidationId },
+                type: "POST",
+                datatype: "json",
+                success: function (r) {
+                    jQuery("#content3").html(r);
+                    jQuery("#modal3").modal('show');
+                }
+            });
+        }
+
+
+
+
+    </script>
+
+}

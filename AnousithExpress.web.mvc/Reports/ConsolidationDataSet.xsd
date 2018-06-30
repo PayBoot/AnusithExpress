@@ -1,0 +1,31 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="ConsolidationDataSet" targetNamespace="http://tempuri.org/ConsolidationDataSet.xsd" xmlns:mstns="http://tempuri.org/ConsolidationDataSet.xsd" xmlns="http://tempuri.org/ConsolidationDataSet.xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:msprop="urn:schemas-microsoft-com:xml-msprop" attributeFormDefault="qualified" elementFormDefault="qualified">
+  <xs:annotation>
+    <xs:appinfo source="urn:schemas-microsoft-com:xml-msdatasource">
+      <DataSource DefaultConnectionIndex="0" FunctionsComponentName="QueriesTableAdapter" Modifier="AutoLayout, AnsiClass, Class, Public" SchemaSerializationMode="IncludeSchema" xmlns="urn:schemas-microsoft-com:xml-msdatasource">
+        <Connections />
+        <Tables />
+        <Sources />
+      </DataSource>
+    </xs:appinfo>
+  </xs:annotation>
+  <xs:element name="ConsolidationDataSet" msdata:IsDataSet="true" msdata:UseCurrentLocale="true" msprop:EnableTableAdapterManager="true" msprop:Generator_DataSetName="ConsolidationDataSet" msprop:Generator_UserDSName="ConsolidationDataSet">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element name="ConsolidationList" msprop:Generator_TableClassName="ConsolidationListDataTable" msprop:Generator_TableVarName="tableConsolidationList" msprop:Generator_TablePropName="ConsolidationList" msprop:Generator_RowDeletingName="ConsolidationListRowDeleting" msprop:Generator_RowChangingName="ConsolidationListRowChanging" msprop:Generator_RowEvHandlerName="ConsolidationListRowChangeEventHandler" msprop:Generator_RowDeletedName="ConsolidationListRowDeleted" msprop:Generator_UserTableName="ConsolidationList" msprop:Generator_RowChangedName="ConsolidationListRowChanged" msprop:Generator_RowEvArgName="ConsolidationListRowChangeEvent" msprop:Generator_RowClassName="ConsolidationListRow">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="ConsolidationNumber" msprop:Generator_ColumnVarNameInTable="columnConsolidationNumber" msprop:Generator_ColumnPropNameInRow="ConsolidationNumber" msprop:Generator_ColumnPropNameInTable="ConsolidationNumberColumn" msprop:Generator_UserColumnName="ConsolidationNumber" type="xs:string" minOccurs="0" />
+              <xs:element name="CustomerId" msprop:Generator_ColumnVarNameInTable="columnCustomerId" msprop:Generator_ColumnPropNameInRow="CustomerId" msprop:Generator_ColumnPropNameInTable="CustomerIdColumn" msprop:Generator_UserColumnName="CustomerId" type="xs:string" minOccurs="0" />
+              <xs:element name="CustomerName" msprop:Generator_ColumnVarNameInTable="columnCustomerName" msprop:Generator_ColumnPropNameInRow="CustomerName" msprop:Generator_ColumnPropNameInTable="CustomerNameColumn" msprop:Generator_UserColumnName="CustomerName" type="xs:string" minOccurs="0" />
+              <xs:element name="CustomerPhonenumber" msprop:Generator_ColumnVarNameInTable="columnCustomerPhonenumber" msprop:Generator_ColumnPropNameInRow="CustomerPhonenumber" msprop:Generator_ColumnPropNameInTable="CustomerPhonenumberColumn" msprop:Generator_UserColumnName="CustomerPhonenumber" type="xs:string" minOccurs="0" />
+              <xs:element name="ConsolidateDate" msprop:Generator_ColumnVarNameInTable="columnConsolidateDate" msprop:Generator_ColumnPropNameInRow="ConsolidateDate" msprop:Generator_ColumnPropNameInTable="ConsolidateDateColumn" msprop:Generator_UserColumnName="ConsolidateDate" type="xs:string" minOccurs="0" />
+              <xs:element name="Amount" msprop:Generator_ColumnVarNameInTable="columnAmount" msprop:Generator_ColumnPropNameInRow="Amount" msprop:Generator_ColumnPropNameInTable="AmountColumn" msprop:Generator_UserColumnName="Amount" type="xs:string" minOccurs="0" />
+              <xs:element name="Fee" msprop:Generator_ColumnVarNameInTable="columnFee" msprop:Generator_ColumnPropNameInRow="Fee" msprop:Generator_ColumnPropNameInTable="FeeColumn" msprop:Generator_UserColumnName="Fee" type="xs:string" minOccurs="0" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:choice>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>
