@@ -201,9 +201,9 @@
     <Compile Include="Controllers\CustomerController.cs" />
     <Compile Include="Controllers\DeliveryController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
-    <Compile Include="Controllers\TbPricesController.cs" />
-    <Compile Include="Controllers\TbRoutesController.cs" />
-    <Compile Include="Controllers\TbTimesController.cs" />
+    <Compile Include="Controllers\PricesController.cs" />
+    <Compile Include="Controllers\RoutesController.cs" />
+    <Compile Include="Controllers\TimesController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -1406,7 +1406,7 @@
     <Content Include="assets\fonts\icomoon\index.html" />
     <Content Include="assets\fonts\index.html" />
     <Content Include="assets\fonts\themify.svg" />
-    <Content Include="assets\Image\anoutsithlogo.png" />
+    <Content Include="assets\Image\logo.png" />
     <Content Include="assets\Image\user-male-icon.png" />
     <Content Include="assets\js\bootstrap-datepicker.js" />
     <Content Include="assets\js\bootstrap.js" />
@@ -1936,23 +1936,6 @@
     <Content Include="Views\Admin\ConsolidationCreate.cshtml" />
     <Content Include="Views\Admin\CreateCustomer.cshtml" />
     <Content Include="Views\Admin\ItemHistory.cshtml" />
-    <Content Include="Views\TbPrices\Create.cshtml" />
-    <Content Include="Views\TbPrices\Delete.cshtml" />
-    <Content Include="Views\TbPrices\Details.cshtml" />
-    <Content Include="Views\TbPrices\Edit.cshtml" />
-    <Content Include="Views\TbPrices\Index.cshtml" />
-    <Content Include="Views\TbRoutes\Create.cshtml" />
-    <Content Include="Views\TbRoutes\Delete.cshtml" />
-    <Content Include="Views\TbRoutes\Details.cshtml" />
-    <Content Include="Views\TbRoutes\Edit.cshtml" />
-    <Content Include="Views\TbRoutes\Index.cshtml" />
-    <Content Include="Views\TbTimes\Create.cshtml" />
-    <Content Include="Views\TbTimes\Delete.cshtml" />
-    <Content Include="Views\TbTimes\Details.cshtml" />
-    <Content Include="Views\TbTimes\Edit.cshtml" />
-    <Content Include="Views\TbTimes\Index.cshtml" />
-    <Content Include="Views\Admin\ConsolidationAllReport.cshtml" />
-    <Content Include="Views\Admin\ConsolidateAllConsolidate.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -11,107 +11,107 @@ using AnousithExpress.DataEntry.Models;
 
 namespace AnousithExpress.web.mvc.Controllers
 {
-    public class TbRoutesController : Controller
+    public class TimesController : Controller
     {
         private EntityContext db = new EntityContext();
 
-        // GET: TbRoutes
+        // GET: Times
         public ActionResult Index()
         {
-            return View(db.tbRoutes.ToList());
+            return View(db.tbTimes.ToList());
         }
 
-        // GET: TbRoutes/Details/5
+        // GET: Times/Details/5
         public ActionResult Details(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            TbRoute tbRoute = db.tbRoutes.Find(id);
-            if (tbRoute == null)
+            TbTime tbTime = db.tbTimes.Find(id);
+            if (tbTime == null)
             {
                 return HttpNotFound();
             }
-            return View(tbRoute);
+            return View(tbTime);
         }
 
-        // GET: TbRoutes/Create
+        // GET: Times/Create
         public ActionResult Create()
         {
             return View();
         }
 
-        // POST: TbRoutes/Create
+        // POST: Times/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,Route")] TbRoute tbRoute)
+        public ActionResult Create([Bind(Include = "Id,Time")] TbTime tbTime)
         {
             if (ModelState.IsValid)
             {
-                db.tbRoutes.Add(tbRoute);
+                db.tbTimes.Add(tbTime);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
 
-            return View(tbRoute);
+            return View(tbTime);
         }
 
-        // GET: TbRoutes/Edit/5
+        // GET: Times/Edit/5
         public ActionResult Edit(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            TbRoute tbRoute = db.tbRoutes.Find(id);
-            if (tbRoute == null)
+            TbTime tbTime = db.tbTimes.Find(id);
+            if (tbTime == null)
             {
                 return HttpNotFound();
             }
-            return View(tbRoute);
+            return View(tbTime);
         }
 
-        // POST: TbRoutes/Edit/5
+        // POST: Times/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,Route")] TbRoute tbRoute)
+        public ActionResult Edit([Bind(Include = "Id,Time")] TbTime tbTime)
         {
             if (ModelState.IsValid)
             {
-                db.Entry(tbRoute).State = EntityState.Modified;
+                db.Entry(tbTime).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            return View(tbRoute);
+            return View(tbTime);
         }
 
-        // GET: TbRoutes/Delete/5
+        // GET: Times/Delete/5
         public ActionResult Delete(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            TbRoute tbRoute = db.tbRoutes.Find(id);
-            if (tbRoute == null)
+            TbTime tbTime = db.tbTimes.Find(id);
+            if (tbTime == null)
             {
                 return HttpNotFound();
             }
-            return View(tbRoute);
+            return View(tbTime);
         }
 
-        // POST: TbRoutes/Delete/5
+        // POST: Times/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            TbRoute tbRoute = db.tbRoutes.Find(id);
-            db.tbRoutes.Remove(tbRoute);
+            TbTime tbTime = db.tbTimes.Find(id);
+            db.tbTimes.Remove(tbTime);
             db.SaveChanges();
             return RedirectToAction("Index");
         }

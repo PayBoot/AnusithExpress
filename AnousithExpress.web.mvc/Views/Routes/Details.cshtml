@@ -1,0 +1,27 @@
+﻿@model AnousithExpress.DataEntry.Models.TbRoute
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_CustomerLayout.cshtml";
+}
+
+
+
+<div>
+    <h4>TbRoute</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Route)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Route)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("ແກ້ໄຂ", "Edit", new { id = Model.Id }) |
+    @Html.ActionLink("ກັບຄືນ", "Index")
+</p>
