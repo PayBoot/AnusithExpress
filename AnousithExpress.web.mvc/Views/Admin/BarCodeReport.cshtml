@@ -3,9 +3,9 @@
 
 
 <div class="row">
-    <div class="col-md-4"></div>
+    @*<div class="col-md-4"></div>
     <div class="col-md-4">
-        <div style="width:80mm; height:100mm; border:1px solid" align="center">
+        <div style="width:80mm;border:1px solid">
             <img style="align-items:center" src="~/Images/logo.png" width="100px" height="50px;" />
             <div style="text-align:left; padding-left:10px;">ເລກທີ:</div>
             <div style="text-align:left; padding-left:10px;">ຜູ້ຝາກ:</div>
@@ -13,10 +13,10 @@
             <div style="text-align:left; padding-left:10px;">ເບີໂທ:</div>
             <div style="text-align:left; padding-left:10px;">ທີຢູ່</div>
 
-            <br />
+            <br />*@
 
-            <div style="text-align:center"><img height="30px" width="200px;" src='@Url.Action("GetBarCode", new {trackingnumber= ViewBag.Trackingnumber })' /> </div>
-            <br />
+          <img height="30px" width="200px;" src='@Url.Action("GetBarCode", new {trackingnumber= ViewBag.Trackingnumber })' /> 
+            @*<br />
             <br />
             <br />
             <br />
@@ -26,7 +26,7 @@
 
     </div>
     <div class="col-md-4"></div>
-</div>
+</div>*@
 
     
 

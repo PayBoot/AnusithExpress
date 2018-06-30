@@ -2,6 +2,7 @@
 using AnousithExpress.DataEntry.ViewModels.Admin;
 using AnousithExpress.DataEntry.ViewModels.Customer;
 using AnousithExpress.web.mvc.Reports;
+using GenCode128;
 using System;
 using System.Collections.Generic;
 using System.Drawing.Imaging;
@@ -10,7 +11,7 @@ using System.Linq;
 using System.Linq.Dynamic;
 using System.Text;
 using System.Web.Mvc;
-
+using System.Drawing;
 
 namespace AnousithExpress.web.mvc.Controllers
 {
@@ -472,15 +473,14 @@ namespace AnousithExpress.web.mvc.Controllers
             FileContentResult result;
 
             Zen.Barcode.Code128BarcodeDraw barcodeObject = Zen.Barcode.BarcodeDrawFactory.Code128WithChecksum;
+            //Image myimg = Code128Rendering.MakeBarcodeImage(trackingnumber, 2, true);
             System.Drawing.Image barcodeImage = barcodeObject.Draw(trackingnumber, 60);
             MemoryStream ms = new MemoryStream();
             barcodeImage.Save(ms, ImageFormat.Png);
             result = this.File(ms.GetBuffer(), "image/jpeg");
             return result;
         }
-
-
-
+        
         public ActionResult CustomerSentItems(int customerId)
         {
             ViewBag.CustomerId = customerId;

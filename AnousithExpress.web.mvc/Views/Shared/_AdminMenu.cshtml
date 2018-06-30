@@ -6,14 +6,14 @@
         <li class="menu-title"></li><!-- /.menu-title -->
         <li>
             @{
-                if (Session["Role"].ToString() == "1")
-                {
-                    <a href="@Url.Action("Account", "Admin")" style="font-family:'Phetsarath OT';"> <i class="menu-icon ti-user"></i>ບັນຊີຜູ້ໃຊ້</a>
-                }
-                else
-                {
-                    <a href="#" data-toggle="modal" data-target="#modalLayout" style="font-family:'Phetsarath OT';"> <i class="menu-icon ti-user"></i>ບັນຊີຜູ້ໃຊ້</a>
-                }
+            if (Session["Role"].ToString() == "1")
+            {
+                <a href="@Url.Action("Account", "Admin")" style="font-family:'Phetsarath OT';"> <i class="menu-icon ti-user"></i>ບັນຊີຜູ້ໃຊ້</a>
+        }
+        else
+        {
+            <a href="#" data-toggle="modal" data-target="#modalLayout" style="font-family:'Phetsarath OT';"> <i class="menu-icon ti-user"></i>ບັນຊີຜູ້ໃຊ້</a>
+    }
 
             }
 
@@ -29,6 +29,15 @@
         </li>
         <li>
             <a href="@Url.Action("ItemHistoryListOfCustomer","Admin")" style="font-family:'Phetsarath OT';"><i class="menu-icon fa fa-book"></i>ຈຳນວນເຄື່ອງສົ່ງ</a>
+        </li>
+        <li>
+            <a href="@Url.Action("Index","TbRoutes")" style="font-family:'Phetsarath OT';"><i class="menu-icon fa fa-book"></i>ເພີ້ມເສັ້ນທາງ</a>
+        </li>
+        <li>
+            <a href="@Url.Action("Index","TbTimes")" style="font-family:'Phetsarath OT';"><i class="menu-icon fa fa-book"></i>ເພີ້ມເວລາ</a>
+        </li>
+        <li>
+            <a href="@Url.Action("Index","TbPrices")" style="font-family:'Phetsarath OT';"><i class="menu-icon fa fa-book"></i>ເພີ້ມລາຄາ</a>
         </li>
         <li>
             <a href="@Url.Action("ItemHistory","Admin")" style="font-family:'Phetsarath OT';"><i class="menu-icon fa fa-book"></i>ປະຫວັດການສົ່ງເຄື່ອງ</a>
