@@ -15,5 +15,7 @@ namespace AnousithExpress.DataEntry.Interface
         double GetPrice(double condition);
 
         bool deleteConsolidation(int consolidationId);
+
+        List<ConsolidationListModel> GetAllConsolidationByDate(DateTime? fromDate, DateTime? toDate);
     }
 }

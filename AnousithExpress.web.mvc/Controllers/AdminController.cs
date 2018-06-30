@@ -913,6 +913,79 @@ namespace AnousithExpress.web.mvc.Controllers
         }
 
 
+        public ActionResult ConsolidateAllConsolidate()
+        {
+            return View();
+        }
+        public ActionResult ConsolidateAllConsolidateTable(DateTime? fromDate, DateTime? toDate)
+        {
+            string draw, searchValue, sortColumnName, sortDir;
+            int start, length;
+
+
+            DatatableInitiator(out draw, out start, out length, out searchValue, out sortColumnName, out sortDir);
+            List<ConsolidationListModel> AllList = new List<ConsolidationListModel>();
+            AllList = _consolidation.GetAllConsolidationByDate(fromDate, toDate);
+
+            int totalRecord = AllList.Count;
+            if (!String.IsNullOrEmpty(searchValue)) // filter
+            {
+                AllList = AllList.Where(x =>
+                        x.CustomerName.Contains(searchValue) ||
+                        x.CustomerPhonenumber.Contains(searchValue)).ToList();
+            }
+            int totalRowAfterFilter = AllList.Count;
+            //sorting
+
+            if (!String.IsNullOrEmpty(sortColumnName) && !String.IsNullOrEmpty(sortDir))
+            {
+                AllList = AllList.OrderBy(sortColumnName + " " + sortDir).ToList();
+            }
+
+            //paging
+
+            AllList = AllList.ToList();
+
+            return Json(new
+            {
+                draw = draw,
+                recordsTotal = totalRecord,
+                recordsFiltered = totalRowAfterFilter,
+                data = AllList
+            }, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult ConsolidationAllReport(DateTime? fromDate, DateTime? toDate)
+        {
+            List<ConsolidationListModel> AllList = new List<ConsolidationListModel>();
+            AllList = _consolidation.GetAllConsolidationByDate(fromDate, toDate);
+            ConsolidationDataSet dataSet = new ConsolidationDataSet();
+
+            if (AllList != null)
+            {
+                foreach (var con in AllList)
+                {
+                    dataSet.ConsolidationList.AddConsolidationListRow(
+                        con.ConsolidateNumber,
+                        con.CustomerIdForShow,
+                        con.CustomerName,
+                        con.CustomerPhonenumber,
+                        con.ConsolidatedDate,
+                        con.AmountOfItem.ToString(),
+                        con.Fee.ToString());
+                }
+                Session["ConsolidateRerpotDataSet"] = dataSet;
+            }
+
+            return View();
+        }
+
+
+
+
+
+
+
         public ActionResult CustomerItems(int customerId, int statusId = 2, DateTime? fromDate = null, DateTime? toDate = null)
         {
             ViewBag.CustomerId = customerId.ToString().PadLeft(4, '0');

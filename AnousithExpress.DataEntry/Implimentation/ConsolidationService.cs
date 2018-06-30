@@ -80,6 +80,44 @@ namespace AnousithExpress.DataEntry.Implimentation
             }
         }
 
+        public List<ConsolidationListModel> GetAllConsolidationByDate(DateTime? fromDate, DateTime? toDate)
+        {
+            using (var db = new EntityContext())
+            {
+                var source = _consolidate.GetAll(db).ToList();
+                if (fromDate != null)
+                {
+                    source = source.Where(s => s.ConsolidatedDate >= fromDate).ToList();
+                }
+                if (toDate != null)
+                {
+                    source = source.Where(s => s.ConsolidatedDate <= toDate).ToList();
+                }
+                if (source != null)
+                {
+                    var result = _consolidate.AssignConsolidationList(source);
+                    ConsolidationListModel sumRow = new ConsolidationListModel
+                    {
+                        Id = 0,
+                        AmountOfItem = result.Sum(x => x.AmountOfItem),
+                        ConsolidatedDate = null,
+                        CustomerID = 0,
+                        ConsolidateNumber = null,
+                        CustomerName = "ລວມ",
+                        CustomerPhonenumber = null,
+                        Fee = result.Sum(x => x.Fee)
+                    };
+                    result.Add(sumRow);
+
+                    return result;
+                }
+                else
+                {
+                    return new List<ConsolidationListModel>();
+                }
+            }
+        }
+
         public ConsolidationModel GetConsolidationDetailByConsolidationId(int consolidationId)
         {
             using (var db = new EntityContext())

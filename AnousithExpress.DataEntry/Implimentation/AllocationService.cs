@@ -27,7 +27,8 @@ namespace AnousithExpress.DataEntry.Implimentation
             {
 
                 var source = _item.GetAllAllocation(db)
-                    .Where(x => x.Route.Id == routeId && x.Time.Id == timeId && x.DateToDeliver == sendingDate).ToList();
+                    .Where(x => x.Route.Id == routeId && x.Time.Id == timeId && x.DateToDeliver == sendingDate
+                    && (x.Item.Status.Id != 6 || x.Item.Status.Id != 8)).ToList();
                 List<ItemsAllocationModelWithDelivery> model = new List<ItemsAllocationModelWithDelivery>();
                 model = source.Select(r => new ItemsAllocationModelWithDelivery
                 {
