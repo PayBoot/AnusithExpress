@@ -11,17 +11,17 @@ using AnousithExpress.DataEntry.Models;
 
 namespace AnousithExpress.web.mvc.Controllers
 {
-    public class TbPricesController : Controller
+    public class PricesController : Controller
     {
         private EntityContext db = new EntityContext();
 
-        // GET: TbPrices
+        // GET: Prices
         public ActionResult Index()
         {
             return View(db.tbPrices.ToList());
         }
 
-        // GET: TbPrices/Details/5
+        // GET: Prices/Details/5
         public ActionResult Details(int? id)
         {
             if (id == null)
@@ -36,13 +36,13 @@ namespace AnousithExpress.web.mvc.Controllers
             return View(tbPrice);
         }
 
-        // GET: TbPrices/Create
+        // GET: Prices/Create
         public ActionResult Create()
         {
             return View();
         }
 
-        // POST: TbPrices/Create
+        // POST: Prices/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
@@ -59,7 +59,7 @@ namespace AnousithExpress.web.mvc.Controllers
             return View(tbPrice);
         }
 
-        // GET: TbPrices/Edit/5
+        // GET: Prices/Edit/5
         public ActionResult Edit(int? id)
         {
             if (id == null)
@@ -74,7 +74,7 @@ namespace AnousithExpress.web.mvc.Controllers
             return View(tbPrice);
         }
 
-        // POST: TbPrices/Edit/5
+        // POST: Prices/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
@@ -90,7 +90,7 @@ namespace AnousithExpress.web.mvc.Controllers
             return View(tbPrice);
         }
 
-        // GET: TbPrices/Delete/5
+        // GET: Prices/Delete/5
         public ActionResult Delete(int? id)
         {
             if (id == null)
@@ -105,7 +105,7 @@ namespace AnousithExpress.web.mvc.Controllers
             return View(tbPrice);
         }
 
-        // POST: TbPrices/Delete/5
+        // POST: Prices/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)

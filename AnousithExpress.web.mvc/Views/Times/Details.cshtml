@@ -1,0 +1,27 @@
+﻿@model AnousithExpress.DataEntry.Models.TbTime
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_CustomerLayout.cshtml";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>TbTime</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Time)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Time)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>
