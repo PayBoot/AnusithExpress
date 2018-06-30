@@ -35,14 +35,14 @@
                             <div class="row">
                                 <div class="col-6">
                                     <label>ຈາກວັນທີ</label>
-                                    <input type="text" class="w-100" placeholder="ວັນ-ເດືອນ-ປີ" name="fromDate" onchange="searchByDate(this)" />
+                                    <input type="date" class="w-100" placeholder="ວັນ-ເດືອນ-ປີ" name="fromDate" id="fromDate" onchange="searchByDate(this)" />
 
 
                                 </div>
                                 <div class="col-6 horizontal">
 
                                     <label>ຫາວັນທີ</label>
-                                    <input type="text" class="w-100" placeholder="ວັນ-ເດືອນ-ປີ" name="toDate" onchange="searchByDate(this)" />
+                                    <input type="date" class="w-100" placeholder="ວັນ-ເດືອນ-ປີ" name="toDate" id ="toDate" onchange="searchByDate(this)" />
 
                                 </div>
                             </div>
@@ -114,17 +114,19 @@
     <script>
         var consolidateAllTable;
         jQuery(document).ready(function () {
-            jQuery("input[name='fromDate']").datepicker({
-                language: 'la'
-            });
+            //jQuery("input[name='fromDate']").datepicker({
+            //    language: 'la',
+            //    dateFormat: 'dd/mm/yy'
+            //});
 
-            jQuery("input[name='toDate']").datepicker({
-                language: 'la'
-            });
+            //jQuery("input[name='toDate']").datepicker({
+            //    language: 'la',
+            //    dateFormat: 'dd/mm/yy'
+            //});
             consoleTable();
         });
         function goToRerpot() {
-            window.location = '@Url.Action("ConsolidationAllReport","Admin")?fromDate=' + jQuery("input[name='fromDate']").val() + '&toDate=' + jQuery("input[name='toDate']");
+            window.location = '@Url.Action("ConsolidationAllReport","Admin")?fromDate=' + jQuery("#fromDate").val() + '&toDate=' + jQuery("#toDate").val();
         }
         function consoleTable() {
             consolidateAllTable = jQuery("#itemDataTable").DataTable({
