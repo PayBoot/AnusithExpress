@@ -15,7 +15,8 @@ namespace AnousithExpress.web.mvc.Reports
             rptDoc.Load(Server.MapPath("~/Reports/ConsolidationListReport.rpt"));
 
             rptDoc.SetDataSource(ds);
-
+            rptDoc.SetParameterValue("dt1", Session["dt1"].ToString());
+            rptDoc.SetParameterValue("dt2", Session["dt2"].ToString());
             ConsolidateAllCRP.ReportSource = rptDoc;
         }
     }

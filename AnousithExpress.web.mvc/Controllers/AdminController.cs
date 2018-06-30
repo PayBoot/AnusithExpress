@@ -975,6 +975,32 @@ namespace AnousithExpress.web.mvc.Controllers
                         con.Fee.ToString());
                 }
                 Session["ConsolidateRerpotDataSet"] = dataSet;
+                if (fromDate == null )
+                {
+                    Session["dt1"] = "ບໍ່ກໍານົດ";
+                   
+
+                }
+
+                else
+                {
+                    Session["dt1"] = fromDate?.ToString("dd/MM/yyyy");
+                   
+                }
+                if (toDate == null)
+                {
+                  
+                    Session["dt2"] = "ບໍ່ກໍານົດ";
+
+                }
+
+                else
+                {
+                   
+                    Session["dt2"] = toDate?.ToString("dd/MM/yyyy");
+
+                }
+
             }
 
             return View();
