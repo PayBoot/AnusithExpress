@@ -458,13 +458,13 @@ namespace AnousithExpress.web.mvc.Controllers
                     model.Barcode);
                 }
                 HttpContext.Session["barcodeModel"] = barcodeDS;
-                return PartialView("BarCodeReport", model);
+              
             }
             else
             {
                 return Content("No item identity is found, please access this page in a proper manner");
             }
-
+            return PartialView("BarCodeReport", model);
         }
         public ActionResult GetBarCode(string trackingnumber)
         {

@@ -12,7 +12,7 @@
                     <th class="control">ຊື່ຜູ້ຮັບ</th>
                     <th class="control">ເບີໂທຜູ້ຮັບ</th>
                     <th class="control">ທີ່ຢູ່ຜູ້ຮັບ</th>
-                    <th class="control">ປລີ້ນບາໂຄດ</th>
+
                     <th class="none">ມື້ພະນັກງານຮັບສີນຄ້າ</th>
                     <th class="none">ມື້ພະນັກງານສົ່ງສີນຄ້າ</th>
                     <th class="none">ເກັບເງິນປາຍທາງ</th>
@@ -29,8 +29,8 @@
                     <td>@item.ReceiverName</td>
                     <td>@item.ReceipverPhone</td>
                     <td>@item.ReceiverAddress</td>
-                    <td>print</td>
-                    <td><button class="btn btn-warning" onclick="barcodeDialog(@item.Id)">ປລີ້ນບາໂຄດ</button></td>
+           
+                    <td><button class="btn btn-warning" onclick="barcodeDialog(@item.Id)">ບາໂຄດ</button></td>
                     <td>@item.ReceiveDate</td>
                     <td>@item.SendingDate</td>
                     <td>
@@ -80,12 +80,12 @@
         let itemId = id;
         jQuery.ajax({
             url: "/Admin/BarCodeReport",
-            type: "GET",
+            type: "Post",
             data: { itemId: itemId },
             datatype: "json",
             success: function (r) {
                 let htmlButton = '';
-                htmlButton += '<button class="btn btn-warning btn-flat mb-1 w-100 mr-1 ml-1" onclick="PrintBarcode()">ພີມບາໂຄດ</button>';
+                htmlButton += '<button class="btn btn-warning btn-flat mb-1 w-100 mr-1 ml-1" onclick="PrintBarcodes()">ພີມບາໂຄດ</button>';
                 htmlButton += '<button class="btn btn-primary btn-flat mb-1 w-100 mr-1 ml-1" data-dismiss="modal">ອອກ</button>';
                 jQuery("#content3").html(r);
                 jQuery("#modalButton3").html(htmlButton);
@@ -93,7 +93,7 @@
             }
         });
     }
-    function PrintBarcode() {
+    function PrintBarcodes() {
     
         window.print();
      
