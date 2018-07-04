@@ -233,6 +233,17 @@
       <DependentUpon>ConsolidationListReport.rpt</DependentUpon>
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Reports\crybill.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>crybill.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Reports\DatasetBill.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>DatasetBill.xsd</DependentUpon>
+    </Compile>
     <Compile Include="Reports\ItemBarCode.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -1815,6 +1826,17 @@
     <Content Include="Reports\ConsolidationDataSet.xss">
       <DependentUpon>ConsolidationDataSet.xsd</DependentUpon>
     </Content>
+    <Content Include="Reports\DatasetBill.xsc">
+      <DependentUpon>DatasetBill.xsd</DependentUpon>
+    </Content>
+    <None Include="Reports\DatasetBill.xsd">
+      <SubType>Designer</SubType>
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>DatasetBill.Designer.cs</LastGenOutput>
+    </None>
+    <Content Include="Reports\DatasetBill.xss">
+      <DependentUpon>DatasetBill.xsd</DependentUpon>
+    </Content>
     <None Include="Reports\ItemBarcodeDataSet.xsd">
       <SubType>Designer</SubType>
       <Generator>MSDataSetGenerator</Generator>
@@ -1985,6 +2007,10 @@
     <EmbeddedResource Include="Reports\ConsolidationListReport.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
       <LastGenOutput>ConsolidationListReport.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\crybill.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>crybill.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Reports\ItemBarCode.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
