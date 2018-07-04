@@ -54,7 +54,7 @@
                                 <label for="hf-email" class=" form-control-label font-weight-bold">ເບີໂທຜູ້ຮັບ</label>
                             </div>
                             <div class="col-12 col-md-9">
-                                @Html.TextBoxFor(m => m.ReceipverPhone, new { @class = "form-control", @placeholder = "ເບີໂທຜູ້ຮັບ",@type="number" })
+                                @Html.TextBoxFor(m => m.ReceipverPhone, new { @class = "form-control", @placeholder = "ເບີໂທຜູ້ຮັບ",@type="number", @id="phonenumber" })
                             </div>
                         </div>
                         <div class="row form-group">
@@ -81,7 +81,7 @@
                                     <label for="hf-email" class=" form-control-label font-weight-bold">ເກັບເງີນປາຍທາງ ສະກຸນເງີນກີບ</label>
                                 </div>
                                 <div class="col-12 col-md-9">
-                                    @Html.TextBoxFor(m => m.ItemValue_Kip, new { @class = "form-control", @placeholder = "ເກັບເງີນປາຍທາງ ສະກຸນເງີນກີບ", @type = "number" })
+                                    @Html.TextBoxFor(m => m.ItemValue_Kip, new { @class = "form-control", @placeholder = "ເກັບເງີນປາຍທາງ ສະກຸນເງີນກີບ", @type = "number", @id ="kip" })
                                 </div>
                             </div>
                             <div class="row form-group">
@@ -89,7 +89,7 @@
                                     <label for="hf-email" class=" form-control-label font-weight-bold">ເກັບເງີນປາຍທາງ ສະກຸນເງີນບາດ</label>
                                 </div>
                                 <div class="col-12 col-md-9">
-                                    @Html.TextBoxFor(m => m.ItemValue_Baht, new { @class = "form-control", @placeholder = "ເກັບເງີນປາຍທາງ ສະກຸນເງີນບາດ", @type = "number" })
+                                    @Html.TextBoxFor(m => m.ItemValue_Baht, new { @class = "form-control", @placeholder = "ເກັບເງີນປາຍທາງ ສະກຸນເງີນບາດ", @type = "number", @id="baht" })
                                 </div>
                             </div>
                             <div class="row form-group">
@@ -97,14 +97,14 @@
                                     <label for="hf-email" class=" form-control-label font-weight-bold">ເກັບເງີນປາຍທາງ ສະກຸນເງີນໂດລ້າ</label>
                                 </div>
                                 <div class="col-12 col-md-9">
-                                    @Html.TextBoxFor(m => m.ItemValue_Dollar, new { @class = "form-control", @placeholder = "ເກັບເງີນປາຍທາງ ສະກຸນເງີນໂດລ້າ", @type = "number" })
+                                    @Html.TextBoxFor(m => m.ItemValue_Dollar, new { @class = "form-control", @placeholder = "ເກັບເງີນປາຍທາງ ສະກຸນເງີນໂດລ້າ", @type = "number" ,@id="dollar"})
                                 </div>
                             </div>
                         </div>
                     </form>
                 </div>
                 <div class="card-footer">
-                    <button type="button" onclick="Save()" class="btn btn-primary ">
+                    <button type="button" onclick="Save()" class="btn btn-danger ">
                         <i class="fa fa-dot-circle-o"></i> ບັນທຶກ
                     </button>
                     <button type="reset" onclick="Reset()" class="btn btn-danger ">
@@ -132,6 +132,84 @@
 </div>
 @section scripts{
     <script>
+        jQuery(document).ready(function () {
+            jQuery("#kip").keydown(function (e) {
+                // Allow: backspace, delete, tab, escape, enter and .
+                if (jQuery.inArray(e.keyCode, [46, 8, 9, 27, 13, 110, 190]) !== -1 ||
+                    // Allow: Ctrl/cmd+A
+                    (e.keyCode == 65 && (e.ctrlKey === true || e.metaKey === true)) ||
+                    // Allow: Ctrl/cmd+C
+                    (e.keyCode == 67 && (e.ctrlKey === true || e.metaKey === true)) ||
+                    // Allow: Ctrl/cmd+X
+                    (e.keyCode == 88 && (e.ctrlKey === true || e.metaKey === true)) ||
+                    // Allow: home, end, left, right
+                    (e.keyCode >= 35 && e.keyCode <= 39)) {
+                    // let it happen, don't do anything
+                    return;
+                }
+                // Ensure that it is a number and stop the keypress
+                if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) && (e.keyCode < 96 || e.keyCode > 105)) {
+                    e.preventDefault();
+                }
+            });
+            jQuery("#baht").keydown(function (e) {
+                // Allow: backspace, delete, tab, escape, enter and .
+                if (jQuery.inArray(e.keyCode, [46, 8, 9, 27, 13, 110, 190]) !== -1 ||
+                    // Allow: Ctrl/cmd+A
+                    (e.keyCode == 65 && (e.ctrlKey === true || e.metaKey === true)) ||
+                    // Allow: Ctrl/cmd+C
+                    (e.keyCode == 67 && (e.ctrlKey === true || e.metaKey === true)) ||
+                    // Allow: Ctrl/cmd+X
+                    (e.keyCode == 88 && (e.ctrlKey === true || e.metaKey === true)) ||
+                    // Allow: home, end, left, right
+                    (e.keyCode >= 35 && e.keyCode <= 39)) {
+                    // let it happen, don't do anything
+                    return;
+                }
+                // Ensure that it is a number and stop the keypress
+                if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) && (e.keyCode < 96 || e.keyCode > 105)) {
+                    e.preventDefault();
+                }
+            });
+            jQuery("#dollar").keydown(function (e) {
+                // Allow: backspace, delete, tab, escape, enter and .
+                if (jQuery.inArray(e.keyCode, [46, 8, 9, 27, 13, 110, 190]) !== -1 ||
+                    // Allow: Ctrl/cmd+A
+                    (e.keyCode == 65 && (e.ctrlKey === true || e.metaKey === true)) ||
+                    // Allow: Ctrl/cmd+C
+                    (e.keyCode == 67 && (e.ctrlKey === true || e.metaKey === true)) ||
+                    // Allow: Ctrl/cmd+X
+                    (e.keyCode == 88 && (e.ctrlKey === true || e.metaKey === true)) ||
+                    // Allow: home, end, left, right
+                    (e.keyCode >= 35 && e.keyCode <= 39)) {
+                    // let it happen, don't do anything
+                    return;
+                }
+                // Ensure that it is a number and stop the keypress
+                if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) && (e.keyCode < 96 || e.keyCode > 105)) {
+                    e.preventDefault();
+                }
+            });
+            jQuery("#phonenumber").keydown(function (e) {
+                // Allow: backspace, delete, tab, escape, enter and .
+                if (jQuery.inArray(e.keyCode, [46, 8, 9, 27, 13, 110, 190]) !== -1 ||
+                    // Allow: Ctrl/cmd+A
+                    (e.keyCode == 65 && (e.ctrlKey === true || e.metaKey === true)) ||
+                    // Allow: Ctrl/cmd+C
+                    (e.keyCode == 67 && (e.ctrlKey === true || e.metaKey === true)) ||
+                    // Allow: Ctrl/cmd+X
+                    (e.keyCode == 88 && (e.ctrlKey === true || e.metaKey === true)) ||
+                    // Allow: home, end, left, right
+                    (e.keyCode >= 35 && e.keyCode <= 39)) {
+                    // let it happen, don't do anything
+                    return;
+                }
+                // Ensure that it is a number and stop the keypress
+                if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) && (e.keyCode < 96 || e.keyCode > 105)) {
+                    e.preventDefault();
+                }
+            });
+        });
         function Reset() {
             jQuery("#itemForm").trigger("reset");
         }
@@ -145,14 +223,21 @@
         }
         function Save() {
             let formInfo = jQuery("#itemForm").serialize();
-            jQuery.ajax({
+                jQuery.ajax({
                 url: "/Customer/ItemsCreateUpdateSave",
                 data: formInfo,
                 datatype: "json",
                 type: "POST",
                 success: function (r) {
                     if (!isNaN(r)) {
-                        window.location = "@Url.Action("ItemDetail", "Customer")?id="+r;
+                        if (r===0) {
+                            jQuery("#popupmessage").html("ຂໍ້ມູນບໍ່ຖືກຕ້ອງ ກະລຸນາກວດໃຫມ່<br/>");
+                            jQuery('#modal1').modal("show");
+                        }
+                        else {
+                              window.location = "@Url.Action("ItemDetail", "Customer")?id="+r;
+                        }
+                      
                     }
                     else {
                         jQuery("#popupmessage").html("ຂໍ້ມູນບໍ່ຖືກຕ້ອງ ກະລຸນາກວດໃຫມ່<br/>"+r);
@@ -161,7 +246,7 @@
                    
                   
                 }
-            });
+            });        
         }
     </script>
 

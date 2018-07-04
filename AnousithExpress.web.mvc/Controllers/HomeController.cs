@@ -11,7 +11,7 @@ namespace AnousithExpress.web.mvc.Controllers
             data = d;
 
         }
-        public ActionResult Datainit()
+        public ActionResult DataInit()
         {
             bool s = data.InitiateData();
             return View(s);

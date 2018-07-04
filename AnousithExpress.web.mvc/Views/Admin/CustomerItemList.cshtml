@@ -37,7 +37,7 @@
                                     <div class="nav nav-tabs" id="nav-tab" role="tablist">
                                         <a class="nav-item nav-link" onclick="ConfirmItemList()" id="ConfirmItemTab" data-toggle="tab" href="#tabDataContent" role="tab">ສີນຄ້າຢືນຢັນໃຫມ່</a>
                                         <a class="nav-item nav-link" onclick="InProcessItemList()" id="InProcessItemTab" data-toggle="tab" href="#tabDataContent" role="tab">ສີນຄ້າກຳລັງດຳເນີນການ</a>
-                                        <a class="nav-item nav-link" onclick="TransportingItemList()" id="SendingItemTab" data-toggle="tab" href="#tabDataContent" role="tab">ສີນຄ້າກຳລັງເຂື່ອນຍ້າຍ</a>
+                                        <a class="nav-item nav-link" onclick="TransportingItemList()" id="SendingItemTab" data-toggle="tab" href="#tabDataContent" role="tab">ສີນຄ້າກຳລັງຂົນສົ່ງ</a>
                                         <a class="nav-item nav-link" onclick="SentItemList()" id="ProcessedItemTab" data-toggle="tab" href="#tabDataContent" role="tab">ສີນຄ້າສົ່ງແລ້ວ</a>
                                         <a class="nav-item nav-link" onclick="CustomerProfile()" id="CustomerProfileTab" data-toggle="tab" href="#tabDataContent" role="tab">ຂໍ້ມູນລຸກຄ້າ</a>
                                         <a class="nav-item nav-link" onclick="CustomerConsolidationList()" id="ConsolidateTab" data-toggle="tab" href="#tabDataContent" role="tab">ສັງລວມ</a>
@@ -58,7 +58,7 @@
         </div><!-- .animated -->
     </div><!-- .content -->
 </div>
-<div class="modal fade" id="modal3" role="dialog">
+<div class="modal fade" id="modal3" role="dialog" data-backdrop="static">
     <div class="modal-dialog  modal-lg">
         <div class="modal-content">
             <div class="modal-body">
@@ -72,7 +72,7 @@
         </div>
     </div>
 </div>
-<div class="modal fade" id="modal1" role="dialog">
+<div class="modal fade" id="modal1" role="dialog" data-backdrop="static">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-body">
@@ -86,7 +86,7 @@
         </div>
     </div>
 </div>
-<div class="modal fade" id="modal2" role="dialog">
+<div class="modal fade" id="modal2" role="dialog" data-backdrop="static">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-body">
@@ -219,6 +219,96 @@
                 },
                 error: function () {
                     alert("Server error");
+                }
+            });
+        }
+        function allocateItemDiaLog(id) {
+            let itemId = id;
+            jQuery.ajax({
+                url: "/Admin/AllocateItemFirstStage",
+                type: "GET",
+                data: { itemId: itemId },
+                datatype: "json",
+                success: function (r) {
+                    let htmlButton = '';
+                    htmlButton += '<button class="btn btn-warning btn-flat mb-1 w-25 mr-1 ml-1" onclick = "allocateitem()">ຈັດສີນຄ້າສົ່ງ</button>';
+                    htmlButton += '<button class="btn btn-danger btn-flat mb-1 w-25 mr-1 ml-1" onclick ="CannotContactCustomer()" data-dismiss="modal">ຕິດຕໍ່ບໍ່ໄດ້</button>';
+                    htmlButton += '<button class="btn btn-primary btn-flat mb-1 w-25 mr-1 ml-1" data-dismiss="modal">ອອກ</button>';
+                    jQuery("#content").html(r);
+                    jQuery("#modalButton").html(htmlButton);
+                    jQuery("#modal1").modal('show');
+                }
+            });
+        }
+        function allocateitem() {
+            jQuery.ajax({
+                url: "/Admin/AllocateItemFirstSageFunction",
+                data: {
+                    itemId: jQuery("#itemId").val(),
+                    routeId: jQuery("#routeId :selected").val(),
+                    timeId: jQuery("#timeId :selected").val(),
+                    dateToDeliver: jQuery("#dateToDeliver").val() || null,
+                    description: jQuery("#descriptiontext").val()
+                },
+                datatype: "json",
+                type: "POST",
+                success: function (r) {
+                    if (r.first === true && r.second === true) {
+                        let htmlButton = '';
+                        htmlButton += '<button class="btn btn-primary btn-flat mb-1 w-100 mr-1 ml-1" data-dismiss="modal" data-target ="#modal2">ອອກ</button>';
+                        jQuery("#content2").html("ສຳເລັດ");
+                        jQuery("#modalButton2").html(htmlButton);
+                        jQuery("#modal2").modal('show');
+                        jQuery("#modal1").modal("hide");
+                        inProcesstable.ajax.reload(null, false);
+                        try {
+                            itemTransferingTable.ajax.reload(null,false);
+                        } catch (e){
+                            console.log('item in transfer is not updated on this page');
+                        }
+                    }
+                    else {
+                        let htmlButton = '';
+                        htmlButton += '<button class="btn btn-primary btn-flat mb-1 w-100 mr-1 ml-1" data-dismiss="modal" data-target ="#modal2">ອອກ</button>';
+                        jQuery("#content2").html(r);
+                        jQuery("#modalButton2").html(htmlButton);
+                        jQuery("#modal2").modal('show');
+
+                    }
+                }
+            });
+        }
+        function CannotContactCustomer() {
+            jQuery.ajax({
+                url: "/Admin/CannotContactCustomer",
+                data: {
+                    itemId: jQuery("#itemId").val(),
+                    description: jQuery("#descriptiontext").val()
+                },
+                type: "POST",
+                datatype: "json",
+                success: function (r) {
+                    if (r.first === true && r.second === true) {
+                        let htmlButton = '';
+                        htmlButton += '<button class="btn btn-primary btn-flat mb-1 w-100 mr-1 ml-1" data-dismiss="modal" data-target ="#modal2">ອອກ</button>';
+                        jQuery("#content2").html("ສຳເລັດ");
+                        jQuery("#modalButton2").html(htmlButton);
+                        jQuery("#modal2").modal('show');
+                        jQuery("#modal1").modal("hide");
+                        inProcesstable.ajax.reload(null, false);
+                        try {
+                            itemTransferingTable.ajax.reload(null, false);
+                        } catch (e) {
+                            console.log('item in transfer is not updated on this page');
+                        }
+                    }
+                    else {
+                        let htmlButton = '';
+                        htmlButton += '<button class="btn btn-primary btn-flat mb-1 w-100 mr-1 ml-1" data-dismiss="modal" data-target ="#modal2">ອອກ</button>';
+                        jQuery("#content2").html(r.first + "" + r.second);
+                        jQuery("#modalButton2").html(htmlButton);
+                        jQuery("#modal2").modal('show');
+                    }
                 }
             });
         }

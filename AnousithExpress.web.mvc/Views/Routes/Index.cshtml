@@ -5,17 +5,14 @@
     Layout = "~/Views/Shared/_CustomerLayout.cshtml";
 }
 
-
-<div class="panel" style=" padding:20px;">
-    <div class="panel panel-heading"></div>
-    <div class="panel panel-body" style=" background-color:white;">
+<h2>ເສັ້ນທາງສົ່ງ</h2>
 
         <p>
-            <a class=" btn btn-primary" href="@Url.Action("Create","Routes")">ສ້າງລາຍການ</a>
+           @Html.ActionLink("ສ້າງໃຫມ່", "Create")
           
         </p>
         <table class="table table-bordered">
-            <tr>,
+            <tr>
                 <th>
                     <label>ເສັ້ນທາງ</label>
                 </th>
@@ -31,14 +28,11 @@
                 <td>
 
                     @Html.ActionLink("ແກ້ໄຂ", "Edit", new { id = item.Id }) |
-                    @Html.ActionLink("ລາຍການ", "Details", new { id = item.Id }) |
-                    @Html.ActionLink("ລືບ", "Delete", new { id = item.Id })
+                    @Html.ActionLink("ລາຍລະອຽດ", "Details", new { id = item.Id }) |
+    
                 </td>
             </tr>
     }
 
         </table>
 
-
-    </div>
-</div>

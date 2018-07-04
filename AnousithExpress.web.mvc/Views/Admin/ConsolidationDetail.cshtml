@@ -1,4 +1,4 @@
-﻿@model AnousithExpress.DataEntry.ViewModels.Customer.ConsolidationModel
+﻿@model AnousithExpress.DataEntry.ViewModels.Admin.ConsolidationModel
 <div class="col-md-12">
     <div class="card">
         <div class="card-header text-center">
@@ -9,35 +9,95 @@
                 <div class="col-md-12">
                     <table class="table">
                         <tr>
+                            <td colspan="4">
+                                @{
+                                    if (Model.ConsolidateDetail.needConfirm == true)
+                                    {
+                                        if (Model.ConsolidateDetail.isBalanceTransfer == true)
+                                        {
+                                            <strong id="isConfirm" class="text-danger">ໂອນເງີນໃຫ້ລຸກຄ້າແລ້ວ</strong>
+                                        }
+                                        else
+                                        {
+                                            <strong id="isConfirm" class="text-danger">ຢັງບໍ່ໄດ້ໂອນເງີນໃຫ້ລຸກຄ້າ</strong>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <strong id="isConfirm" class="text-danger">ບໍ່ຕ້ອງການການໂອນເງີນ</strong>
+                                    }
+
+
+                                }
+                            </td>
+                        </tr>
+                        <tr>
                             <td style="font-weight:bolder;">ລະຫັດລຸກຄ້າ</td>
-                            <td>@Model.Detail.CustomerID</td>
+                            <td>@Model.ConsolidateDetail.CustomerId</td>
                             <td style="font-weight:bolder;">ເລກສັງລວມ</td>
-                            <td>@Model.Detail.ConsolidateNumber</td>
+                            <td>@Model.ConsolidateDetail.ConsolidateNumber</td>
                         </tr>
                         <tr>
                             <td style="font-weight:bolder;">ຊື່ລຸກຄ້າ</td>
-                            <td>@Model.Detail.CustomerName</td>
+                            <td>@Model.ConsolidateDetail.CustomerName</td>
                             <td style="font-weight:bolder;">ວັນທີສັງລວມ</td>
-                            <td>@Model.Detail.ConsolidatedDate</td>
+                            <td>@Model.ConsolidateDetail.ConsolidatedDate</td>
                         </tr>
                         <tr>
                             <td style="font-weight:bolder;">ເບີໂທລຸກຄ້າ</td>
-                            <td>@Model.Detail.CustomerPhonenumber</td>
+                            <td>@Model.ConsolidateDetail.CustomerPhoneNumber</td>
                             <td style="font-weight:bolder;">ຄ່າບໍລິການ</td>
-                            <td>@Model.Detail.Fee</td>
+                            <td>@Model.ConsolidateDetail.Fee</td>
                         </tr>
                         <tr>
                             <td style="font-weight:bolder;">ຈຳນວນສີນຄ້າ</td>
-                            <td>@Model.Detail.AmountOfItem</td>
+                            <td>@Model.ConsolidateDetail.AmountOfItem</td>
                             <td style="font-weight:bolder;"></td>
-                            <td><button class="btn btn-danger w-100" onclick="DeleteConsolidation(@Model.Detail.Id)">ລືບ</button></td>
+                            <td>                           
+                                
+                            </td>
+                        </tr>
+                        <tr><td colspan="4">
+    <button class="btn btn-danger w-25" onclick="NeedCustomerConfirm(@Model.ConsolidateDetail.Id)">ຂໍການຢືນຢັນຈາກລຸກຄ້າ</button>
+    <button class="btn btn-danger w-25" onclick="UndoCustomerConfirm(@Model.ConsolidateDetail.Id)">ລືບຄຳຂໍການຢືນຢັນ</button>
+    <button class="btn btn-danger w-25" onclick="DeleteConsolidationConfirmation(@Model.ConsolidateDetail.Id)">ລືບລາຍການ</button>
+</td></tr>
+                    </table>
+                    <table class="table">
+                        <tr>
+                            <td style="font-weight:bolder;">ຈຳນວນເງີນຮັບມາເປັນກີບ</td>
+                            <td style="font-weight:bolder;">@Model.ConsolidateDetail.IncomingBalanceInKip</td>
+                            <td style="font-weight:bolder;">ຈຳນວນເງີນຮັບມາເປັນບາດ</td>
+                            <td style="font-weight:bolder;">@Model.ConsolidateDetail.IncomingBalanceInBaht</td>
+                        </tr>
+                        <tr>
+                            <td style="font-weight:bolder;">ຈຳນວນເງີນກີບທີ່ຕ້ອງໂອນໄຫ້ລຸກຄ້າ</td>
+                            <td style="font-weight:bolder;">@Model.ConsolidateDetail.BalanceToTransferInKip</td>
+                            <td style="font-weight:bolder;">ຈຳນວນເງີນຮັບມາເປັນໂດລາ</td>
+                            <td style="font-weight:bolder;">@Model.ConsolidateDetail.IncomingBalanceInDollar</td>
+                        </tr>
+                        <tr><td colspan="4">
+    @{
+        if (Model.ConsolidateDetail.isCustomerConfirmed == true)
+        {
+            <button class="btn btn-danger mb-2 w-100" onclick="confirmTransfer(@Model.ConsolidateDetail.Id)">ຢືນຢັນການໂອນເງີນ</button>
+
+            <button class="btn btn-danger w-100" onclick="UndoConfirmTransfer(@Model.ConsolidateDetail.Id)">ຢ້ອນກັບການຢືນຢັນການໂອນເງີນ</button>
+
+        }
+        else
+        {
+            <strong>ລຸກຄ້າຢັງບໍ່ທັນໄດ້ຢືນຢັນ</strong>
+        }
+    }
+</td>
                         </tr>
                     </table>
-
+                    
                 </div>
             </div>
             <div class="row">
-                <div class="col table-responsive">
+                <div class=" table-responsive">
                     <table class="table table-striped table-bordered table-hover table-condensed display responsive no-wrap" id="tableItemDetail" style="width:100%;white-space:nowrap;">
                         <thead>
                             <tr>
@@ -52,14 +112,14 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach (var item in Model.Items)
+                            @foreach (var item in Model.ConsolidationItems)
                             {
                                 <tr>
                                     <td width="auto">@item.TrackingNumber</td>
                                     <td width="auto">@item.ItemName</td>
                                     <td width="auto">@item.Status</td>
                                     <td width="auto">@item.ReceiverName</td>
-                                    <td width="auto">@item.ReceiverPhone</td>
+                                    <td width="auto">@item.ReceipverPhone</td>
                                     <td width="auto">@item.ReceiveDate</td>
                                     <td width="auto">@item.SentDate</td>
                                     <td>
@@ -90,8 +150,6 @@
                 </div>
             </div>
 
-
-
         </div>
     </div>
 </div>
@@ -103,13 +161,26 @@
 
                 </div>
             </div>
-            <div class="modal-footer">
-                <button class="btn btn-warning w-100" data-dismiss="modal" data-target="#modalConsolidated">ຕົກລົງ</button>
+            <div class="modal-footer" id="modalConsolidateFooter">
+                
             </div>
         </div>
     </div>
 </div>
+<div class="modal" id="modalConsolidatedSuccess">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="text-center" id="modalConsolidateSuccessMessage">
 
+                </div>
+            </div>
+            <div class="modal-footer" id="modalConsolidateSuccessFooter">
+
+            </div>
+        </div>
+    </div>
+</div>
 <script type="text/javascript">
         jQuery(document).ready(function () {
             jQuery("#tableItemDetail").DataTable({
@@ -125,6 +196,15 @@
                 .responsive.recalc();
 
     });
+    function DeleteConsolidationConfirmation(id) {
+        let consolidationId = id;
+        let htmlbutton = '';
+        htmlbutton += '<button class = "btn btn-danger w-25" onclick ="DeleteConsolidation(' + consolidationId + ')">ຕົກລົງລືບ</button>';
+        htmlbutton += '<button class = "btn btn-danger w-25" data-dismiss="modal" data-target="#modalConsolidated">ອອກ</button>';
+        jQuery("#modalConsolidateMessage").html("ທ່ານແນ່ໃຈແລ້ວບໍທີ່ຈະລືບລາຍການດັ່ງກ່າວ");
+        jQuery("#modalConsolidateFooter").html(htmlbutton);
+        jQuery("#modalConsolidated").modal("show");
+    }
     function DeleteConsolidation(id) {
         var consolidationId = id;
         jQuery.ajax({
@@ -133,9 +213,110 @@
             datatype: "json",
             type: "POST",
             success: function (r) {
-                jQuery("#modalConsolidateMessage").html("ສຳເລັດ");
-                jQuery("#modalConsolidated").modal("show");
+                jQuery("#modalConsolidateSuccessMessage").html("ສຳເລັດ");
+                jQuery("#modalConsolidated").modal("hide");
+                let htmlbutton = '';
+                htmlbutton += '<button class = "btn btn-danger w-25" data-dismiss="modal">ອອກ</button>';
+                jQuery("#modalConsolidateSuccessFooter").html(htmlbutton);
+                jQuery("#modalConsolidatedSuccess").modal("show");
                 consolidateTable.ajax.reload(null, false);
+            }
+        });
+    }
+    function NeedCustomerConfirm(id) {
+        let consolidationId = id;
+        jQuery.ajax({
+            url: "/Admin/NeedCustomerConfirm",
+            data: { consolidationId: consolidationId },
+            datatype: "json",
+            type: "POST",
+            success: function (r) {
+                if (r=== true) {
+                    let htmlbutton = '';
+                    htmlbutton += '<button class = "btn btn-danger w-25" data-dismiss="modal" data-target="#modalConsolidated">ອອກ</button>';
+                    jQuery("#modalConsolidateMessage").html("ສົ່ງຄຳຂໍສຳເລັດ");
+                    jQuery("#modalConsolidateFooter").html(htmlbutton);
+                    jQuery("#modalConsolidated").modal("show");
+                    jQuery("#isConfirm").html("ຢັງບໍ່ໄດ້ໂອນເງີນໃຫ້ລຸກຄ້າ");
+                }
+                else {
+                    let htmlbutton = '';
+                    htmlbutton += '<button class = "btn btn-danger w-25" data-dismiss="modal" data-target="#modalConsolidated">ອອກ</button>';
+                    jQuery("#modalConsolidateMessage").html("ບໍ່ສຳເລັດ");
+                    jQuery("#modalConsolidateFooter").html(htmlbutton);
+                    jQuery("#modalConsolidated").modal("show");
+                }
+               
+            
+            },
+            error: function () {
+                alert("Server error");
+            }
+        });
+    }
+    function UndoCustomerConfirm(id) {
+        let consolidationId = id;
+        jQuery.ajax({
+            url: "/Admin/UndoCustomerConfirm",
+            data: { consolidationId: consolidationId },
+            datatype: "json",
+            type: "POST",
+            success: function (r) {
+                if (r === true) {
+                    let htmlbutton = '';
+                    htmlbutton += '<button class = "btn btn-danger w-25" data-dismiss="modal" data-target="#modalConsolidated">ອອກ</button>';
+                    jQuery("#modalConsolidateMessage").html("ຢຸດຕິການຂໍຄຳຢືນຢັນສຳເລັດ");
+                    jQuery("#modalConsolidateFooter").html(htmlbutton);
+                    jQuery("#modalConsolidated").modal("show");
+                    jQuery("#isConfirm").html("ບໍ່ຕ້ອງການການໂອນເງີນ");
+                }
+                else {
+                    let htmlbutton = '';
+                    htmlbutton += '<button class = "btn btn-danger w-25" data-dismiss="modal" data-target="#modalConsolidated">ອອກ</button>';
+                    jQuery("#modalConsolidateMessage").html("ບໍ່ສຳເລັດ");
+                    jQuery("#modalConsolidateFooter").html(htmlbutton);
+                    jQuery("#modalConsolidated").modal("show");
+                }
+
+
+            },
+            error: function () {
+                alert("Server error");
+            }
+        });
+    }
+    function confirmTransfer(id) {
+        var consolidationId = id;
+        jQuery.ajax({
+            url: "/Admin/ConfirmTransferBalance",
+            data: { consolidationId: consolidationId },
+            datatype: "json",
+            type: "POST",
+            success: function (r) {
+                jQuery("#modalConsolidateSuccessMessage").html("ສຳເລັດ");       
+                let htmlbutton = '';
+                htmlbutton += '<button class = "btn btn-danger w-25" data-dismiss="modal" data-target="#modalConsolidatedSuccess">ອອກ</button>';
+                jQuery("#modalConsolidateSuccessFooter").html(htmlbutton);
+                jQuery("#modalConsolidatedSuccess").modal("show");
+                jQuery("#isConfirm").html("ໂອນເງີນໃຫ້ລຸກຄ້າແລ້ວ");
+            }
+        });
+    }
+    function UndoConfirmTransfer(id)
+    {
+        var consolidationId = id;
+        jQuery.ajax({
+            url: "/Admin/UndoConfirmTransferBalance",
+            data: { consolidationId: consolidationId },
+            datatype: "json",
+            type: "POST",
+            success: function (r) {
+                jQuery("#modalConsolidateSuccessMessage").html("ສຳເລັດ");
+                let htmlbutton = '';
+                htmlbutton += '<button class = "btn btn-danger w-25" data-dismiss="modal" data-target="#modalConsolidatedSuccess">ອອກ</button>';
+                jQuery("#modalConsolidateSuccessFooter").html(htmlbutton);
+                jQuery("#modalConsolidatedSuccess").modal("show");
+                jQuery("#isConfirm").html("ຢັງບໍ່ໄດ້ໂອນເງີນໃຫ້ລຸກຄ້າ");
             }
         });
     }

@@ -1,5 +1,5 @@
 ﻿using AnousithExpress.DataEntry.Models;
-using AnousithExpress.DataEntry.ViewModels.Customer;
+using AnousithExpress.DataEntry.ViewModels.Admin;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
@@ -37,8 +37,15 @@ namespace AnousithExpress.DataEntry.Utility
                     ConsolidatedDate = r.ConsolidatedDate.ToString("dd-MM-yyyy"),
                     ConsolidateNumber = r.ConsolidateNumber,
                     CustomerName = r.Customer.Name,
-                    CustomerID = r.Customer.Id,
-                    CustomerPhonenumber = r.Customer.Phonenumber,
+                    CustomerId = r.Customer.Id,
+                    IncomingBalanceInBaht = r.IncomingBalanceInBaht,
+                    IncomingBalanceInKip = r.IncomingBalanceInKip,
+                    IncomingBalanceInDollar = r.IncomingBalanceInDollar,
+                    isBalanceTransfer = r.isBalanceTransfer,
+                    isCustomerConfirmed = r.isCustomerConfirmed,
+                    needConfirm = r.needConfirm,
+                    BalanceToTransferInKip = r.BalanceToTransfer,
+                    CustomerPhoneNumber = r.Customer.Phonenumber,
                     Fee = r.Fee
                 }).ToList();
             }
@@ -59,9 +66,16 @@ namespace AnousithExpress.DataEntry.Utility
                     ConsolidatedDate = source.ConsolidatedDate.ToString("dd-MM-yyyy"),
                     ConsolidateNumber = source.ConsolidateNumber,
                     CustomerName = source.Customer.Name,
-                    CustomerID = source.Customer.Id,
-                    CustomerPhonenumber = source.Customer.Phonenumber,
-                    Fee = source.Fee
+                    CustomerId = source.Customer.Id,
+                    CustomerPhoneNumber = source.Customer.Phonenumber,
+                    IncomingBalanceInBaht = source.IncomingBalanceInBaht,
+                    IncomingBalanceInKip = source.IncomingBalanceInKip,
+                    IncomingBalanceInDollar = source.IncomingBalanceInDollar,
+                    isBalanceTransfer = source.isBalanceTransfer,
+                    isCustomerConfirmed = source.isCustomerConfirmed,
+                    Fee = source.Fee,
+                    BalanceToTransferInKip = source.BalanceToTransfer,
+                    needConfirm = source.needConfirm
                 };
             }
             else
@@ -69,42 +83,6 @@ namespace AnousithExpress.DataEntry.Utility
                 return null;
             }
         }
-        public List<ConsolidationItemModel> AssignConsolidationItemsList(List<TbConsolidatedItems> consolidation)
-        {
-            if (consolidation != null)
-            {
-                return consolidation.Select(r => new ConsolidationItemModel
-                {
-                    Id = r.Id,
-                    ConsolidationId = r.Consolidator.Id,
-                    ItemsId = r.Items.Id,
-                    ConsolidationNumber = r.Consolidator.ConsolidateNumber,
-                    TrackingNumber = r.Items.TrackingNumber,
-                    Status = r.Items.Status.Status,
-                    CustomerId = r.Items.Customer.Id,
-                    CustomerName = r.Items.Customer.Name,
-                    CustomerPhonenumber = r.Items.Customer.Phonenumber,
-                    Description = r.Items.Descripttion,
-                    isDeleted = r.Items.isDeleted,
-                    ItemName = r.Items.ItemName,
-                    ItemValue_Baht = r.Items.ItemValue_Baht,
-                    ItemValue_Dollar = r.Items.ItemValue_Dollar,
-                    ItemValue_Kip = r.Items.ItemValue_Kip,
-                    ConfrimDate = r.Items.ConfrimDate == null ? "" : r.Items.ConfrimDate?.ToString("dd-MM-yyyy"),
-                    CreatedDate = r.Items.CreatedDate == null ? "" : r.Items.CreatedDate?.ToString("dd-MM-yyyy"),
-                    ReceiveDate = r.Items.ReceiveDate == null ? "" : r.Items.ReceiveDate?.ToString("dd-MM-yyyy"),
-                    SendingDate = r.Items.SendingDate == null ? "" : r.Items.SendingDate?.ToString("dd-MM-yyyy"),
-                    SentDate = r.Items.SentDate == null ? "" : r.Items.SentDate?.ToString("dd-MM-yyyy"),
-                    ReceiverAddress = r.Items.ReceiverAddress,
-                    ReceiverName = r.Items.ReceiverName,
-                    ReceiverPhone = r.Items.ReceipverPhone
-                }).ToList();
-            }
-            else
-            {
-                return new List<ConsolidationItemModel>();
-            }
 
-        }
     }
 }

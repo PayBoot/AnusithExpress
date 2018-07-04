@@ -113,7 +113,7 @@
 </div>
 @section scripts{
     <script type="text/javascript" language="javascript">
-        let table;
+        var sentItemTable;
         jQuery(document).ready(function () {
             itemTable();
             jQuery('input[name="dateToDeliver"]').datepicker({
@@ -132,7 +132,7 @@
         }
 
         function itemTable() {
-            table = jQuery("#itemDataTable").DataTable({
+            sentItemTable = jQuery("#itemDataTable").DataTable({
                 serverSide: true,
                 responsive: true,
                 paging: true,
@@ -153,7 +153,7 @@
                     }
                 },
                 rowCallback: function (row, data) {
-                    if (data.StatusId==6 || data.StatusId == 8) {
+                    if (data.StatusId==6 || data.StatusId == 8 || data.StatusId == 10) {
                         jQuery("td", row).css('background-color','#98FB98');
                     }
                 },
@@ -162,12 +162,8 @@
                         targets: [0, 1, 2, 3, 4, 5, 6],
                         orderable: false
                     },
-
                 ],
-                columns: [
-
-
-                    
+                columns: [                   
                     { data: "TrackingNumber", name: "TrackingNumber" }, 
                     
                     { data: "ItemName", name: "ItemName" },
@@ -198,7 +194,7 @@
                     },
                     {
                         data: "ItemId", render: function (data, type, full, meta) {
-                            if (full.StatusId !== 6 && full.StatusId !== 8) {
+                            if (full.StatusId !== 6 && full.StatusId !== 8 && full.StatusId!==10) {
                                 return '<button class="btn btn-warning" onclick="SendItemDialog('+ data +','+ full.StatusId +')" style="align:center;">ກົດສົ່ງເຄື່ອງ</button>';
                             }
                             else {
@@ -212,7 +208,7 @@
             });
         }
         function searchItems() {
-            table.ajax.reload(false, null);
+            sentItemTable.ajax.reload(false, null);
         }
 
         function SendItemDialog(id, status) {
@@ -224,12 +220,12 @@
                 type: "POST",
                 datatype: "json",
                 success: function (r) {
-                    let htmlButton = ' <button class="btn btn-warning btn-flat mb-2 w-75" onclick="SendItemConfirmDialog('+ itemId +','+ statusId +')" >ລູກຄ້າກົດຮັບເຄື່ອງ</button>';
-                    htmlButton += ' <button class="btn btn-primary btn-flat mb-1 w-75" data-dismiss="modal" data-target="#modal1">ອອກ</button>';
+                    let htmlButton = ' <button class="btn btn-danger btn-flat mb-2 w-75" onclick="SendItemConfirmDialog('+ itemId +','+ statusId +')" >ລູກຄ້າກົດຮັບເຄື່ອງ</button>';
+                    htmlButton += ' <button class="btn btn-danger btn-flat mb-1 w-75" onclick="UnWantedItemDialog('+ itemId +')">ລຸກຄ້າບໍ່ຮັບເຄື່ອງ</button>';
+                    htmlButton += ' <button class="btn btn-danger btn-flat mb-1 w-75" data-dismiss="modal" data-target="#modal1">ອອກ</button>';
                     jQuery("#content").html(r);
                     jQuery("#modalButton").html(htmlButton);
-                    jQuery("#modal1").modal("show");
-    
+                    jQuery("#modal1").modal("show");   
                 },
                 error: function () {
                     alert("Server error");
@@ -239,9 +235,14 @@
         function SendItemConfirmDialog(id, status) {
             let itemId = id;
             let statusId = status;
+            let kip = jQuery("#kiptext").val() || 0;
+            let baht = jQuery("#bahttext").val() || 0;
+            let dollar = jQuery("#dollarval").val() ||0;
+            
+           
             let htmlButton = ' <button class="btn btn-warning btn-flat mb-2 w-75" onclick="UpdateItemSent(' + itemId + ',' + statusId +')">ຢືນຢັນ</button>';
             htmlButton += ' <button class="btn btn-primary btn-flat mb-1 w-75" data-dismiss="modal" data-target="#modal2">ອອກ</button>';
-            jQuery("#messageOutput").html("ກະລຸນາກົດຍືນຢັນ");
+            jQuery("#messageOutput").html("ກະລຸນາກົດຍືນຢັນ<br/> ຈຳນວນເງີນທີ່ທ່ານຈ່າຍໃຫ້ພະນັກງານແມ່ນ <br/> "+ kip + "ກີບ<br/>" + baht +"ບາດ<br/>"+dollar+"ໂດລ້າ");
             jQuery("#modalButton2").html(htmlButton);
             jQuery("#modal2").modal("show");         
         }
@@ -250,7 +251,14 @@
             let statusId = status;
             jQuery.ajax({
                 url: "/Delivery/SentItem",
-                data: { itemId: itemId, statusId: statusId },
+                data: {
+                    itemId: itemId,
+                    statusId: statusId,
+                    kip: jQuery("#kiptext").val(),
+                    baht: jQuery("#bahttext").val(),
+                    dollar: jQuery("#dollarval").val()
+
+                },
                 type: "POST",
                 datatype: "json",
                 success: function (r) {
@@ -258,10 +266,44 @@
                         let htmlButton = ' <button class="btn btn-primary btn-flat mb-1 w-75" data-dismiss="modal" data-target="#modal2">ອອກ</button>';
                         jQuery("#modal1").modal("hide"); 
                         jQuery("#modal2").modal("hide"); 
-                        table.ajax.reload(null,false);
+                        sentItemTable.ajax.reload(null,false);
                         jQuery("#messageOutput").html("ສຳເລັດ");            
                         jQuery("#modalButton2").html(htmlButton);
                         jQuery("#modal2").modal("show"); 
+                    }
+                }
+            });
+        }
+        function UnWantedItemDialog(id) {
+            let itemId = id;
+            let statusId = status;
+            let htmlButton = ' <button class="btn btn-warning btn-flat mb-2 w-75" onclick="UpdateItemUnwanted(' + itemId + ')">ຢືນຢັນ</button>';
+            htmlButton += ' <button class="btn btn-primary btn-flat mb-1 w-75" data-dismiss="modal" data-target="#modal2">ອອກ</button>';
+            jQuery("#messageOutput").html("ກະລຸນາກົດຍືນຢັນ");
+            jQuery("#modalButton2").html(htmlButton);
+            jQuery("#modal2").modal("show");    
+        }
+        function UpdateItemUnwanted(id) {
+            let itemId = id;
+            jQuery.ajax({
+                url: "/Delivery/UnWantedItem",
+                data: {
+                    itemId: itemId,
+                    kip: jQuery("#kiptext").val(),
+                    baht: jQuery("#bahttext").val(),
+                    dollar: jQuery("#dollarval").val()
+                },
+                type: "POST",
+                datatype: "json",
+                success: function (r) {
+                    if (r === true) {
+                        let htmlButton = ' <button class="btn btn-primary btn-flat mb-1 w-75" data-dismiss="modal" data-target="#modal2">ອອກ</button>';
+                        jQuery("#modal1").modal("hide");
+                        jQuery("#modal2").modal("hide");
+                        sentItemTable.ajax.reload(null, false);
+                        jQuery("#messageOutput").html("ສຳເລັດ");
+                        jQuery("#modalButton2").html(htmlButton);
+                        jQuery("#modal2").modal("show");
                     }
                 }
             });

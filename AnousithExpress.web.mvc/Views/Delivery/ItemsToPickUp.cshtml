@@ -40,6 +40,7 @@
                                     <label>ລະຫັດລູກຄ້າ</label>
                                     <input type="text" name="customerId" class="w-50" />
                                     <input type="button" class="btn btn-sm btn-warning" onclick="searchItems()" name="searchForItem" value="ຄົ້ນຫາ" />
+                                    
                                 </div>
                             </div>
                             <div class="table-responsive">
@@ -132,6 +133,7 @@
                     type: "POST",
                     datatype: "json",
                     data: function (d) {
+        
                         d.customerId = jQuery("input[name='customerId']").val() || 0
                     }
                 },

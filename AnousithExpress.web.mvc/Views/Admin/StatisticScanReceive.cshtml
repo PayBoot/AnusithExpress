@@ -1,0 +1,216 @@
+﻿
+@{
+    ViewBag.Title = "CustomerItemList";
+    Layout = "~/Views/Shared/_CustomerLayout.cshtml";
+}
+@model AnousithExpress.DataEntry.ViewModels.Customer.ItemsModel
+
+<div class="breadcrumbs">
+    <div class="col-sm-4">
+        <div class="page-header float-left">
+            <div class="page-title">
+
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-8">
+        <div class="page-header float-right">
+            <div class="page-title">
+                <ol class="breadcrumb text-right">
+                    <li><a href="@Url.Action("Index","Admin")">ຫນ້າຫລັກ</a></li>
+                    <li class="Active">ສະທິຕິສີນຄ້າຂາເຂົ້າ</li>
+
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container" id="containerResize">
+    <div class="content mt-3">
+        <div class="animated fadeIn">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card">
+
+                        <div class="card-body ">
+                            <div class="row">
+                                <div class="col-6">
+                                    <label>ຈາກວັນທີສົ່ງ</label>
+                                    @{
+                                        if (ViewBag.fromDate != null)
+                                        {
+                                            <input type="text" value="@ViewBag.fromDate" placeholder="ວັນ-ເດືອນ-ປີ" class="w-100" name="fromDate" readonly="readonly" onchange="searchByDate(this)" />
+
+                                        }
+                                        else
+                                        {
+                                            <input type="text" placeholder="ວັນ-ເດືອນ-ປີ" class="w-100" name="fromDate" readonly="readonly" onchange="searchByDate(this)" />
+
+                                        }
+
+                                    }
+
+
+                                </div>
+                                <div class="col-6 horizontal">
+
+                                    <label>ຫາວັນທີສົ່ງ</label>
+                                    @{
+                                        if (ViewBag.toDate != null)
+                                        {
+                                            <input type="text" value="@ViewBag.toDate" placeholder="ວັນ-ເດືອນ-ປີ" class="w-100" name="toDate" readonly="readonly" onchange="searchByDate(this)" />
+
+                                        }
+                                        else
+                                        {
+                                            <input type="text" placeholder="ວັນ-ເດືອນ-ປີ" class="w-100" name="toDate" readonly="readonly" onchange="searchByDate(this)" />
+
+                                        }
+                                    }
+
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col text-center" style="vertical-align:middle;">
+                                    <table class="table" style="width:75%;margin-left:auto;margin-right:auto">
+                                        <tr>
+                                            <td style="width:50%;">ສີນຄ້າຮັບມາທັງຫມົດ</td>
+                                            <td style="width:50%;" id="totalNumberReceive"></td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="table-responsive">
+                                <table id="statisticItemReceiveDatatabe" class="table table-striped table-bordered" style="width:100%;white-space:nowrap;">
+                                    <thead>
+                                        <tr>
+                                            <th class="control">ເລກຕິດຕາມ</th>
+                                            <th class="control">ປະເພດສີນຄ້າ</th>
+                                            <th class="control">ສະຖານະ</th>
+                                            <th>ຊື່ຜູ້ຮັບ</th>
+                                            <th>ເບີໂທຜູ້ຮັບ</th>
+                                            <th>ທີ່ຢູ່ຜູ້ຮັບ</th>
+                                            <th>ມື້ຮັບສີນຄ້າ</th>
+                                            <th>ມື້ມອບເຄື່ອງ</th>
+                                            <th>ເກັບເງິນປາຍທາງ</th>
+                                            <th class="control">ຝັງຊັ້ນ</th>
+                                        </tr>
+                                    </thead>
+
+                                </table>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div><!-- .animated -->
+    </div>
+</div>
+@section scripts{
+    <script>
+    var statisticItemReceiveTable;
+    jQuery(document).ready(
+        function () {
+
+            itemScanInCount();
+            statisticItemReceiveDatatable();
+            jQuery("input[name='fromDate']").datepicker({
+                language: 'la'
+            });
+
+            jQuery("input[name='toDate']").datepicker({
+                language: 'la'
+            });
+        }
+    );
+
+    function statisticItemReceiveDatatable() {
+        statisticItemReceiveTable = jQuery("#statisticItemReceiveDatatabe").DataTable({
+            serverSide: true,
+            responsive: true,
+            searching: false,
+            language: LaoLangage,
+            order: [[1, 'desc']],
+            ajax: {
+                url: "/Admin/StatisticScanReceiveTable",
+                type: "POST",
+                datatype: "json",
+                data: function (d) {
+                    d.fromDate = jQuery("input[name='fromDate']").val() || null,
+                    d.toDate = jQuery("input[name='toDate']").val() || null
+                }
+            },
+            columns: [
+                { data: "TrackingNumber", name: "TrackingNumber" },
+                { data: "ItemName", name: "ItemName" },
+                { data: "Status", name: "Status" },
+                { data: "ReceiverName", name: "ReceiverName" },
+                { data: "ReceipverPhone", name: "ReceipverPhone" },
+                { data: "ReceiverAddress", name: "ReceiverAddress" },
+                { data: "ReceiveDate", name: "ReceiveDate" },
+                { data: "SentDate", name: "SentDate" },
+                {
+                    data: "Id", render: function (data, type, full, meta) {
+                        let html = '';
+                        if (full.ItemValue_Kip !== null) {
+                            html += full.ItemValue_Kip + "ກີບ<br/>";
+                        }
+                        if (full.ItemValue_Baht !== null) {
+                            html += full.ItemValue_Baht + "ບາດ<br/>";
+                        }
+                        if (full.ItemValue_Dollar !== null) {
+                            html += full.ItemValue_Dollar + "ໂດລ້າ";
+                        }
+                        if (full.ItemValue_Kip === null && full.ItemValue_Baht === null && full.ItemValue_Dollar === null) {
+                            html = 'ບໍ່ມີ';
+                        }
+                        return '<p>' + html + '</p>';
+                    }
+                },
+                {
+                    data: "Id", render: function (data, type, full, meta) {
+                        let html = '';
+                        html += '<button type="button" onclick="itemDetail(' + data + ')" class="btn btn-flat btn-warning btn-sm">ລາຍລະອຽດ</button>';
+                        html += '';
+
+
+                        return html;
+                    }
+                }
+            ]
+        });
+    }
+    function itemScanInCount() {
+        jQuery.ajax({
+            url: "/Admin/StatisticScanReceiveCount",
+            type: "POST",
+            data: {
+                fromDate: jQuery("input[name='fromDate']").val() || null,
+                toDate: jQuery("input[name='toDate']").val() || null
+            },
+            datatype: "json",
+            success: function (r) {
+                jQuery("#totalNumberReceive").html(r+ " ອັນ");
+            },
+            error: function () {
+                alert("Server error");
+            }
+        });
+    }
+    function searchByDate(source) {
+        statisticItemReceiveTable.ajax.reload(null, false);
+        jQuery(source).datepicker('hide');
+        itemScanInCount();
+    }
+
+    function itemDetail(id) {
+
+        window.location = "@Url.Action("ItemsDetail","Admin")?itemId="+id;
+
+    }
+
+    </script>
+}
+

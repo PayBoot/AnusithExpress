@@ -5,10 +5,10 @@
     Layout = "~/Views/Shared/_CustomerLayout.cshtml";
 }
 
-<h2>Index</h2>
+<h2>ເວລາສົ່ງ</h2>
 
 <p>
-    @Html.ActionLink("Create New", "Create")
+    @Html.ActionLink("ສ້າງໃຫມ່", "Create")
 </p>
 <table class="table">
     <tr>
@@ -24,9 +24,9 @@
             @Html.DisplayFor(modelItem => item.Time)
         </td>
         <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |
-            @Html.ActionLink("Details", "Details", new { id=item.Id }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.Id })
+            @Html.ActionLink("ປ່ຽນແປງ", "Edit", new { id=item.Id }) |
+            @Html.ActionLink("ລາຍລະອຽດ", "Details", new { id=item.Id }) |
+
         </td>
     </tr>
 }

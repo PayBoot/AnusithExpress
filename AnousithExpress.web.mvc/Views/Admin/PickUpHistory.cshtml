@@ -1,0 +1,191 @@
+﻿@{
+    ViewBag.Title = "CustomerItemList";
+    Layout = "~/Views/Shared/_CustomerLayout.cshtml";
+}
+
+<div class="breadcrumbs">
+    <div class="col-sm-4">
+        <div class="page-header float-left">
+            <div class="page-title">
+
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-8">
+        <div class="page-header float-right">
+            <div class="page-title">
+                <ol class="breadcrumb text-right">
+                    <li><a href="@Url.Action("Index","Admin")">ຫນ້າຫລັກ</a></li>
+                    <li class="Active">ສະທິຕິສີນຄ້າຂາເຂົ້າ</li>
+
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container" id="containerResize">
+    <div class="content mt-3">
+        <div class="animated fadeIn">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card">
+
+                        <div class="card-body ">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <label>ຈາກວັນທີສົ່ງ</label>
+                                    @{
+                                        if (ViewBag.fromDate != null)
+                                        {
+                                            <input type="text" value="@ViewBag.fromDate" placeholder="ວັນ-ເດືອນ-ປີ" class="w-100 form-control" name="fromDate" readonly="readonly" onchange="searchByDate(this)" />
+
+                                        }
+                                        else
+                                        {
+                                            <input type="text" placeholder="ວັນ-ເດືອນ-ປີ" class="w-100 form-control" name="fromDate" readonly="readonly" onchange="searchByDate(this)" />
+
+                                        }
+
+                                    }
+
+
+                                </div>
+                                <div class="col-md-4">
+
+                                    <label>ຫາວັນທີສົ່ງ</label>
+                                    @{
+                                        if (ViewBag.toDate != null)
+                                        {
+                                            <input type="text" value="@ViewBag.toDate" placeholder="ວັນ-ເດືອນ-ປີ" class="w-100 form-control" name="toDate" readonly="readonly" onchange="searchByDate(this)" />
+
+                                        }
+                                        else
+                                        {
+                                            <input type="text" placeholder="ວັນ-ເດືອນ-ປີ" class="w-100 form-control" name="toDate" readonly="readonly" onchange="searchByDate(this)" />
+
+                                        }
+                                    }
+
+                                </div>
+                                <div class="col-md-4">
+                                    <label>ພະນັກງານຮັບສົ່ງ</label>
+                                    @Html.DropDownList("deliveryId", ViewBag.DeliveryMan as SelectList, "ທັງຫມົດ", new { @id = "deliveryId", @class = "form-control", @onchange = "searchByDelivery()" })
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col text-center" style="vertical-align:middle;">
+                                    <table class="table" style="width:75%;margin-left:auto;margin-right:auto">
+                                        <tr>
+                                            <td style="width:50%;">ສີນຄ້າຮັບທັງຫມົດ</td>
+                                            <td style="width:50%;" id="totalNumberReceive"></td>
+                                        </tr>
+
+                                    </table>
+                                   
+                                </div>
+                            </div>
+                            <div class="table-responsive">
+                                <table id="PickUpHistoryTable" class="table table-striped table-bordered" style="width:100%;white-space:nowrap;">
+                                    <thead>
+                                        <tr>
+                                            <th class="control">ເລກຕິດຕາມ</th>
+                                            <th class="control">ປະເພດສີນຄ້າ</th>
+                                            <th class="control">ສະຖານະ</th>
+                                            <th class="control">ມື້ພະນັກງານຮັບເຄື່ອງ</th>                                           
+                                            <th class="control">ຊື່ພະນັກງານຜູ້ຮັບ</th>                                           
+                                        </tr>
+                                    </thead>
+
+                                </table>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div><!-- .animated -->
+    </div>
+</div>
+@section scripts{
+    <script>
+    var PickUpHistoryTable;
+    jQuery(document).ready(
+        function () {
+
+            itemPickUpHistoryCount();
+            PickUpHistoryDataTable();
+            jQuery("input[name='fromDate']").datepicker({
+                language: 'la'
+            });
+
+            jQuery("input[name='toDate']").datepicker({
+                language: 'la'
+            });
+        }
+    );
+
+    function PickUpHistoryDataTable() {
+        PickUpHistoryTable = jQuery("#PickUpHistoryTable").DataTable({
+            serverSide: true,
+            responsive: false,
+            searching: false,
+            language: LaoLangage,
+            order: [[1, 'desc']],
+            ajax: {
+                url: "/Admin/PickUpHistoryTable",
+                type: "POST",
+                datatype: "json",
+                data: function (d) {
+                    d.fromDate = jQuery("input[name='fromDate']").val() || null,
+                        d.toDate = jQuery("input[name='toDate']").val() || null,
+                        d.deliveryId = jQuery("#deliveryId").val() || null
+                }
+            },
+            columns: [
+                { data: "TrackingNumber", name: "TrackingNumber" },
+                { data: "ItemName", name: "ItemName" },
+                { data: "ItemStatus", name: "ItemStatus" },
+                { data: "AssignDate", name: "AssignDate" },
+                { data: "DeliveryManName", name: "DeliveryManName" }
+     
+            ]
+        });
+    }
+    function itemPickUpHistoryCount() {
+        jQuery.ajax({
+            url: "/Admin/PickUpHistoryCount",
+            type: "POST",
+            data: {
+                fromDate: jQuery("input[name='fromDate']").val() || null,
+                toDate: jQuery("input[name='toDate']").val() || null,
+                deliveryId : jQuery("#deliveryId").val() || null
+            },
+            datatype: "json",
+            success: function (r) {
+                jQuery("#totalNumberReceive").html(r + " ອັນ");             
+            },
+            error: function () {
+                alert("Server error");
+            }
+        });
+    }
+    function searchByDate(source) {
+        PickUpHistoryTable.ajax.reload(null, false);
+        jQuery(source).datepicker('hide');
+        itemPickUpHistoryCount();
+    }
+    function searchByDelivery() {
+        PickUpHistoryTable.ajax.reload(null, false);
+        itemPickUpHistoryCount();
+    }
+    function itemDetail(id) {
+
+        window.location = "@Url.Action("ItemsDetail","Admin")?itemId="+id;
+
+    }
+
+    </script>
+}
+

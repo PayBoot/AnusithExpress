@@ -1,71 +1,31 @@
-﻿@model List<AnousithExpress.DataEntry.ViewModels.Customer.ItemsModel>
-
+﻿
 <div class="animated fadeIn">
     <div class="table-responsive">
-        <table id="itemConfirmTable" class="table  table-hover  " style="width:100%;white-space:nowrap;">
+        <table id="itemTransferingTable" class="table  table-hover  " style="width:100%;white-space:nowrap;">
             <thead>
                 <tr>
-
-                    <th class="control">ປະເພດສີນຄ້າ</th>
                     <th class="control">ເລກຕິດຕາມ</th>
+                    <th class="control">ປະເພດສີນຄ້າ</th>
+
                     <th class="control">ສະຖານະ</th>
                     <th class="control">ຊື່ຜູ້ຮັບ</th>
                     <th class="control">ເບີໂທຜູ້ຮັບ</th>
                     <th class="control">ທີ່ຢູ່ຜູ້ຮັບ</th>
-                    <th class="control">ປລີ້ນບາໂຄດ</th>
-                    <th class="none">ມື້ພະນັກງານຮັບສີນຄ້າ</th>
+                    <th class="none">ມື້ພະນັກງານຮັບສີນຄ້າ</th>            
                     <th class="none">ມື້ພະນັກງານສົ່ງສີນຄ້າ</th>
                     <th class="none">ເກັບເງິນປາຍທາງ</th>
-                    <th></th>
+                    <th class="none">ລາຍລະອຽດ</th>
+                    <th class="none"></th>
+
                 </tr>
             </thead>
-            <tbody>
-                @foreach (var item in Model)
-                {
-                <tr>
-                    <td>@item.ItemName</td>
-                    <td>@item.TrackingNumber</td>
-                    <td>@item.Status</td>
-                    <td>@item.ReceiverName</td>
-                    <td>@item.ReceipverPhone</td>
-                    <td>@item.ReceiverAddress</td>
-                    <td>print</td>
-                    <td><button class="btn btn-warning" onclick="barcodeDialog(@item.Id)">ປລີ້ນບາໂຄດ</button></td>
-                    <td>@item.ReceiveDate</td>
-                    <td>@item.SendingDate</td>
-                    <td>
-                        @{
-                            <b>: </b>
-                            if (item.ItemValue_Kip != null)
-                            {
-                                <b>@item.ItemValue_Kip ກີບ </b>
-                            }
-                            if (item.ItemValue_Baht != null)
-                            {
-                                <b>@item.ItemValue_Baht ບາດ </b>
-                            }
-                            if (item.ItemValue_Dollar != null)
-                            {
-                                <b>@item.ItemValue_Dollar ໂດລ້າ</b>
-                            }
-                            if (item.ItemValue_Kip == null && item.ItemValue_Baht == null && item.ItemValue_Dollar == null)
-                            {
-                                <b>ບໍ່ມີ</b>
-                            }
-                        }
-                    </td>
-                    <td>
-                       <button type="button" onclick="itemDetail(@item.Id)" class="btn btn-flat btn-warning btn-sm">ລາຍລະອຽດ</button>
-
-                    </td>
-                </tr>
-                }
-            </tbody>
+       
         </table>
     </div>
 </div>
 
 <script>
+    var itemTransferingTable;
     jQuery(document).ready(function () {
             jQuery("#itemConfirmTable").DataTable({
                 lengthChange: false,
@@ -74,8 +34,65 @@
                 pageLength: 25,
                 serverSide: false,
                 language:LaoLangage
-            });
+        });
+        itemTransferingDataTable();
     });
+    function itemTransferingDataTable() {
+        itemTransferingTable = jQuery("#itemTransferingTable").DataTable({
+            serverSide: true,
+            responsive: true,
+            searching: false,
+            language: LaoLangage,
+            order: [[1, 'desc']],
+            ajax: {
+                url: "/Admin/ItemTransportingTable",
+                type: "POST",
+                datatype: "json",
+                data: function (d) {
+                    d.customerId = '@ViewBag.CustomerId'
+                }
+            },
+            columns: [
+                { data: "TrackingNumber", name: "TrackingNumber" },
+                { data: "ItemName", name: "ItemName" },
+                { data: "Status", name: "Status" },
+                { data: "ReceiverName", name: "ReceiverName" },
+                { data: "ReceipverPhone", name: "ReceipverPhone" },
+                { data: "ReceiverAddress", name: "ReceiverAddress" },
+                { data: "ReceiveDate", name: "ReceiveDate" },
+                { data: "SendingDate", name: "SendingDate" },
+                {
+                    data: "Id", render: function myfunction(data,type,full,meta) {
+                        var result = '';
+                        if (full.ItemValue_Kip !== null) {
+                            result += full.ItemValue_Kip + 'ກີບ';
+                        }
+                        if (full.ItemValue_Baht!==null) {
+                            result += full.ItemValue_Baht + 'ບາດ';
+                        }
+                        if (full.ItemValue_Dollar !==null) {
+                            result += full.ItemValue_Dollar + 'ໂດລາ';
+                        }
+                        if (full.ItemValue_Kip===null && full.ItemValue_Baht === null && full.ItemValue_Dollar===null) {
+                            result = 'ບໍ່ມີ';
+                        }
+                        return result;
+                    }
+                },
+                { data: "Description", name: "Description" },
+                {
+                    data: "Id", render: function (data, type, full, meta) {
+                        var buttons = '';
+                        buttons+=   '<button type="button" onclick="allocateItemDiaLog('+data+')" class="btn btn-flat btn-warning btn-sm">ກຽມສີນຄ້າສົ່ງ</button>';
+                        buttons+='<button class="btn btn-danger btn-sm mr-1 ml-1" onclick="barcodeDialog('+data+')">ບາໂຄດ</button>';
+                        buttons+='<button type="button" onclick="itemDetail('+data+')" class="btn btn-flat btn-danger btn-sm mr-1 ml-1">ລາຍລະອຽດ</button>';
+                        return buttons;
+                    }
+                },
+            ]
+        });
+    }
+
     function barcodeDialog(id) {
         let itemId = id;
         jQuery.ajax({

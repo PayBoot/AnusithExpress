@@ -44,18 +44,22 @@ namespace AnousithExpress.DataEntry.Interface
         ItemsCountModel GetItemsCount(int CustomerId,
            DateTime? fromReceiveDate,
            DateTime? toReceiveDate);
+
+
+
         /// Delivery
         /// 
-        /// /////////////////////////////////
         /// 
-        List<ItemsModel> GetProductToPickUpByCustomerId(int CustomerId);
+        /// 
+        List<ItemsModel> GetProductToPickUpByCustomerId(int CustomerId, int deliveryManId);
 
-        List<ItemsAllocationModel> GetProductToSend(int routeId, int timeId, DateTime? date, int userId);
+        List<ItemsSentAllocationModel> GetProductToSend(int routeId, int timeId, DateTime? date, int userId);
 
-        bool PickUp(int[] itemId);
+        bool PickUp(int[] itemId, int deliveryManId);
 
-        bool Send(int itemId, int statusId);
+        bool Send(int itemId, int statusId, int deliveryId, double? kip, double? baht, double? dollar);
 
+        bool SentButUnwantedItem(int itemId, int deliveryId, double? kip, double? baht, double? dollar);
         List<TbRoute> GetRoute();
         List<TbTime> GetTime();
 
@@ -72,6 +76,7 @@ namespace AnousithExpress.DataEntry.Interface
         Double GetNotification();
         List<CustomerItemsModel> GetProductByCustomerId(int customerId, int statusId, DateTime? fromDate, DateTime? toDate);
         int CreateByAdmin(ItemsModel model);
+        List<ItemsModel> GetProductConfirmByCustomerId(int CustomerId);
         List<ItemsModel> GetProductInProcessPerCustomerAdminUser(int CustomerId);
         List<ItemsModel> GetProductTransportingPerCustomerAdminUser(int CustomerId);
         bool CannotContactCustomer(int itemId);
@@ -85,5 +90,19 @@ namespace AnousithExpress.DataEntry.Interface
         List<ItemsModel> GetItemsHistoryList(DateTime? fromDate, DateTime? toDate, int condition);
 
         int GetProductId(string trackingnumber);
+
+        List<ItemsModel> GetStatisticItemScanIn(DateTime? fromDate, DateTime? toDate);
+        List<ItemsModel> GetStatisticItemScanSent(DateTime? fromDate, DateTime? toDate);
+        ItemsCountModel GetStatisticItemScanSentCount(DateTime? fromDate, DateTime? toDate);
+        List<ItemsModel> GetStatisticItemSentBack(DateTime? fromDate, DateTime? toDate);
+        ItemsCountModel GetStatisticItemScanReturnCount(DateTime? fromDate, DateTime? toDate);
+
+        List<DeliveryHistoryModel> GetDeliveryHistory(DateTime? fromDate, DateTime? toDate, int? deliveryId);
+        SentHistoryCountModel GetDeliveryHistoryCount(DateTime? fromDate, DateTime? toDate, int? deliveryId);
+        List<PickUpHistoryModel> GetPickUpHistory(DateTime? fromDate, DateTime? toDate, int? deliveryId);
+
+        bool ReceiveMoneyFromDeliveryMan(int historyId);
+        bool UndoReceiveMoneyFromDeliveryMan(int historyId);
+
     }
 }

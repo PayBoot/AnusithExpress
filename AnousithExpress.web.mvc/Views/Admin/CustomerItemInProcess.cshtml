@@ -7,14 +7,13 @@
                     <th class="control">ເລກຕິດຕາມ</th>
                     <th class="control">ປະເພດສີນຄ້າ</th>
                     <th class="control">ສະຖານະ</th>
-                    <th class="none">ຊື່ຜູ້ຮັບ</th>
-                    <th class="none">ເບີໂທຜູ້ຮັບ</th>
-                    <th class="none">ທີ່ຢູ່ຜູ້ຮັບ</th>
+                    <th class="control">ຊື່ຜູ້ຮັບ</th>
+                    <th class="control">ເບີໂທຜູ້ຮັບ</th>
+                    <th class="control">ທີ່ຢູ່ຜູ້ຮັບ</th>
                     <th class="none">ມື້ທີ່ຈະສົ່ງ</th>
                     <th class="none">ລາຍລະອຽດ</th>
-                    <th>ເກັບເງິນປາຍທາງ</th>
-                    <th class="control">ຈັດການ</th>
-                    <th class="none">ລືບ ຫລື ປ່ຽນແປງ</th>
+                    <th class="none">ເກັບເງິນປາຍທາງ</th>    
+                    <th class="none">ຈັດການ</th>
                 </tr>
             </thead>
 
@@ -27,15 +26,14 @@
     var inProcesstable;
         jQuery(document).ready(function () {
 
-            itemTable();
+            inProcessDataTable();
         });
-    function itemTable() {
+    function inProcessDataTable() {
         inProcesstable = jQuery("#itemInProcessDataTable").DataTable({
                 serverSide: true,
                 responsive: true,
                 paging: true,
                 pageLength: 25,
-
                 lengthChange:false,
                 searching: true,
                 language: LaoLangage,
@@ -61,36 +59,27 @@
                         data: "Id", render: function (data, type, full, meta) {
                             let html = '';
                             if (full.ItemValue_Kip !== null) {
-                                html += full.ItemValue_Kip + "ກີບ<br/>";
+                                html += ""+full.ItemValue_Kip + "ກີບ ";
                             }
                             if (full.ItemValue_Baht !== null) {
-                                html += full.ItemValue_Baht + "ບາດ<br/>";
+                                html += ""+full.ItemValue_Baht + "ບາດ ";
                             }
                             if (full.ItemValue_Dollar !== null) {
-                                html += full.ItemValue_Dollar + "ໂດລ້າ";
+                                html += ""+full.ItemValue_Dollar + "ໂດລ້າ ";
                             }
                             if (full.ItemValue_Kip === null && full.ItemValue_Baht === null && full.ItemValue_Dollar === null) {
-                                html = 'ບໍ່ມີ';
+                                html = "<b>"+'ບໍ່ມີ</b>';
                             }
                             return '<p>' + html + '</p>';
                         }
-                    },
+                    },       
                     {
                         data: "Id", render: function (data, type, full, meta) {
                             let html = '';
-                            html += '<button type="button" onclick="allocateItemDiaLog(' + data + ')" class="btn btn-flat btn-warning btn-sm">ກຽມສີນຄ້າສົ່ງ</button>';
-                            html += '';
-
-
-                            return html;
-                        }
-                    },
-                    {
-                        data: "Id", render: function (data, type, full, meta) {
-                            let html = '';
-                            html += '<button type="button" onclick="deleteItemDialog(' + data + ')" class="btn btn-flat btn-danger btn-sm mr-2 ml-2"><i class="fa fa-trash"></i> ລືບ</button>';
-                            html += '<button type="button" onclick="updateItemDialog(' + data + ')" class="btn btn-flat btn-warning btn-sm mr-2 ml-2"><i class="fa fa-edit"></i> ປ່ຽນແປງ</button>';
-                            html += '<button type="button" onclick="itemDetail(' + data + ')" class="btn btn-flat btn-warning btn-sm">ລາຍລະອຽດ</button>';
+                            html += '<button type="button" onclick="allocateItemDiaLog(' + data + ')" class="btn btn-flat btn-warning btn-sm mr-1 ml-1">ກຽມສີນຄ້າສົ່ງ</button>';
+                            html += '<button type="button" onclick="deleteItemDialog(' + data + ')" class="btn btn-flat btn-danger btn-sm mr-1 ml-1"><i class="fa fa-trash"></i> ລືບ</button>';
+                            html += '<button type="button" onclick="updateItemDialog(' + data + ')" class="btn btn-flat btn-warning btn-sm mr-1 ml-1"><i class="fa fa-edit"></i> ປ່ຽນແປງ</button>';
+                            html += '<button type="button" onclick="itemDetail(' + data + ')" class="btn btn-flat btn-warning btn-sm mr-1 ml-1">ລາຍລະອຽດ</button>';
                             html += '';
 
 
@@ -108,86 +97,7 @@
             jQuery(source).datepicker('hide');
         }
 
-    function allocateItemDiaLog(id) {
-            let itemId = id;
-            jQuery.ajax({
-                url: "/Admin/AllocateItemFirstStage",
-                type: "GET",
-                data: { itemId: itemId },
-                datatype: "json",
-                success: function (r) {
-                    let htmlButton = '';
-                    htmlButton += '<button class="btn btn-warning btn-flat mb-1 w-25 mr-1 ml-1" onclick = "allocateitem()">ຈັດສີນຄ້າສົ່ງ</button>';
-                    htmlButton += '<button class="btn btn-danger btn-flat mb-1 w-25 mr-1 ml-1" onclick ="CannotContactCustomer()" data-dismiss="modal">ຕິດຕໍ່ບໍ່ໄດ້</button>';
-                    htmlButton += '<button class="btn btn-primary btn-flat mb-1 w-25 mr-1 ml-1" data-dismiss="modal">ອອກ</button>';
-                    jQuery("#content").html(r);
-                    jQuery("#modalButton").html(htmlButton);
-                    jQuery("#modal1").modal('show');
-                }
-            });
-    }
-    function allocateitem() {
-        jQuery.ajax({
-            url: "/Admin/AllocateItemFirstSageFunction",
-            data: {
-                itemId: jQuery("#itemId").val(),
-                routeId: jQuery("#routeId :selected").val(),
-                timeId: jQuery("#timeId :selected").val(),
-                dateToDeliver: jQuery("#dateToDeliver").val() || null,
-                description: jQuery("#descriptiontext").val()
-            },
-            datatype: "json",
-            type: "POST",
-            success: function (r) {
-                if (r.first === true && r.second === true) {
-                    let htmlButton = '';
-                    htmlButton += '<button class="btn btn-primary btn-flat mb-1 w-100 mr-1 ml-1" data-dismiss="modal" data-target ="#modal2">ອອກ</button>';
-                    jQuery("#content2").html("ສຳເລັດ");
-                    jQuery("#modalButton2").html(htmlButton);
-                    jQuery("#modal2").modal('show');
-                    jQuery("#modal1").modal("hide");
-                    inProcesstable.ajax.reload(null, false);
-                }
-                else {
-                    let htmlButton = '';
-                    htmlButton += '<button class="btn btn-primary btn-flat mb-1 w-100 mr-1 ml-1" data-dismiss="modal" data-target ="#modal2">ອອກ</button>';
-                    jQuery("#content2").html(r);
-                    jQuery("#modalButton2").html(htmlButton);
-                    jQuery("#modal2").modal('show');
-
-                }
-            }
-        });
-    }
-    function CannotContactCustomer() {
-        jQuery.ajax({
-            url: "/Admin/CannotContactCustomer",
-            data: {
-                itemId: jQuery("#itemId").val(),
-                description: jQuery("#descriptiontext").val()
-            },
-            type: "POST",
-            datatype: "json",
-            success: function (r) {
-                if (r.first===true && r.second ===true) {
-                    let htmlButton = '';
-                    htmlButton += '<button class="btn btn-primary btn-flat mb-1 w-100 mr-1 ml-1" data-dismiss="modal" data-target ="#modal2">ອອກ</button>';
-                    jQuery("#content2").html("ສຳເລັດ");
-                    jQuery("#modalButton2").html(htmlButton);
-                    jQuery("#modal2").modal('show');
-                    jQuery("#modal1").modal("hide");
-                    inProcesstable.ajax.reload(null, false);
-                }
-                else {
-                    let htmlButton = '';
-                    htmlButton += '<button class="btn btn-primary btn-flat mb-1 w-100 mr-1 ml-1" data-dismiss="modal" data-target ="#modal2">ອອກ</button>';
-                    jQuery("#content2").html(r.first + "" + r.second);
-                    jQuery("#modalButton2").html(htmlButton);
-                    jQuery("#modal2").modal('show');
-                }
-            }
-        });
-    }
+   
     function updateItemDialog(id) {
         let itemId = id;
         jQuery.ajax({

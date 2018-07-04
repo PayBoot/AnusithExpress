@@ -1,4 +1,5 @@
 ﻿using AnousithExpress.DataEntry.Interface;
+using AnousithExpress.DataEntry.Models;
 using AnousithExpress.DataEntry.Utility;
 using AnousithExpress.DataEntry.ViewModels.Admin;
 using AnousithExpress.DataEntry.ViewModels.Delivery;
@@ -11,7 +12,37 @@ namespace AnousithExpress.DataEntry.Implimentation
     public class AllocationService : IAllocation
     {
         private ItemUtility _item = new ItemUtility();
-        public List<ItemsAllocationModel> GetAll()
+
+        public bool AllocatePersonToPickUp(int itemId, int DeliveryManId)
+        {
+            using (var db = new EntityContext())
+            {
+                if (!db.tbItemPickUpAllocations.Any(a => a.Item.Id == itemId))
+                {
+                    TbItemsPickUpAllocation itemAllocation = new TbItemsPickUpAllocation
+                    {
+                        DateToPickUp = DateTime.Now.Date,
+                        DeliveryMan = db.tbUsers.FirstOrDefault(u => u.Id == DeliveryManId),
+                        Item = db.TbItems.FirstOrDefault(i => i.Id == itemId)
+                    };
+                    db.tbItemPickUpAllocations.Add(itemAllocation);
+                    db.SaveChanges();
+                    return true;
+                }
+                else
+                {
+                    var itemAllocation = _item.GetAllPickUpAllocation(db).FirstOrDefault(a => a.Item.Id == itemId);
+                    db.Entry(itemAllocation).State = System.Data.Entity.EntityState.Modified;
+                    itemAllocation.DateToPickUp = DateTime.Now.Date;
+                    itemAllocation.DeliveryMan = db.tbUsers.FirstOrDefault(u => u.Id == DeliveryManId);
+                    db.SaveChanges();
+                    return true;
+                }
+
+            }
+        }
+
+        public List<ItemsSentAllocationModel> GetAll()
         {
             using (var db = new EntityContext())
             {
@@ -38,6 +69,7 @@ namespace AnousithExpress.DataEntry.Implimentation
                     ItemId = r.Item.Id,
                     ItemName = r.Item.ItemName,
                     ItemStatus = r.Item.Status.Status,
+                    StatusId = r.Item.Status.Id,
                     Trackingnumber = r.Item.TrackingNumber,
                     TimeId = r.Time.Id,
                     TimeName = r.Time.Time,
@@ -48,7 +80,7 @@ namespace AnousithExpress.DataEntry.Implimentation
             }
         }
 
-        public List<ItemsAllocationModel> GetBySorting(int? customerId, int? routeId, int? timeId, DateTime? sendingDateFrom, DateTime? sendingDateTo)
+        public List<ItemsSentAllocationModel> GetBySorting(int? customerId, int? routeId, int? timeId, DateTime? sendingDateFrom, DateTime? sendingDateTo)
         {
             using (var db = new EntityContext())
             {
@@ -77,6 +109,32 @@ namespace AnousithExpress.DataEntry.Implimentation
                 }
                 var result = _item.AssignItemsAllocation(source);
                 return result;
+            }
+        }
+
+        public List<ItemsPickUpAllocationModel> GetItemToPickUp(int customerId)
+        {
+            using (var db = new EntityContext())
+            {
+                var result = from item in _item.GetAll(db).Where(i => i.Customer.Id == customerId && i.Status.Id == 2).ToList()
+                             from allocation in _item.GetAllPickUpAllocation(db).Where(a => a.Item.Customer.Id == customerId && a.Item.Status.Id == 2 && a.Item.Id == item.Id).ToList().DefaultIfEmpty()
+                             select new ItemsPickUpAllocationModel
+                             {
+                                 TrackingNumber = item.TrackingNumber,
+                                 CustomerAddress = item.Customer.Address,
+                                 CustomerId = item.Customer.Id,
+                                 CustomerName = item.Customer.Name,
+                                 Status = item.Status.Status,
+                                 StatusId = item.Status.Id,
+                                 CustomerPhonenumber = item.Customer.Phonenumber,
+                                 DateToDeliver = allocation == null ? "" : allocation.DateToPickUp.ToString("dd/MM/yyyy"),
+                                 ItemId = item.Id,
+                                 ItemName = item.ItemName,
+                                 UserName = allocation == null ? "" : allocation.DeliveryMan.Username,
+                                 Id = allocation == null ? 0 : allocation.Id
+                             };
+
+                return result.ToList();
             }
         }
 

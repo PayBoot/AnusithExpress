@@ -18,6 +18,9 @@ namespace AnousithExpress.DataEntry.Implimentation
                         db.Database.ExecuteSqlCommand("DBCC CHECKIDENT('TbRole', RESEED)");
                         db.Database.ExecuteSqlCommand("DBCC CHECKIDENT('TbItemStatus', RESEED)");
                         db.Database.ExecuteSqlCommand("DBCC CHECKIDENT('TbStatus', RESEED)");
+                        db.Database.ExecuteSqlCommand("DBCC CHECKIDENT('TbUser', RESEED)");
+                        db.Database.ExecuteSqlCommand("DBCC CHECKIDENT('TbRoute', RESEED)");
+                        db.Database.ExecuteSqlCommand("DBCC CHECKIDENT('TbTime', RESEED)");
                         List<TbStatus> status = new List<TbStatus>
                         {
                         new TbStatus { Id = 1, Status = "ພ້ອມນຳໃຊ້" },
@@ -28,8 +31,12 @@ namespace AnousithExpress.DataEntry.Implimentation
                         List<TbRole> role = new List<TbRole>
                         {
                         new TbRole { Id= 1, Role= "ແອດມີນ"},
-                        new TbRole{ Id= 2, Role= "ພະນັກງານຫ້ອງການ"},
-                        new TbRole{ Id= 2, Role= "ພະນັກງານຮັບສົ່ງ"}
+                        new TbRole { Id= 2, Role= "Call Center"},
+                        new TbRole { Id= 3, Role= "ພະນັກງານຮັບສົ່ງ"},
+                        new TbRole { Id= 4, Role= "ຄົນສັງລວມ"},
+                        new TbRole { Id= 5, Role= "ນາຍສາງ"},
+                        new TbRole { Id= 6, Role= "ພະນັກງານບັນຊີ"}
+
                         };
                         db.tbRoles.AddRange(role);
                         db.SaveChanges();
@@ -43,7 +50,8 @@ namespace AnousithExpress.DataEntry.Implimentation
                         new TbItemStatus{Id = 6, Status = "ສີນຄ້າຖືກສົ່ງໃຫ້ປາຍທາງແລ້ວ"},
                         new TbItemStatus{Id = 7, Status = "ບໍ່ສາມາດຕິຕໍ່ກັບປາຍທາງໄດ້"},
                         new TbItemStatus{Id = 8, Status = "ສົ່ງກັບຄືນແລ້ວ" },
-                        new TbItemStatus{Id = 9, Status= "ເຄື່ອງກຳລັງສົ່ງກັບຄືນ" }
+                        new TbItemStatus{Id = 9, Status= "ເຄື່ອງກຳລັງສົ່ງກັບຄືນ" },
+                        new TbItemStatus{Id = 10, Status= "ລຸກຄ້າບໍ່ຮັບເຄື່ອງ" }
                         };
                         db.tbItemStatuses.AddRange(itemstatus);
                         db.SaveChanges();
@@ -56,7 +64,22 @@ namespace AnousithExpress.DataEntry.Implimentation
                             ,Role=db.tbRoles.FirstOrDefault(r=>r.Id==1)
                             ,Status=db.tbStatuses.FirstOrDefault(s=>s.Id==1)}
                         };
+
                         db.tbUsers.AddRange(user);
+                        db.SaveChanges();
+                        TbRoute route = new TbRoute
+                        {
+                            Id = 1,
+                            Route = "A1"
+                        };
+                        db.tbRoutes.Add(route);
+                        db.SaveChanges();
+                        TbTime time = new TbTime
+                        {
+                            Id = 1,
+                            Time = "8-10 ໂມງ"
+                        };
+                        db.tbTimes.Add(time);
                         db.SaveChanges();
                         dbtransaction.Commit();
                         return true;

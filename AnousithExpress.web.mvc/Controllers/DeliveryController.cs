@@ -24,7 +24,23 @@ namespace AnousithExpress.web.mvc.Controllers
 
         public ActionResult ItemsToPickUp()
         {
-            return View();
+            if (Session["Role"] != null)
+            {
+                if (Session["Role"].ToString() == "3")
+                {
+                    return View();
+                }
+                else
+                {
+                    return RedirectToAction("ULogin", "Account");
+                }
+
+            }
+            else
+            {
+                return RedirectToAction("Index", "Account");
+            }
+
         }
 
         public ActionResult ItemsToPickUpTable(int customerId = 0)
@@ -39,7 +55,7 @@ namespace AnousithExpress.web.mvc.Controllers
 
             DatatableInitiator(out draw, out start, out length, out searchValue, out sortColumnName, out sortDir);
             List<ItemsModel> AllList = new List<ItemsModel>();
-            AllList = _product.GetProductToPickUpByCustomerId(customerId);
+            AllList = _product.GetProductToPickUpByCustomerId(customerId, UserId);
 
             int totalRecord = AllList.Count;
             if (!String.IsNullOrEmpty(searchValue)) // filter
@@ -73,15 +89,24 @@ namespace AnousithExpress.web.mvc.Controllers
 
         public ActionResult PickUp(int[] itemsId)
         {
-            if (itemsId == null || itemsId.Length == 0)
+            if (Session["UserId"] != null)
             {
-                return Json("inValid", JsonRequestBehavior.AllowGet);
+                int userId = (int)Session["UserID"];
+                if (itemsId == null || itemsId.Length == 0)
+                {
+                    return Json("inValid", JsonRequestBehavior.AllowGet);
+                }
+                else
+                {
+                    bool result = _product.PickUp(itemsId, userId);
+                    return Json(result, JsonRequestBehavior.AllowGet);
+                }
             }
             else
             {
-                bool result = _product.PickUp(itemsId);
-                return Json(result, JsonRequestBehavior.AllowGet);
+                return Json("inValid", JsonRequestBehavior.AllowGet);
             }
+
 
 
 
@@ -89,11 +114,27 @@ namespace AnousithExpress.web.mvc.Controllers
 
         public ActionResult ItemsToSent()
         {
-            var route = _product.GetRoute();
-            var time = _product.GetTime();
-            ViewBag.Routes = new SelectList(route, "Id", "Route");
-            ViewBag.Times = new SelectList(time, "Id", "Time");
-            return View();
+            if (Session["Role"] != null)
+            {
+                if (Session["Role"].ToString() == "3")
+                {
+                    var route = _product.GetRoute();
+                    var time = _product.GetTime();
+                    ViewBag.Routes = new SelectList(route, "Id", "Route");
+                    ViewBag.Times = new SelectList(time, "Id", "Time");
+                    return View();
+                }
+                else
+                {
+                    return RedirectToAction("ULogin", "Account");
+                }
+
+            }
+            else
+            {
+                return RedirectToAction("ULogin", "Account");
+            }
+
         }
 
         public ActionResult ItemsToSentTable(int routeId = 0, int timeId = 0, DateTime? dateToDeliver = null)
@@ -106,9 +147,8 @@ namespace AnousithExpress.web.mvc.Controllers
             {
                 UserId = (int)Session["UserId"];
             }
-
             DatatableInitiator(out draw, out start, out length, out searchValue, out sortColumnName, out sortDir);
-            List<ItemsAllocationModel> AllList = new List<ItemsAllocationModel>();
+            List<ItemsSentAllocationModel> AllList = new List<ItemsSentAllocationModel>();
             AllList = _product.GetProductToSend(routeId, timeId, dateToDeliver, UserId);
             int totalRecord = AllList.Count;
             if (!String.IsNullOrEmpty(searchValue)) // filter
@@ -119,12 +159,6 @@ namespace AnousithExpress.web.mvc.Controllers
                         x.ReceiverName.Contains(searchValue)).ToList();
             }
             int totalRowAfterFilter = AllList.Count;
-            //sorting
-
-
-
-            //paging
-
             AllList = AllList.Skip(start).Take(length).OrderBy(x => x.Status).ToList();
 
             return Json(new
@@ -134,8 +168,6 @@ namespace AnousithExpress.web.mvc.Controllers
                 recordsFiltered = totalRowAfterFilter,
                 data = AllList
             }, JsonRequestBehavior.AllowGet);
-
-
         }
 
         public ActionResult ItemDetail(int itemId)
@@ -147,21 +179,48 @@ namespace AnousithExpress.web.mvc.Controllers
 
             }
             return PartialView("ItemDetail", model);
-
         }
 
-        public ActionResult SentItem(int itemId, int statusId)
+        public ActionResult SentItem(int itemId, int statusId, double? kip, double? baht, double? dollar)
         {
-            if (itemId > 0 && statusId > 0)
+            if (Session["UserId"] != null)
             {
-                bool result = _product.Send(itemId, statusId);
-                return Json(result, JsonRequestBehavior.AllowGet);
+                int userId = (int)Session["UserId"];
+                if (itemId > 0 && statusId > 0)
+                {
+                    bool result = _product.Send(itemId, statusId, userId, kip, baht, dollar);
+                    return Json(result, JsonRequestBehavior.AllowGet);
+                }
+                else
+                {
+                    return Json("Invalid", JsonRequestBehavior.AllowGet);
+                }
             }
             else
             {
                 return Json("Invalid", JsonRequestBehavior.AllowGet);
             }
 
+        }
+        public ActionResult UnWantedItem(int itemId, double? kip, double? baht, double? dollar)
+        {
+            if (Session["UserId"] != null)
+            {
+                int userId = (int)Session["UserId"];
+                if (itemId > 0)
+                {
+                    bool result = _product.SentButUnwantedItem(itemId, userId, kip, baht, dollar);
+                    return Json(result, JsonRequestBehavior.AllowGet);
+                }
+                else
+                {
+                    return Json("Invalid", JsonRequestBehavior.AllowGet);
+                }
+            }
+            else
+            {
+                return Json("Invalid", JsonRequestBehavior.AllowGet);
+            }
         }
         private void DatatableInitiator(out string draw, out int start, out int length, out string searchValue, out string sortColumnName, out string sortDir)
         {

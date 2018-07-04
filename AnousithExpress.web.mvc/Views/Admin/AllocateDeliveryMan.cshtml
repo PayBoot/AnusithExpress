@@ -1,6 +1,6 @@
 ﻿
 @{
-    ViewBag.Title = "ຈັດສີນຄ້າສົ່ງ";
+    ViewBag.Title = "ຈັດຄົນສົ່ງ";
     Layout = "~/Views/Shared/_CustomerLayout.cshtml";
 }
 
@@ -59,7 +59,7 @@
                                         <th class="none">ມື້ທີ່ຈະສົ່ງ</th>
                                         <th class="none">ສາຍສົ່ງ</th>
                                         <th class="none">ເວລາສົ່ງ</th>
-                                        <th class="control">ຜູ້ສົ່ງ</th>
+                                        <th class="control">ພະນັກງານສົ່ງ</th>
   
                                     </tr>
                                 </thead>
@@ -132,6 +132,11 @@
                     d.dateToDeliver = jQuery("#sendingDate").val()
                 }
             },
+            rowCallback: function (row,data) {
+                if (data.StatusId == 6 || data.StatusId == 8 || data.StatusId == 10) {
+                    jQuery("td", row).css('background-color', '#98FB98');
+                }
+            },
             columns: [
                 { data: "Trackingnumber", name: "Trackingnumber" },
                 { data: "ItemName", name: "ItemName" },
@@ -144,7 +149,10 @@
                         var html = '';
                         if (data !== null && data!=="") {
                             html += data;
-                            html += ' <button type="button" onclick="SelectDeliveryMan(' + full.ItemId + ')" class="btn btn-flat btn-warning btn-sm">ປ່ຽນຄົນສົ່ງ</button>';
+                            if (full.StatusId!== 6 && full.StatusId !== 8 && full.StatusId !==10) {
+                                html += ' <button type="button" onclick="SelectDeliveryMan(' + full.ItemId + ')" class="btn btn-flat btn-warning btn-sm">ປ່ຽນຄົນສົ່ງ</button>';
+                            }
+                            
                         }
                         else {
                             html = '<button type="button" onclick="SelectDeliveryMan('+full.ItemId+')" class="btn btn-flat btn-warning btn-sm">ຈັດຄົນສົ່ງ</button>';

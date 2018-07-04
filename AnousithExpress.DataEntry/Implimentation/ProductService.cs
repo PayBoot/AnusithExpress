@@ -182,24 +182,28 @@ namespace AnousithExpress.DataEntry.Implimentation
         /// </summary>
         /// <param name="CustomerId"></param>
         /// <returns></returns>
-        public List<ItemsModel> GetProductToPickUpByCustomerId(int CustomerId)
+        public List<ItemsModel> GetProductToPickUpByCustomerId(int CustomerId, int DeliveryManId)
         {
             using (var db = new EntityContext())
             {
-                var source = _item.GetAll(db).Where(i => i.Customer.Id == CustomerId && i.Status.Id == 2).ToList();
+                var source = _item.GetAll(db).Where(i => i.Customer.Id == CustomerId && i.Status.Id == 2
+                    && db.tbItemPickUpAllocations
+                    .Where(a => a.DeliveryMan.Id == DeliveryManId).Select(a => a.Item.Id).Contains(i.Id))
+                    .ToList();
                 var result = _item.AssignItemsList(source);
                 return result;
             }
         }
 
-        public List<ItemsAllocationModel> GetProductToSend(int routeId, int timeId, DateTime? date, int userId)
+        public List<ItemsSentAllocationModel> GetProductToSend(int routeId, int timeId, DateTime? date, int userId)
         {
             using (var db = new EntityContext())
             {
                 var source = _item.GetAllAllocation(db)
                     .Where(i => i.Route.Id == routeId
                             && i.Time.Id == timeId
-                                && (i.Item.Status.Id == 5 || i.Item.Status.Id == 9 || i.Item.Status.Id == 6 || i.Item.Status.Id == 8)
+                                && (i.Item.Status.Id == 5 || i.Item.Status.Id == 9 || i.Item.Status.Id == 6 || i.Item.Status.Id == 8
+                                    || i.Item.Status.Id == 10)
                                     && i.DeliveryMan.Id == userId).ToList();
                 if (date != null)
                 {
@@ -210,7 +214,7 @@ namespace AnousithExpress.DataEntry.Implimentation
             }
         }
 
-        public bool PickUp(int[] itemId)
+        public bool PickUp(int[] itemId, int deliveryManId)
         {
             using (var db = new EntityContext())
             {
@@ -223,6 +227,13 @@ namespace AnousithExpress.DataEntry.Implimentation
                     };
                     db.Entry(source).State = EntityState.Modified;
                     source.Status = db.tbItemStatuses.FirstOrDefault(s => s.Id == 3);
+                    TbItemsPickupHistory pickupHistory = new TbItemsPickupHistory
+                    {
+                        TransactionDate = DateTime.Now.Date,
+                        DeliveryMan = db.tbUsers.FirstOrDefault(u => u.Id == deliveryManId),
+                        Item = db.TbItems.FirstOrDefault(i => i.Id == id)
+                    };
+                    db.tbItemsPickupHistories.Add(pickupHistory);
                     source.ReceiveDate = DateTime.Now.Date;
                 }
                 db.SaveChanges();
@@ -230,13 +241,13 @@ namespace AnousithExpress.DataEntry.Implimentation
             }
         }
 
-        public bool Send(int itemId, int statusId)
+        public bool Send(int itemId, int statusId, int deliveryManId, double? kip, double? baht, double? dollar)
         {
             using (var db = new EntityContext())
             {
-                var source = _item.GetSingle(db, itemId);
+                var item = _item.GetSingle(db, itemId);
                 int status;
-                if (source == null)
+                if (item == null)
                 {
                     return false;
                 };
@@ -248,14 +259,50 @@ namespace AnousithExpress.DataEntry.Implimentation
                 {
                     status = 6;
                 }
-                db.Entry(source).State = EntityState.Modified;
-                source.Status = db.tbItemStatuses.FirstOrDefault(s => s.Id == status);
-                source.SentDate = DateTime.Now.Date;
+                db.Entry(item).State = EntityState.Modified;
+                item.Status = db.tbItemStatuses.FirstOrDefault(s => s.Id == status);
+                item.SentDate = DateTime.Now.Date;
+                TbItemSentHistory sentHistory = new TbItemSentHistory
+                {
+                    DeliveryMan = db.tbUsers.FirstOrDefault(u => u.Id == deliveryManId),
+                    Item = db.TbItems.FirstOrDefault(i => i.Id == itemId),
+                    TransactionDate = DateTime.Now.Date,
+                    IncomingBalanceInKip = kip == null ? 0 : (double)kip,
+                    IncomingBalanceInBaht = baht == null ? 0 : (double)baht,
+                    IncomingBalanceInDollar = dollar == null ? 0 : (double)dollar
+                };
+                db.tbItemSentHistories.Add(sentHistory);
                 db.SaveChanges();
                 return true;
             }
         }
-
+        public bool SentButUnwantedItem(int itemId, int deliveryManId, double? kip, double? baht, double? dollar)
+        {
+            using (var db = new EntityContext())
+            {
+                var item = _item.GetSingle(db, itemId);
+                int status = 10;
+                if (item == null)
+                {
+                    return false;
+                };
+                db.Entry(item).State = EntityState.Modified;
+                item.Status = db.tbItemStatuses.FirstOrDefault(s => s.Id == status);
+                item.SentDate = DateTime.Now.Date;
+                TbItemSentHistory sentHistory = new TbItemSentHistory
+                {
+                    DeliveryMan = db.tbUsers.FirstOrDefault(u => u.Id == deliveryManId),
+                    Item = db.TbItems.FirstOrDefault(i => i.Id == itemId),
+                    TransactionDate = DateTime.Now.Date,
+                    IncomingBalanceInKip = kip == null ? 0 : (double)kip,
+                    IncomingBalanceInBaht = baht == null ? 0 : (double)baht,
+                    IncomingBalanceInDollar = dollar == null ? 0 : (double)dollar
+                };
+                db.tbItemSentHistories.Add(sentHistory);
+                db.SaveChanges();
+                return true;
+            }
+        }
         public List<TbRoute> GetRoute()
         {
             using (var db = new EntityContext())
@@ -335,6 +382,18 @@ namespace AnousithExpress.DataEntry.Implimentation
                 return db.TbItems.Any(i => i.TrackingNumber == trackingNumber);
             }
         }
+
+        public List<ItemsModel> GetProductConfirmByCustomerId(int CustomerId)
+        {
+            using (var db = new EntityContext())
+            {
+                var source = _item.GetAll(db).Where(i => i.Customer.Id == CustomerId && i.Status.Id == 2)
+                    .ToList();
+                var result = _item.AssignItemsList(source);
+                return result;
+            }
+        }
+
 
         public List<ItemsModel> GetProductInStorePerCustomer(int CustomerId, DateTime? fromDate, DateTime? toDate)
         {
@@ -482,6 +541,7 @@ namespace AnousithExpress.DataEntry.Implimentation
                 {
                     db.Entry(item).State = EntityState.Modified;
                     item.Status = db.tbItemStatuses.FirstOrDefault(s => s.Id == 5);
+                    item.SendingDate = DateTime.Now.Date;
                     db.SaveChanges();
                     var result = _item.AssignItem(item);
                     return result;
@@ -505,7 +565,7 @@ namespace AnousithExpress.DataEntry.Implimentation
                     var allocation = _item.GetAllAllocation(db).FirstOrDefault(x => x.Item.TrackingNumber == itemTrackingNumber);
                     if (allocation != null)
                     {
-                        db.tbItemAllocations.Remove(allocation);
+                        db.tbItemSentAllocations.Remove(allocation);
                     }
                     db.SaveChanges();
                     var result = _item.AssignItem(item);
@@ -526,6 +586,7 @@ namespace AnousithExpress.DataEntry.Implimentation
                 {
                     db.Entry(item).State = EntityState.Modified;
                     item.Status = db.tbItemStatuses.FirstOrDefault(s => s.Id == 9);
+                    item.SendingDate = DateTime.Now.Date;
                     db.SaveChanges();
                     var result = _item.AssignItem(item);
                     return result;
@@ -552,7 +613,7 @@ namespace AnousithExpress.DataEntry.Implimentation
                 var allocatedItem = _item.GetAllAllocation(db).FirstOrDefault(i => i.Item.Id == itemId);
                 if (allocatedItem != null)
                 {
-                    db.tbItemAllocations.Remove(allocatedItem);
+                    db.tbItemSentAllocations.Remove(allocatedItem);
                 }
                 db.SaveChanges();
                 return true;
@@ -587,10 +648,10 @@ namespace AnousithExpress.DataEntry.Implimentation
                     if (_item.GetAllAllocation(db).Any(i => i.Item.Id == itemId))
                     {
                         var item = _item.GetAllAllocation(db).FirstOrDefault(i => i.Item.Id == itemId);
-                        db.tbItemAllocations.Remove(item);
+                        db.tbItemSentAllocations.Remove(item);
                         db.SaveChanges();
                     };
-                    var itemAllocation = new TbItemAllocation
+                    var itemAllocation = new TbItemSentAllocation
                     {
                         DateToDeliver = dateToDeliver,
                         DeliveryMan = null,
@@ -601,7 +662,7 @@ namespace AnousithExpress.DataEntry.Implimentation
                     var updateItem = _item.GetSingle(db, itemId);
                     db.Entry(updateItem).State = EntityState.Modified;
                     updateItem.SendingDate = dateToDeliver;
-                    db.tbItemAllocations.Add(itemAllocation);
+                    db.tbItemSentAllocations.Add(itemAllocation);
                     db.SaveChanges();
                     dbtransact.Commit();
                     return true;
@@ -745,6 +806,7 @@ namespace AnousithExpress.DataEntry.Implimentation
             }
         }
 
+
         public List<ItemsModel> GetItemsHistoryList(DateTime? fromDate, DateTime? toDate, int condition)
         {
             using (var db = new EntityContext())
@@ -813,6 +875,193 @@ namespace AnousithExpress.DataEntry.Implimentation
                 {
                     return 0;
                 }
+            }
+        }
+
+        public List<ItemsModel> GetStatisticItemScanIn(DateTime? fromDate, DateTime? toDate)
+        {
+            using (var db = new EntityContext())
+            {
+                var items = _item.GetAll(db).Where(i => i.ReceiveDate >= fromDate && i.ReceiveDate <= toDate).ToList();
+                var result = _item.AssignItemsList(items);
+                return result;
+            }
+        }
+
+        public List<ItemsModel> GetStatisticItemScanSent(DateTime? fromDate, DateTime? toDate)
+        {
+            using (var db = new EntityContext())
+            {
+                var items = _item.GetAll(db).Where(i => i.SendingDate >= fromDate
+                && i.SendingDate <= toDate
+                && (i.Status.Id != 8 && i.Status.Id != 9)).ToList();
+                return _item.AssignItemsList(items);
+            }
+        }
+
+        public ItemsCountModel GetStatisticItemScanSentCount(DateTime? fromDate, DateTime? toDate)
+        {
+            using (var db = new EntityContext())
+            {
+                var items = _item.GetAll(db).Where(i => i.SendingDate >= fromDate
+                && i.SendingDate <= toDate
+                && (i.Status.Id != 8 && i.Status.Id != 9)).ToList();
+                double all = items.Count();
+                double success = items.Where(i => (i.Status.Id == 6 || i.Status.Id == 10) && i.SentDate != null).Count();
+                ItemsCountModel result = new ItemsCountModel
+                {
+                    totalItem = all,
+                    totalSuccess = success,
+                    totalItemReceive = 0,
+                    totalSendBack = 0
+                };
+                return result;
+            }
+        }
+
+        public List<ItemsModel> GetStatisticItemSentBack(DateTime? fromDate, DateTime? toDate)
+        {
+            using (var db = new EntityContext())
+            {
+                var items = _item.GetAll(db).Where(i => i.SendingDate >= fromDate
+                && i.SendingDate <= toDate
+                && (i.Status.Id == 8 || i.Status.Id == 9)).ToList();
+                return _item.AssignItemsList(items);
+            }
+        }
+        public ItemsCountModel GetStatisticItemScanReturnCount(DateTime? fromDate, DateTime? toDate)
+        {
+            using (var db = new EntityContext())
+            {
+                var items = _item.GetAll(db).Where(i => i.SendingDate >= fromDate
+                && i.SendingDate <= toDate
+                && (i.Status.Id == 8 || i.Status.Id == 9)).ToList();
+                double all = items.Count();
+                double success = items.Where(i => (i.Status.Id == 8) && i.SentDate != null).Count();
+                ItemsCountModel result = new ItemsCountModel
+                {
+                    totalItem = all,
+                    totalSuccess = success,
+                    totalItemReceive = 0,
+                    totalSendBack = 0
+                };
+                return result;
+            }
+        }
+
+        public List<DeliveryHistoryModel> GetDeliveryHistory(DateTime? fromDate, DateTime? toDate, int? deliveryId)
+        {
+            using (var db = new EntityContext())
+            {
+                var source = _item.GetSentHistory(db).Where(x => x.TransactionDate >= fromDate && x.TransactionDate <= toDate).ToList();
+                if (deliveryId != null)
+                {
+                    source = source.Where(x => x.DeliveryMan.Id == deliveryId).ToList();
+                }
+                List<DeliveryHistoryModel> model = new List<DeliveryHistoryModel>();
+                if (source != null)
+                {
+                    model = source.Select(r => new DeliveryHistoryModel
+                    {
+                        Id = r.Id,
+                        DeliveryDate = r.TransactionDate.ToString("dd-MM-yyyy"),
+                        AllocatedSendingDate = r.Item.SendingDate == null ? "" : r.Item.SendingDate?.ToString("dd-MM-yyyy"),
+                        ItemStatus = r.Item.Status.Status,
+                        ItemName = r.Item.ItemName,
+                        DeliveryManId = r.DeliveryMan.Id,
+                        DeliveryManName = r.DeliveryMan.Username,
+                        GiveMoney = r.GiveMoney,
+                        IncomingBalanceInBaht = r.IncomingBalanceInBaht,
+                        IncomingBalanceInDollar = r.IncomingBalanceInDollar,
+                        IncomingBalanceInKip = r.IncomingBalanceInKip,
+                        TrackingNumber = r.Item.TrackingNumber
+                    }).ToList();
+                }
+                return model;
+            }
+        }
+
+        public SentHistoryCountModel GetDeliveryHistoryCount(DateTime? fromDate, DateTime? toDate, int? deliveryId)
+        {
+            using (var db = new EntityContext())
+            {
+                var source = _item.GetSentHistory(db).Where(x => x.TransactionDate >= fromDate && x.TransactionDate <= toDate).ToList();
+                if (deliveryId != null)
+                {
+                    source = source.Where(x => x.DeliveryMan.Id == deliveryId).ToList();
+                }
+                SentHistoryCountModel model = new SentHistoryCountModel
+                {
+                    CountItem = source.Count(),
+                    KipNotYetReceive = source.Where(x => x.GiveMoney == false).Sum(x => x.IncomingBalanceInKip),
+                    BahtNoYetRecieve = source.Where(x => x.GiveMoney == false).Sum(x => x.IncomingBalanceInBaht),
+                    DollarNotYetReceive = source.Where(x => x.GiveMoney == false).Sum(x => x.IncomingBalanceInDollar),
+                    KipReceived = source.Where(x => x.GiveMoney == true).Sum(x => x.IncomingBalanceInKip),
+                    BahtReceived = source.Where(x => x.GiveMoney == true).Sum(x => x.IncomingBalanceInBaht),
+                    DollarReceived = source.Where(x => x.GiveMoney == false).Sum(x => x.IncomingBalanceInDollar),
+                    KipTotal = source.Sum(x => x.IncomingBalanceInKip),
+                    BahtTotal = source.Sum(x => x.IncomingBalanceInBaht),
+                    DollarTotal = source.Sum(x => x.IncomingBalanceInDollar)
+                };
+                return model;
+            }
+        }
+
+        public List<PickUpHistoryModel> GetPickUpHistory(DateTime? fromDate, DateTime? toDate, int? deliveryId)
+        {
+            using (var db = new EntityContext())
+            {
+                var source = _item.GetPickUpHistory(db).Where(x => x.TransactionDate >= fromDate && x.TransactionDate <= toDate).ToList();
+                if (deliveryId != null)
+                {
+                    source = source.Where(x => x.DeliveryMan.Id == deliveryId).ToList();
+                }
+                List<PickUpHistoryModel> model = new List<PickUpHistoryModel>();
+                if (source != null)
+                {
+                    model = source.Select(r => new PickUpHistoryModel
+                    {
+                        TrackingNumber = r.Item.TrackingNumber,
+                        ItemStatus = r.Item.Status.Status,
+                        AssignDate = r.TransactionDate == null ? "" : r.TransactionDate.ToString("dd-MM-yyyy"),
+                        DeliveryManId = r.DeliveryMan.Id,
+                        DeliveryManName = r.DeliveryMan.Username,
+                        Id = r.Id,
+                        ItemName = r.Item.ItemName
+                    }).ToList();
+                }
+                return model;
+            }
+        }
+
+        public bool ReceiveMoneyFromDeliveryMan(int historyId)
+        {
+            using (var db = new EntityContext())
+            {
+                var itemHistory = _item.GetSentHistory(db).FirstOrDefault(s => s.Id == historyId);
+                if (itemHistory == null)
+                {
+                    return false;
+                };
+                db.Entry(itemHistory).State = EntityState.Modified;
+                itemHistory.GiveMoney = true;
+                db.SaveChanges();
+                return true;
+            }
+        }
+        public bool UndoReceiveMoneyFromDeliveryMan(int historyId)
+        {
+            using (var db = new EntityContext())
+            {
+                var itemHistory = _item.GetSentHistory(db).FirstOrDefault(s => s.Id == historyId);
+                if (itemHistory == null)
+                {
+                    return false;
+                };
+                db.Entry(itemHistory).State = EntityState.Modified;
+                itemHistory.GiveMoney = false;
+                db.SaveChanges();
+                return true;
             }
         }
     }

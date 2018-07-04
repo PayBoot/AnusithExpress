@@ -342,12 +342,6 @@
     <Service Include="{C0C07587-41A7-46C8-8FBD-3F9C8EBE2DDC}" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\AnousithExpress.Data\AnousithExpress.Data.csproj">
-      <Project>{40c41ecf-6635-4611-84b3-b822009589f1}</Project>
-      <Name>AnousithExpress.Data</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <EmbeddedResource Include="Reports\billdelivery.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
       <LastGenOutput>billdelivery.cs</LastGenOutput>

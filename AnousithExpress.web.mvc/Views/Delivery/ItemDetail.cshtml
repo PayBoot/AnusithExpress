@@ -52,30 +52,40 @@
                         </tr>
                         <tr>
                             <td style="font-weight:bolder; width:50%;">ເກັບເງີນປາຍທາງ</td>
-                            <td style="width:50%;">@{
+                            <td style="width:50%;">
+                                @{
 
-                                if (Model.ItemValue_Kip!=null)
-                                {
-                                <div>Model.ItemValue_Kip ກີບ</div>
+                                    if (Model.ItemValue_Kip != null)
+                                    {
+                                        <div>@Model.ItemValue_Kip ກີບ <br /></div>
+                                    }
+                                    if (Model.ItemValue_Baht != null)
+                                    {
+                                        <div>@Model.ItemValue_Baht ບາດ <br /></div>
+                                    }
+                                    if (Model.ItemValue_Dollar != null)
+                                    {
+                                        <div>@Model.ItemValue_Dollar ໂດລາ <br /></div>
+                                    }
+                                    if (Model.ItemValue_Kip == null && Model.ItemValue_Baht == null && Model.ItemValue_Dollar == null)
+                                    {
+                                        <div>ບໍ່ມີ <br /></div>
+                                    }
                                 }
-                                if (Model.ItemValue_Baht!=null)
-                                {
-                                <div>Model.ItemValue_Baht ບາດ</div>
-                                }
-                                if (Model.ItemValue_Dollar!=null)
-                                {
-                                <div>Model.ItemValue_Dollar ໂດລາ</div>  
-                                }
-                                if (Model.ItemValue_Kip == null && Model.ItemValue_Baht==null && Model.ItemValue_Dollar==null)
-                                {
-                                <div>ບໍ່ມີ</div>
-                                }
-                            }</td>
+                            </td>
                         </tr>
-
-
                     </table>
-
+                    @{
+                        if (Model.ItemValue_Kip != null || Model.ItemValue_Baht != null && Model.ItemValue_Dollar != null)
+                        {
+                            <label>ເງີນທີ່ຮັບມາເປັນເງີນກີບ</label>
+                            <input type="text" id="kiptext" class="form-control" placeholder="ຮັບເປັນເງີນກີບ" />
+                            <label>ເງີນທີ່ຮັບມາເປັນເງີນບາດ</label>
+                            <input type="text" id="bahttext" class="form-control" placeholder="ຮັບເປັນເງີນບາດ" />
+                            <label>ເງີນທີ່ຮັບມາເປັນເງີນໂດລາ</label>
+                            <input type="text" id="dollartext" class="form-control" placeholder="ຮັບເປັນເງີນໂດລາ" />
+                        }
+                    }
                 </div>
             </div>
         </div>

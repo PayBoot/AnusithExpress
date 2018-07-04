@@ -1,4 +1,4 @@
-﻿@model AnousithExpress.DataEntry.ViewModels.Customer.ConsolidationModel
+﻿@model AnousithExpress.DataEntry.ViewModels.Admin.ConsolidationModel
 <div class="col-md-12">
     <div class="card">
         <div class="card-header text-center">
@@ -10,35 +10,62 @@
                     <table class="table">
                         <tr>
                             <td style="font-weight:bolder;">ລະຫັດລຸກຄ້າ</td>
-                            <td>@Model.Detail.CustomerID</td>
+                            <td>@Model.ConsolidateDetail.CustomerId</td>
                             <td style="font-weight:bolder;">ເລກສັງລວມ</td>
-                            <td>@Model.Detail.ConsolidateNumber</td>
+                            <td>@Model.ConsolidateDetail.ConsolidateNumber</td>
                         </tr>
                         <tr>
                             <td style="font-weight:bolder;">ຊື່ລຸກຄ້າ</td>
-                            <td>@Model.Detail.CustomerName</td>
+                            <td>@Model.ConsolidateDetail.CustomerName</td>
                             <td style="font-weight:bolder;">ວັນທີສັງລວມ</td>
-                            <td>@Model.Detail.ConsolidatedDate</td>
+                            <td>@Model.ConsolidateDetail.ConsolidatedDate</td>
                         </tr>
                         <tr>
                             <td style="font-weight:bolder;">ເບີໂທລຸກຄ້າ</td>
-                            <td>@Model.Detail.CustomerPhonenumber</td>
+                            <td>@Model.ConsolidateDetail.CustomerPhoneNumber</td>
                             <td style="font-weight:bolder;">ຄ່າບໍລິການ</td>
-                            <td>@Model.Detail.Fee</td>
+                            <td>@Model.ConsolidateDetail.Fee</td>
                         </tr>
                         <tr>
                             <td style="font-weight:bolder;">ຈຳນວນສີນຄ້າ</td>
-                            <td>@Model.Detail.AmountOfItem</td>
+                            <td>@Model.ConsolidateDetail.AmountOfItem</td>
                             <td style="font-weight:bolder;"></td>
                             <td></td>
                         </tr>
+                    </table>
+                    <table class="table">
+                        <tr>
+                            <td style="font-weight:bolder;">ຈຳນວນເງີນຮັບມາເປັນກີບ</td>
+                            <td style="font-weight:bolder;">@Model.ConsolidateDetail.IncomingBalanceInKip</td>
+                            <td style="font-weight:bolder;">ຈຳນວນເງີນຮັບມາເປັນບາດ</td>
+                            <td style="font-weight:bolder;">@Model.ConsolidateDetail.IncomingBalanceInBaht</td>
+                        </tr>
+                        <tr>
+                            <td style="font-weight:bolder;">ຈຳນວນເງີນກີບທີ່ຕ້ອງໂອນໄຫ້ລຸກຄ້າ</td>
+                            <td style="font-weight:bolder;">@Model.ConsolidateDetail.BalanceToTransferInKip</td>
+                            <td style="font-weight:bolder;">ຈຳນວນເງີນຮັບມາເປັນໂດລາ</td>
+                            <td style="font-weight:bolder;">@Model.ConsolidateDetail.IncomingBalanceInDollar</td>
+                        </tr>
+                        <tr><td colspan="4">
+    @{ if (Model.ConsolidateDetail.needConfirm == true)
+        {
+            <button class="btn btn-danger w-100" onclick="customerConfirm(@Model.ConsolidateDetail.Id)">ຢືນຢັນຄວາມຖືກຕ້ອງ</button>
+
+        }
+        else
+        {
+            <strong class="text-center">ບໍ່ຕ້ອງການການຢືນຢັນ</strong>
+        }
+    }
+
+</td></tr>
                     </table>
 
                 </div>
             </div>
             <div class="row">
-                <div class="col table-responsive">
-                    <table class="table table-striped table-bordered table-hover table-condensed display responsive no-wrap" id="tableItemDetail" style="width:100%; height:440px;">
+                <div class=" table-responsive">
+                    <table class="table table-striped table-bordered table-hover table-condensed display responsive no-wrap" id="tableItemDetail" style="width:100%;white-space:nowrap;">
                         <thead>
                             <tr>
                                 <th>ເລກຕິດຕາມສີນຄ້າ</th>
@@ -52,14 +79,14 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach (var item in Model.Items)
+                            @foreach (var item in Model.ConsolidationItems)
                             {
                                 <tr>
                                     <td width="auto">@item.TrackingNumber</td>
                                     <td width="auto">@item.ItemName</td>
                                     <td width="auto">@item.Status</td>
                                     <td width="auto">@item.ReceiverName</td>
-                                    <td width="auto">@item.ReceiverPhone</td>
+                                    <td width="auto">@item.ReceipverPhone</td>
                                     <td width="auto">@item.ReceiveDate</td>
                                     <td width="auto">@item.SentDate</td>
                                     <td>
@@ -89,25 +116,67 @@
                     </table>
                 </div>
             </div>
-              
-                    
-          
+
         </div>
     </div>
 </div>
+<div class="modal" id="modalConsolidated">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="text-center" id="modalConsolidateMessage">
 
-    <script type="text/javascript">
-        jQuery(document).ready(function () {
-            jQuery("#tableItemDetail").DataTable({
-                responsive: true,
-                paging: false,
-                searching: false,
-                serverSide: false,
-                language: LaoLangage,
-                
-            }).columns.adjust()
-                .responsive.recalc();
-       
+                </div>
+            </div>
+            <div class="modal-footer" id="modalConsolidateFooter">
+
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal" id="modalConsolidatedSuccess">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="text-center" id="modalConsolidateSuccessMessage">
+
+                </div>
+            </div>
+            <div class="modal-footer" id="modalConsolidateSuccessFooter">
+
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    jQuery(document).ready(function () {
+        jQuery("#tableItemDetail").DataTable({
+            responsive: true,
+            paging: true,
+            lengthChange: false,
+            pageLength: 10,
+            searching: false,
+            serverSide: false,
+            language: LaoLangage,
+
+        }).columns.adjust()
+            .responsive.recalc();
+
+    });
+    function customerConfirm(id) {
+        let consolidationId = id;
+        jQuery.ajax({
+            url: "/Customer/ConfirmConsolidation",
+            data: { consolidationId: consolidationId },
+            datatype: "json",
+            type: "POST",
+            success: function (r) {
+                let htmlbutton = '';
+                htmlbutton += '<button class = "btn btn-danger w-25" data-dismiss="modal">ອອກ</button>';
+                jQuery("#modalConsolidateMessage").html("ສຳເລັດ");
+                jQuery("#modalConsolidateFooter").html(htmlbutton);
+                jQuery("#modalConsolidated").modal("show");
+            }
         });
-    </script>
-    
+    }
+</script>

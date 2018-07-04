@@ -1,0 +1,366 @@
+﻿@{
+    ViewBag.Title = "CustomerItemList";
+    Layout = "~/Views/Shared/_CustomerLayout.cshtml";
+}
+
+<div class="breadcrumbs">
+    <div class="col-sm-4">
+        <div class="page-header float-left">
+            <div class="page-title">
+
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-8">
+        <div class="page-header float-right">
+            <div class="page-title">
+                <ol class="breadcrumb text-right">
+                    <li><a href="@Url.Action("Index","Admin")">ຫນ້າຫລັກ</a></li>
+                    <li class="Active">ສະທິຕິສີນຄ້າຂາເຂົ້າ</li>
+
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container" id="containerResize">
+    <div class="content mt-3">
+        <div class="animated fadeIn">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card">
+
+                        <div class="card-body ">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <label>ຈາກວັນທີສົ່ງ</label>
+                                    @{
+                                        if (ViewBag.fromDate != null)
+                                        {
+                                            <input type="text" value="@ViewBag.fromDate" placeholder="ວັນ-ເດືອນ-ປີ" class="w-100 form-control" name="fromDate" readonly="readonly" onchange="searchByDate(this)" />
+
+                                        }
+                                        else
+                                        {
+                                            <input type="text" placeholder="ວັນ-ເດືອນ-ປີ" class="w-100 form-control" name="fromDate" readonly="readonly" onchange="searchByDate(this)" />
+
+                                        }
+
+                                    }
+
+
+                                </div>
+                                <div class="col-md-4">
+
+                                    <label>ຫາວັນທີສົ່ງ</label>
+                                    @{
+                                        if (ViewBag.toDate != null)
+                                        {
+                                            <input type="text" value="@ViewBag.toDate" placeholder="ວັນ-ເດືອນ-ປີ" class="w-100 form-control" name="toDate" readonly="readonly" onchange="searchByDate(this)" />
+
+                                        }
+                                        else
+                                        {
+                                            <input type="text" placeholder="ວັນ-ເດືອນ-ປີ" class="w-100 form-control" name="toDate" readonly="readonly" onchange="searchByDate(this)" />
+
+                                        }
+                                    }
+
+                                </div>
+                                <div class="col-md-4">
+                                    <label>ພະນັກງານຮັບສົ່ງ</label>
+                                    @Html.DropDownList("deliveryId", ViewBag.DeliveryMan as SelectList,"ທັງຫມົດ", new { @id ="deliveryId",@class="form-control" ,@onchange = "searchByDelivery()" })
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col text-center" style="vertical-align:middle;">
+                                    <table class="table" style="width:75%;margin-left:auto;margin-right:auto">
+                                        <tr>
+                                            <td style="width:50%;">ສີນຄ້າສົ່ງທັງຫມົດ</td>
+                                            <td style="width:50%;" id="totalNumberReceive"></td>
+                                        </tr>
+                                       
+                                    </table>
+                                    <table class="table">
+                                        <tr>
+                                            <td style="width:16.6%;">ເງີນທີ່ຕ້ອງຮັບ(ກີບ)</td>
+                                            <td style="width:16.6%;" id="totalKip"></td>
+                                            <td style="width:16.6%;">ເງີນທີ່ໄດ້ຮັບ(ກີບ)</td>
+                                            <td style="width:16.6%;" id="totalKipReceive"></td>
+                                            <td style="width:16.6%;">ເງີນທີ່ບໍ່ທັນໄດ້ຮັບ(ກີບ)</td>
+                                            <td style="width:16.6%;" id="totalKipNotYetReceive"></td>
+                                        </tr>
+                                        <tr>
+                                            <td style="width:16.6%;">ເງີນທີ່ຕ້ອງຮັບ(ບາດ)</td>
+                                            <td style="width:16.6%;" id="totalBaht"></td>
+                                            <td style="width:16.6%;">ເງີນທີ່ໄດ້ຮັບ(ບາດ)</td>
+                                            <td style="width:16.6%;" id="totalBahtReceive"></td>
+                                            <td style="width:16.6%;">ເງີນທີ່ບໍ່ທັນໄດ້ຮັບ(ບາດ)</td>
+                                            <td style="width:16.6%;" id="totalBahtNotYetReceive"></td>
+
+                                        </tr>
+                                        <tr>
+                                            <td style="width:16.6%;">ເງີນທີ່ຕ້ອງຮັບ(ໂດລາ)</td>
+                                            <td style="width:16.6%;" id="totalDollar"></td>
+                                            <td style="width:16.6%;">ເງີນທີ່ໄດ້ຮັບ(ໂດລາ)</td>
+                                            <td style="width:16.6%;" id="totalDollarReceive"></td>
+                                            <td style="width:16.6%;">ເງີນທີ່ບໍ່ທັນໄດ້ຮັບ(ໂດລາ)</td>
+                                            <td style="width:16.6%;" id="totalDollarNotYetRecieve"></td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="table-responsive">
+                                <table id="DeliveryHistoryTable" class="table table-striped table-bordered" style="width:100%;white-space:nowrap;">
+                                    <thead>
+                                        <tr>
+                                            <th class="control">ເລກຕິດຕາມ</th>
+                                            <th class="control">ປະເພດສີນຄ້າ</th>
+                                            <th class="control">ສະຖານະ</th>
+                                            <th class="none">ມື້ພະນັກງານສົ່ງເຄື່ອງ</th>
+                                            <th class="none">ມື້ລຸກຄ້າຮັບເຄື່ອງ</th>
+                                            <th class="none">ຊື່ພະນັກງານສົ່ງ</th>
+                                            <th class="none">ເງີນເກັບປາຍທາງ(ກີບ)</th>
+                                            <th class="none">ເງີນເກັບປາຍທາງ(ບາດ)</th>
+                                            <th class="none">ເງີນເກັບປາຍທາງ(ໂດລາ)</th>
+                                            <th class="control">ສົ່ງເງີນ</th>
+                                            <th>ຢືນຢັນຮັບເງີນ</th>
+                                        </tr>
+                                    </thead>
+
+                                </table>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div><!-- .animated -->
+    </div>
+</div>
+<div class="modal" id="sentHistoryModal">
+    <div class="modal-dialog modal-dialog-center">
+        <div class="modal-content">
+            <div class="modal-body">
+                <strong id="sentHistoryModalMessage"></strong>
+            </div>
+            <div class="modal-footer" id="sentHistoryModalFooter">
+
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal" id="resultModal">
+    <div class="modal-dialog modal-dialog-center">
+        <div class="modal-content">
+            <div class="modal-body">
+                <strong id="resultModalMessage"></strong>
+            </div>
+            <div class="modal-footer text-center" id="resultModalFooter">
+
+            </div>
+        </div>
+    </div>
+</div>
+@section scripts{
+    <script>
+    var SentHistoryTable;
+    jQuery(document).ready(
+        function () {
+
+            itemSentHistoryCount();
+            SentHistoryDataTable();
+            jQuery("input[name='fromDate']").datepicker({
+                language: 'la'
+            });
+
+            jQuery("input[name='toDate']").datepicker({
+                language: 'la'
+            });
+        }
+    );
+
+    function SentHistoryDataTable() {
+        SentHistoryTable = jQuery("#DeliveryHistoryTable").DataTable({
+            serverSide: true,
+            responsive: true,
+            searching: false,
+            language: LaoLangage,
+            order: [[1, 'desc']],
+            ajax: {
+                url: "/Admin/DeliveryHistoryTable",
+                type: "POST",
+                datatype: "json",
+                data: function (d) {
+                    d.fromDate = jQuery("input[name='fromDate']").val() || null,
+                        d.toDate = jQuery("input[name='toDate']").val() || null,
+                        d.deliveryId = jQuery("#deliveryId").val() || null
+                }
+            },
+            columns: [
+                { data: "TrackingNumber", name: "TrackingNumber" },
+                { data: "ItemName", name: "ItemName" },
+                { data: "ItemStatus", name: "ItemStatus" },
+                { data: "AllocatedSendingDate", name: "AllocatedSendingDate" },
+                { data: "DeliveryDate", name: "DeliveryDate" },
+                { data: "DeliveryManName", name: "ReceipverPhone" },
+                { data: "IncomingBalanceInKip", name: "ReceiverAddress" },
+                { data: "IncomingBalanceInBaht", name: "ReceiveDate" },
+                { data: "IncomingBalanceInDollar", name: "SentDate" },
+                {
+                    data: "GiveMoney", render: function (data, type, full, meta) {
+                        if (data === true) {
+                            return "ສົ່ງເງີນແລ້ວ";
+                        } else {
+                            return "ຍັງບໍ່ທັນສົ່ງເງີນ";
+                        }
+                    }
+                },   
+                {
+                    data: "Id", render: function (data,type,full,meta) {
+                        var htmlbutton = '';
+                        if (full.GiveMoney === true) {
+                            htmlbutton += '<button class="btn btn-danger " onclick="ConfirmUnReceiveMoneyDialog(' + data + ')">ກົດປ່ຽນເປັນບໍ່ໄດ້ຮັບເງີນ</button>';
+                        } else {
+                            htmlbutton += '<button class="btn btn-danger" onclick="ConfirmReceiveMoneyDialog(' + data + ')">ກົດຢືນຢັນຮັບເງີນ</button>';
+                        }
+                        return htmlbutton;
+                    }
+                }
+            ]
+        });
+        }
+
+        function ConfirmUnReceiveMoneyDialog(id) {
+            let ItemHistoryId = id;
+            let htmlbuttons = '';
+            htmlbuttons += '<button class="btn btn-danger w-25" onclick="confirmUnReceived(' + ItemHistoryId + ')">ຢືນຢັນ</button>';
+            htmlbuttons += '<button class="btn bnt-danger w-25" data-dismiss ="modal" data-target="#sentHistoryModal">ອອກ</button>';
+            jQuery("#sentHistoryModalMessage").html("ປ່ຽນສະຖານະເປັນບໍ່ໄດ້ຮັບ");
+            jQuery("#sentHistoryModalFooter").html(htmlbuttons);
+            jQuery("#sentHistoryModal").modal('show');
+        }
+        function confirmUnReceived(id) {
+            let ItemHistoryId = id;
+            jQuery.ajax({
+                url: '/Admin/UndoReceiveMoneyFromDeliveryMan',
+                type: "POST",
+                datatype: 'json',
+                data: { historyId: ItemHistoryId },
+                success: function (r) {
+                    if (r === true) {
+                        let htmlbutton = '';
+                        htmlbutton += '<button class="btn btn-danger w-50" data-dismiss= "modal" data-target ="#resultModal">ຕົກລົງ</button>';
+                        jQuery("#resultModalMessage").html("ສຳເລັດ");
+                        jQuery("#resultModalFooter").html(htmlbutton);
+                        jQuery("#resultModal").modal("show");
+                        jQuery("#sentHistoryModal").modal("hide");
+                        SentHistoryTable.ajax.reload(null,false);
+                    }
+                    else {
+                        let htmlbutton = '';
+                        htmlbutton += '<button class="btn btn-danger w-50" data-dismiss= "modal" data-target ="#resultModal">ຕົກລົງ</button>';
+                        jQuery("#resultModalMessage").html("ບໍ່ສຳເລັດ");
+                        jQuery("#resultModalFooter").html(htmlbutton);
+                        jQuery("#resultModal").modal("show");
+                     
+                    }
+                    
+                },
+                error: function () {
+                    alert("Server error");
+                }
+            });
+        }
+        function ConfirmReceiveMoneyDialog(id) {
+            let ItemHistoryId = id;
+            let htmlbuttons = '';
+            htmlbuttons += '<button class="btn btn-danger w-25" onclick="confirmReceived(' + ItemHistoryId + ')">ຢືນຢັນ</button>';
+            htmlbuttons += '<button class="btn bnt-danger w-25" data-dismiss ="modal" data-target="#sentHistoryModal">ອອກ</button>';
+            jQuery("#sentHistoryModalMessage").html("ປ່ຽນສະຖານະເປັນໄດ້ຮັບເງີນແລ້ວ");
+            jQuery("#sentHistoryModalFooter").html(htmlbuttons);
+            jQuery("#sentHistoryModal").modal('show');
+        }
+        function confirmReceived(id) {
+            let ItemHistoryId = id;
+            jQuery.ajax({
+                url: '/Admin/ReceiveMoneyFromDeliveryMan',
+                type: "POST",
+                datatype: 'json',
+                data: { historyId: ItemHistoryId },
+                success: function (r) {
+                    if (r === true) {
+                        let htmlbutton = '';
+                        htmlbutton += '<button class="btn btn-danger w-50" data-dismiss= "modal" data-target ="#resultModal">ຕົກລົງ</button>';
+                        jQuery("#resultModalMessage").html("ສຳເລັດ");
+                        jQuery("#resultModalFooter").html(htmlbutton);
+                        jQuery("#resultModal").modal("show");
+                        jQuery("#sentHistoryModal").modal("hide");
+                        SentHistoryTable.ajax.reload(null, false);
+                    }
+                    else {
+                        let htmlbutton = '';
+                        htmlbutton += '<button class="btn btn-danger w-50" data-dismiss= "modal" data-target ="#resultModal">ຕົກລົງ</button>';
+                        jQuery("#resultModalMessage").html("ບໍ່ສຳເລັດ");
+                        jQuery("#resultModalFooter").html(htmlbutton);
+                        jQuery("#resultModal").modal("show");
+
+                    }
+
+                },
+                error: function () {
+                    alert("Server error");
+                }
+            });
+        }
+    function itemSentHistoryCount() {
+        jQuery.ajax({
+            url: "/Admin/DeliveryHistoryCount",
+            type: "POST",
+            data: {
+                fromDate: jQuery("input[name='fromDate']").val() || null,
+                toDate: jQuery("input[name='toDate']").val() || null,
+                deliveryId : jQuery("#deliveryId").val() || null
+            },
+            datatype: "json",
+            success: function (r) {
+                jQuery("#totalNumberReceive").html(r.count + " ອັນ");
+
+                jQuery("#totalKipNotYetReceive").html(r.kipNYR + "ກີບ");
+                jQuery("#totalBahtNotYetReceive").html(r.bahtNYR + "ບາດ");
+                jQuery("#totalDollarNotYetRecieve").html(r.dollarNYR + "ໂດລາ");
+
+                jQuery("#totalKip").html(r.kipR + "ກີບ");
+                jQuery("#totalBaht").html(r.bahtR + "ບາດ");
+                jQuery("#totalDollar").html(r.dollarR + "ໂດລາ");
+
+                jQuery("#totalKipReceive").html(r.kipT + "ກີບ");
+                jQuery("#totalBahtReceive").html(r.bahtT + "ບາດ");
+                jQuery("#totalDollarReceive").html(r.dollarT + "ໂດລາ");
+            },
+            error: function () {
+                alert("Server error");
+            }
+        });
+    }
+    function searchByDate(source) {
+        SentHistoryTable.ajax.reload(null, false);
+        jQuery(source).datepicker('hide');
+        itemSentHistoryCount();
+    }
+        function searchByDelivery() {
+            SentHistoryTable.ajax.reload(null, false);
+           
+            itemSentHistoryCount();
+        }
+    function itemDetail(id) {
+
+        window.location = "@Url.Action("ItemsDetail","Admin")?itemId="+id;
+
+    }
+
+    </script>
+}
+

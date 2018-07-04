@@ -66,29 +66,47 @@
     <Compile Include="Interface\ICustomers.cs" />
     <Compile Include="Interface\IDatabaseInit.cs" />
     <Compile Include="Interface\IProducts.cs" />
-    <Compile Include="Migrations\201806180436572_initial.cs" />
-    <Compile Include="Migrations\201806180436572_initial.Designer.cs">
-      <DependentUpon>201806180436572_initial.cs</DependentUpon>
+    <Compile Include="Migrations\201807010822447_intial.cs" />
+    <Compile Include="Migrations\201807010822447_intial.Designer.cs">
+      <DependentUpon>201807010822447_intial.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201806260512181_addDeliveryMan.cs" />
-    <Compile Include="Migrations\201806260512181_addDeliveryMan.Designer.cs">
-      <DependentUpon>201806260512181_addDeliveryMan.cs</DependentUpon>
+    <Compile Include="Migrations\201807011512440_GiveMoney.cs" />
+    <Compile Include="Migrations\201807011512440_GiveMoney.Designer.cs">
+      <DependentUpon>201807011512440_GiveMoney.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201806291439222_addprice.cs" />
-    <Compile Include="Migrations\201806291439222_addprice.Designer.cs">
-      <DependentUpon>201806291439222_addprice.cs</DependentUpon>
+    <Compile Include="Migrations\201807020734019_balancetransfer.cs" />
+    <Compile Include="Migrations\201807020734019_balancetransfer.Designer.cs">
+      <DependentUpon>201807020734019_balancetransfer.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201806291440069_addprice1.cs" />
-    <Compile Include="Migrations\201806291440069_addprice1.Designer.cs">
-      <DependentUpon>201806291440069_addprice1.cs</DependentUpon>
+    <Compile Include="Migrations\201807020735080_balancetransfer1.cs" />
+    <Compile Include="Migrations\201807020735080_balancetransfer1.Designer.cs">
+      <DependentUpon>201807020735080_balancetransfer1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201807030846023_confirmConsolidation.cs" />
+    <Compile Include="Migrations\201807030846023_confirmConsolidation.Designer.cs">
+      <DependentUpon>201807030846023_confirmConsolidation.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201807040249582_needconfirm.cs" />
+    <Compile Include="Migrations\201807040249582_needconfirm.Designer.cs">
+      <DependentUpon>201807040249582_needconfirm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201807040416571_timeLaofont.cs" />
+    <Compile Include="Migrations\201807040416571_timeLaofont.Designer.cs">
+      <DependentUpon>201807040416571_timeLaofont.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201807040418017_timeLaofont1.cs" />
+    <Compile Include="Migrations\201807040418017_timeLaofont1.Designer.cs">
+      <DependentUpon>201807040418017_timeLaofont1.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\TbConsolidatedItems.cs" />
     <Compile Include="Models\TbConsolidateList.cs" />
     <Compile Include="Models\TbCustomer.cs" />
-    <Compile Include="Models\TbItemAllocation.cs" />
-    <Compile Include="Models\TbItemLog.cs" />
+    <Compile Include="Models\TbItemsPickUpAllocation.cs" />
+    <Compile Include="Models\TbItemSentAllocation.cs" />
     <Compile Include="Models\TbItems.cs" />
+    <Compile Include="Models\TbItemSentHistory.cs" />
+    <Compile Include="Models\TbItemsPickupHistory.cs" />
     <Compile Include="Models\TbItemStatus.cs" />
     <Compile Include="Models\TbPrice.cs" />
     <Compile Include="Models\TbRole.cs" />
@@ -102,38 +120,52 @@
     <Compile Include="Utility\ItemUtility.cs" />
     <Compile Include="Utility\UserUtility.cs" />
     <Compile Include="ViewModels\Admin\AccountModel.cs" />
+    <Compile Include="ViewModels\Admin\ConsolidateFactorModel.cs" />
+    <Compile Include="ViewModels\Admin\ConsolidationListModel.cs" />
     <Compile Include="ViewModels\Admin\ConsolidationModel.cs" />
     <Compile Include="ViewModels\Admin\CustomerItemsModel.cs" />
     <Compile Include="ViewModels\Admin\CustomerModel.cs" />
+    <Compile Include="ViewModels\Admin\DeliveryHistoryModel.cs" />
     <Compile Include="ViewModels\Admin\ItemBarCodeModel.cs" />
     <Compile Include="ViewModels\Admin\ItemHistoryModel.cs" />
     <Compile Include="ViewModels\Admin\ItemsAllocationModelWithDelivery.cs" />
-    <Compile Include="ViewModels\Customer\ConsolidationItemModel.cs" />
-    <Compile Include="ViewModels\Customer\ConsolidationListModel.cs" />
-    <Compile Include="ViewModels\Customer\ConsolidationModel.cs" />
+    <Compile Include="ViewModels\Admin\PickUpHistoryModel.cs" />
+    <Compile Include="ViewModels\Admin\SentHistoryCountModel.cs" />
     <Compile Include="ViewModels\Customer\CustomerProfileItemsModel.cs" />
     <Compile Include="ViewModels\Customer\ItemsCountModel.cs" />
     <Compile Include="ViewModels\Customer\ItemsModel.cs" />
     <Compile Include="ViewModels\Customer\ProfileModel.cs" />
-    <Compile Include="ViewModels\Delivery\ItemsAllocationModel.cs" />
+    <Compile Include="ViewModels\Delivery\ItemsPickUpAllocationModel.cs" />
+    <Compile Include="ViewModels\Delivery\ItemsSentAllocationModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201806180436572_initial.resx">
-      <DependentUpon>201806180436572_initial.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201807010822447_intial.resx">
+      <DependentUpon>201807010822447_intial.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201806260512181_addDeliveryMan.resx">
-      <DependentUpon>201806260512181_addDeliveryMan.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201807011512440_GiveMoney.resx">
+      <DependentUpon>201807011512440_GiveMoney.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201806291439222_addprice.resx">
-      <DependentUpon>201806291439222_addprice.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201807020734019_balancetransfer.resx">
+      <DependentUpon>201807020734019_balancetransfer.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201806291440069_addprice1.resx">
-      <DependentUpon>201806291440069_addprice1.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201807020735080_balancetransfer1.resx">
+      <DependentUpon>201807020735080_balancetransfer1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201807030846023_confirmConsolidation.resx">
+      <DependentUpon>201807030846023_confirmConsolidation.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201807040249582_needconfirm.resx">
+      <DependentUpon>201807040249582_needconfirm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201807040416571_timeLaofont.resx">
+      <DependentUpon>201807040416571_timeLaofont.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201807040418017_timeLaofont1.resx">
+      <DependentUpon>201807040418017_timeLaofont1.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

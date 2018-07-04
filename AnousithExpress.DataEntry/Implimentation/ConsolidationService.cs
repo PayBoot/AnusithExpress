@@ -1,9 +1,11 @@
 ﻿using AnousithExpress.DataEntry.Interface;
 using AnousithExpress.DataEntry.Models;
 using AnousithExpress.DataEntry.Utility;
+using AnousithExpress.DataEntry.ViewModels.Admin;
 using AnousithExpress.DataEntry.ViewModels.Customer;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 
 namespace AnousithExpress.DataEntry.Implimentation
@@ -22,17 +24,41 @@ namespace AnousithExpress.DataEntry.Implimentation
                 {
                     try
                     {
+                        //get balance from delivery
+                        double kip = 0;
+                        double baht = 0;
+                        double dollar = 0;
+                        foreach (var id in itemId)
+                        {
+                            kip += db.tbItemSentHistories
+                                .Include(x => x.Item)
+                                .FirstOrDefault(x => x.Item.Id == id).IncomingBalanceInKip;
+                            baht += db.tbItemSentHistories
+                                 .Include(x => x.Item)
+                                .FirstOrDefault(x => x.Item.Id == id).IncomingBalanceInBaht;
+                            dollar += db.tbItemSentHistories.Include(x => x.Item)
+                                .FirstOrDefault(x => x.Item.Id == id).IncomingBalanceInDollar;
+                        }
+
+                        double balanceToTransfer = kip - fee;
                         TbConsolidateList list = new TbConsolidateList
                         {
                             Customer = db.tbCustomers.FirstOrDefault(u => u.Id == cusomterId),
                             AmountOfItem = amount,
                             ConsolidatedDate = DateTime.Now.Date,
-                            Fee = fee
+                            IncomingBalanceInKip = kip,
+                            IncomingBalanceInBaht = baht,
+                            IncomingBalanceInDollar = dollar,
+                            BalanceToTransfer = balanceToTransfer,
+                            isBalanceTransfer = false,
+                            isCustomerConfirmed = false,
+                            Fee = fee,
+
                         };
                         db.tbConsolidateLists.Add(list);
 
                         db.SaveChanges();
-                        db.Entry(list).State = System.Data.Entity.EntityState.Modified;
+                        db.Entry(list).State = EntityState.Modified;
                         list.ConsolidateNumber = "L" + list.Id.ToString().PadLeft(5, '0');
                         foreach (var id in itemId)
                         {
@@ -96,19 +122,6 @@ namespace AnousithExpress.DataEntry.Implimentation
                 if (source != null)
                 {
                     var result = _consolidate.AssignConsolidationList(source);
-                    ConsolidationListModel sumRow = new ConsolidationListModel
-                    {
-                        Id = 0,
-                        AmountOfItem = result.Sum(x => x.AmountOfItem),
-                        ConsolidatedDate = null,
-                        CustomerID = 0,
-                        ConsolidateNumber = null,
-                        CustomerName = "ລວມ",
-                        CustomerPhonenumber = null,
-                        Fee = result.Sum(x => x.Fee)
-                    };
-                    result.Add(sumRow);
-
                     return result;
                 }
                 else
@@ -126,12 +139,38 @@ namespace AnousithExpress.DataEntry.Implimentation
                 var sourceItems = _consolidate.GetAllItems(db).Where(c => c.Consolidator.Id == consolidationId).ToList();
                 ConsolidationModel result = new ConsolidationModel
                 {
-                    Detail = _consolidate.AssignSingleConsolidationList(sourceDetail),
-                    Items = _consolidate.AssignConsolidationItemsList(sourceItems)
+                    ConsolidateDetail = _consolidate.AssignSingleConsolidationList(sourceDetail),
+                    ConsolidationItems = AssignConsolidateItems(sourceItems)
                 };
                 return result;
-
             }
+        }
+
+        private static List<ItemsModel> AssignConsolidateItems(List<TbConsolidatedItems> sourceItems)
+        {
+            return sourceItems.Select(r => new ItemsModel
+            {
+                ItemName = r.Items.ItemName,
+                TrackingNumber = r.Items.TrackingNumber,
+                Status = r.Items.Status.Status,
+                CustomerName = r.Items.Customer.Name,
+                CustomerId = r.Items.Customer.Id,
+                CustomerPhonenumber = r.Items.Customer.Phonenumber,
+                Id = r.Items.Id,
+                ConfrimDate = r.Items.ConfrimDate == null ? "" : r.Items.ConfrimDate?.ToString("dd-MM-yyyy"),
+                CreatedDate = r.Items.CreatedDate == null ? "" : r.Items.CreatedDate?.ToString("dd-MM-yyyy"),
+                Description = r.Items.Descripttion,
+                SendingDate = r.Items.SendingDate == null ? "" : r.Items.SendingDate?.ToString("dd-MM-yyyy"),
+                SentDate = r.Items.SentDate == null ? "" : r.Items.SentDate?.ToString("dd-MM-yyyy"),
+                isDeleted = r.Items.isDeleted,
+                ItemValue_Baht = r.Items.ItemValue_Baht,
+                ItemValue_Dollar = r.Items.ItemValue_Dollar,
+                ItemValue_Kip = r.Items.ItemValue_Kip,
+                ReceipverPhone = r.Items.ReceipverPhone,
+                ReceiveDate = r.Items.ReceiveDate == null ? "" : r.Items.ReceiveDate?.ToString("dd-MM-yyyy"),
+                ReceiverAddress = r.Items.ReceiverAddress,
+                ReceiverName = r.Items.ReceiverName
+            }).ToList();
         }
 
         public List<ConsolidationListModel> GetConsolidationListByCustomerId(int customerId, DateTime? searchFrom, DateTime? searchTo)
@@ -152,10 +191,20 @@ namespace AnousithExpress.DataEntry.Implimentation
             }
         }
 
-        public double GetPrice(double condition)
+        public ConsolidateFactorModel GetConsolidationFactor(int[] itemId, int customerId)
         {
             using (var db = new EntityContext())
             {
+                if (itemId.Length == 0)
+                {
+                    return null;
+                };
+                double condition = GetCondition(itemId, customerId, db);
+                string Date = GetDate(itemId, customerId, db);
+                if (condition == 0)
+                {
+                    return null;
+                };
                 double fee = 0;
                 List<TbPrice> priceCondition = new List<TbPrice>();
                 priceCondition = db.tbPrices.ToList();
@@ -175,15 +224,88 @@ namespace AnousithExpress.DataEntry.Implimentation
                         fee = priceNumber[i];
                     }
                 }
-                return fee;
+                return new ConsolidateFactorModel
+                {
+                    ConditionUsed = condition,
+                    DateOfReceive = Date,
+                    PricePerUnit = fee
+                };
             }
+        }
+        private double GetCondition(int[] itemId, int customerId, EntityContext db)
+        {
+            bool valueEqual = false;
+
+            List<DateTime> AllDate = new List<DateTime>();
+
+            foreach (var id in itemId)
+            {
+                AllDate.Add((DateTime)db.TbItems
+                    .Include(s => s.Customer).FirstOrDefault(s => s.Id == id
+                        && s.Customer.Id == customerId).ReceiveDate);
+
+            }
+            DateTime[] DateString = AllDate.ToArray();
+            for (int r = 0; r < DateString.Length; r++)
+            {
+                if (r >= 1)
+                {
+                    valueEqual = AllDate[0].ToString().Equals(AllDate[r].ToString(), StringComparison.InvariantCulture);
+                    if (!valueEqual)
+                    {
+                        return 0;
+                    }
+                }
+            }
+            DateTime resultTime = new DateTime();
+            foreach (var time in AllDate)
+            {
+                resultTime = time;
+            }
+            double count = db.TbItems
+                .Include(s => s.Customer).Where(x => x.ReceiveDate == resultTime
+                        && x.Customer.Id == customerId).Count();
+            return count;
+
+
+        }
+
+        private string GetDate(int[] itemId, int customerId, EntityContext db)
+        {
+            bool valueEqual = false;
+
+            List<DateTime> AllDate = new List<DateTime>();
+
+            foreach (var id in itemId)
+            {
+                AllDate.Add((DateTime)db.TbItems.Include(s => s.Customer).FirstOrDefault(s => s.Id == id && s.Customer.Id == customerId).ReceiveDate);
+
+            }
+            DateTime[] DateString = AllDate.ToArray();
+            for (int r = 0; r < DateString.Length; r++)
+            {
+                if (r >= 1)
+                {
+                    valueEqual = AllDate[0].ToString().Equals(AllDate[r].ToString(), StringComparison.InvariantCulture);
+                    if (!valueEqual)
+                    {
+                        return "";
+                    }
+                }
+            }
+            DateTime resultTime = new DateTime();
+            foreach (var time in AllDate)
+            {
+                resultTime = time;
+            }
+            return resultTime.ToString("dd-MM-yyyy");
         }
 
         public List<ItemsModel> GetUnConlidateItems(int customerId)
         {
             using (var db = new EntityContext())
             {
-                var source = _item.GetAll(db).Where(i => i.Customer.Id == customerId && i.Status.Id == 6
+                var source = _item.GetAll(db).Where(i => i.Customer.Id == customerId && (i.Status.Id == 6 || i.Status.Id == 10)
                         && !db.tbConsolidatedItems.Select(x => x.Items.Id).Contains(i.Id)).ToList();
                 if (source != null)
                 {
@@ -197,6 +319,100 @@ namespace AnousithExpress.DataEntry.Implimentation
             }
         }
 
+        public bool AddNeedConfirm(int consolidationId)
+        {
+            using (var db = new EntityContext())
+            {
+                var source = db.tbConsolidateLists.FirstOrDefault(c => c.Id == consolidationId);
+                if (source == null)
+                {
+                    return false;
+                };
+                db.Entry(source).State = EntityState.Modified;
+                source.needConfirm = true;
+                db.SaveChanges();
+                return true;
+            }
+        }
 
+        public bool UndoNeedConfirm(int consolidationId)
+        {
+            using (var db = new EntityContext())
+            {
+                var source = db.tbConsolidateLists.FirstOrDefault(c => c.Id == consolidationId);
+                if (source == null)
+                {
+                    return false;
+                };
+                db.Entry(source).State = EntityState.Modified;
+                source.needConfirm = false;
+                db.SaveChanges();
+                return true;
+            }
+        }
+
+        public bool CustomerConfirm(int consolidationId)
+        {
+            using (var db = new EntityContext())
+            {
+                var source = db.tbConsolidateLists.FirstOrDefault(c => c.Id == consolidationId);
+                if (source == null)
+                {
+                    return false;
+                };
+                db.Entry(source).State = EntityState.Modified;
+                source.isCustomerConfirmed = true;
+                db.SaveChanges();
+                return true;
+            }
+        }
+
+        public bool UndoCustomerConfirm(int consolidationId)
+        {
+            using (var db = new EntityContext())
+            {
+                var source = db.tbConsolidateLists.FirstOrDefault(c => c.Id == consolidationId);
+                if (source == null)
+                {
+                    return false;
+                };
+                db.Entry(source).State = EntityState.Modified;
+                source.isCustomerConfirmed = false;
+                db.SaveChanges();
+                return true;
+            }
+        }
+
+        public bool ConfirmTransfer(int consolidationId)
+        {
+            using (var db = new EntityContext())
+            {
+                var source = db.tbConsolidateLists.FirstOrDefault(c => c.Id == consolidationId);
+                if (source == null)
+                {
+                    return false;
+                };
+                db.Entry(source).State = EntityState.Modified;
+                source.isBalanceTransfer = true;
+                db.SaveChanges();
+                return true;
+            }
+        }
+
+        public bool UndoConfirmTransfer(int consolidationId)
+        {
+            using (var db = new EntityContext())
+            {
+                var source = db.tbConsolidateLists.FirstOrDefault(c => c.Id == consolidationId);
+                if (source == null)
+                {
+                    return false;
+                };
+                db.Entry(source).State = EntityState.Modified;
+                source.isBalanceTransfer = false;
+                db.SaveChanges();
+                return true;
+            }
+        }
     }
 }

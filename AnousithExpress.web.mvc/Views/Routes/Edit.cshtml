@@ -5,10 +5,8 @@
     Layout = "~/Views/Shared/_CustomerLayout.cshtml";
 }
 
-<div class="panel panel-default" style="padding:20px;">
-    <div class="panel panel-body" style="background-color:white">
 
-         
+<h4>ປ່ຽນແປງສາຍສົ່ງ</h4>         
         @using (Html.BeginForm())
     {
         @Html.AntiForgeryToken()
@@ -20,8 +18,8 @@
             @Html.HiddenFor(model => model.Id)
 
             <div class="form-group">
-                @Html.LabelFor(model => model.Route, htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
+                <label class="control-label col-md-2">ສາຍສົ່ງ</label>
+                <div>
                     @Html.EditorFor(model => model.Route, new { htmlAttributes = new { @class = "form-control" } })
                     @Html.ValidationMessageFor(model => model.Route, "", new { @class = "text-danger" })
                 </div>
@@ -29,7 +27,7 @@
 
             <div class="form-group">
                 <div class="col-md-offset-2 col-md-10">
-                    <input type="submit" value="Save" class="btn btn-primary" />
+                    <input type="submit" value="ບັນທຶກ" class="btn btn-danger" />
                 </div>
             </div>
         </div>
@@ -43,5 +41,4 @@
             @Scripts.Render("~/bundles/jqueryval")
         }
 
-    </div>
-</div>
+

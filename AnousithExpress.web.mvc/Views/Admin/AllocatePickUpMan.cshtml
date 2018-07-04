@@ -1,0 +1,179 @@
+﻿
+@{
+    ViewBag.Title = "ຈັດຄົນຮັບ";
+    Layout = "~/Views/Shared/_CustomerLayout.cshtml";
+}
+
+<div class="breadcrumbs">
+    <div class="col-sm-4">
+        <div class="page-header float-left">
+            <div class="page-title">
+
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-8">
+        <div class="page-header float-right">
+            <div class="page-title">
+                <ol class="breadcrumb text-right">
+                    <li><a href="@Url.Action("Index", "Admin")">ຫນ້າຫລັກ</a></li>
+                    <li class="active">@ViewData["Title"]</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container" id="containerResize">
+    <div class="content mt-3">
+        <div class="animated fadeIn">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card">
+                       
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col">
+                                <div class="form-horizontal">
+                                    <label>ລະຫັດລຸກຄ້າ</label>
+                                    <input type="text" id="customerId" class="form-control" />         
+                                    <button class="btn btn-danger" onclick="search()">ຄົ້ນຫາ</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="table-responsive">
+                            <table id="itemAllocationTable" class="table table-hover " style="width:100%;white-space:nowrap;">
+                                <thead>
+                                    <tr>
+                                        <th class="control">ເລກຕິດຕາມ</th>
+                                        <th class="control">ປະເພດສີນຄ້າ</th>
+                                        <th class="control">ສະຖານະ</th>
+                                        <th class="control">ຊື່ລຸກຄ້າ</th>
+                                        <th class="none">ເບີໂທລຸກຄ້າ</th>
+                                        <th class="none">ທີ່ຢູ່</th>
+                                        <th class="control">ພະນັກງານໄປຮັບ</th>
+
+                                    </tr>
+                                </thead>
+
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div><!-- .animated -->
+    </div><!-- .content -->
+</div>
+<div class="modal fade" id="modal1" role="dialog">
+    <div class="modal-dialog  modal-lg">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div id="content1" class="text-center printableArea">
+                    <label>ຜູ້ສົ່ງ</label>
+                    @Html.DropDownList("DeliveryMan", ViewBag.delivery as SelectList, new { @class = "form-control", @id = "deliveryId" })
+                </div>
+                <div id="modalButton1" class="form-horizontal text-center">
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="modal2" role="dialog">
+    <div class="modal-dialog  modal-lg">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div id="content2" class="text-center printableArea">
+                    <strong id="successMessage"></strong>
+                </div>
+                <div id="modalButton2" class="form-horizontal text-center">
+                    <button class="btn btn-warning">ຕົກລົງ</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@section scripts{
+    <script>
+    var pickupallocationtable;
+    jQuery(document).ready(function () {
+        jQuery("#sendingDate").datepicker({
+            language: 'la'
+        });
+        PickupItemDataTable();
+
+    });
+    function search() {
+        pickupallocationtable.ajax.reload(null,false);
+    }
+    function PickupItemDataTable() {
+        pickupallocationtable = jQuery("#itemAllocationTable").DataTable({
+            serverSide: true,
+            responsive: true,
+            paging: false,
+            searching: false,
+            language: LaoLangage,
+            order: [[1, 'desc']],
+            ajax: {
+                url: "/Admin/AllocationPickUpTable",
+                type: "POST",
+                datatype: "json",
+                data: function (d) {
+                    d.customerId = jQuery("#customerId").val()
+                }
+            },
+            columns: [
+                { data: "TrackingNumber", name: "TrackingNumber" },
+                { data: "ItemName", name: "ItemName" },
+                { data: "Status", name: "Status" },
+                { data: "CustomerName", name: "CustomerName" },
+                { data: "CustomerPhonenumber", name: "CustomerPhonenumber" },
+                { data: "CustomerAddress", name: "CustomerAddress"},
+                {
+                    data: "UserName", render: function (data, type, full, meta) {
+                        var html = '';
+                        if (data !== null && data!=="") {
+                            html += data;
+                            html += ' <button type="button" onclick="SelectPickUpDeliveryMan(' + full.ItemId + ')" class="btn btn-flat btn-warning btn-sm">ປ່ຽນຄົນສົ່ງ</button>';
+                        }
+                        else {
+                            html = '<button type="button" onclick="SelectPickUpDeliveryMan('+full.ItemId+')" class="btn btn-flat btn-warning btn-sm">ຈັດຄົນສົ່ງ</button>';
+                        }
+
+                        return '<div>' + html + '</div>';
+                    }
+                }
+
+            ]
+        });
+    }
+    function SelectPickUpDeliveryMan(id) {
+        var item = id;
+
+        var htmlbutton = '';
+        htmlbutton += '<button type="button" onclick="SelectPickUpPerSon(' + item + ')" class="btn btn-flat btn-warning w-25 mr-1 ml-1 mt-1">ຕົກລົງ</button>';
+        htmlbutton += '<button type="button" class="btn btn-flat btn-primary w-25 mr-1 ml-1 mt-1" data-dismiss="modal">ອອກ</button>';
+        jQuery("#modalButton1").html(htmlbutton);
+        jQuery("#modal1").modal("show");
+
+    }
+    function SelectPickUpPerSon(item, person) {
+
+        var id = item;
+        jQuery.ajax({
+            url: "/Admin/AllocationPickUpFunction",
+            data: { itemId: id, deliveryManId: jQuery('#deliveryId').val() },
+            datatype: "json",
+            type: "POST",
+            success: function (r) {
+                jQuery("#successMessage").html("ສຳເລັດ");
+                pickupallocationtable.ajax.reload(null, false);
+                jQuery("#modal1").modal("hide");
+            },
+            error: function () {
+                alert("Server error");
+            }
+        });
+    }
+    </script>
+}

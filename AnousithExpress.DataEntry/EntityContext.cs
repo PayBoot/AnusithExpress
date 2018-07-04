@@ -21,8 +21,10 @@ namespace AnousithExpress.DataEntry
         public DbSet<TbRole> tbRoles { get; set; }
         public DbSet<TbItemStatus> tbItemStatuses { get; set; }
         public DbSet<TbItems> TbItems { get; set; }
-        public DbSet<TbItemLog> tbItemLogs { get; set; }
-        public DbSet<TbItemAllocation> tbItemAllocations { get; set; }
+        public DbSet<TbItemSentAllocation> tbItemSentAllocations { get; set; }
+        public DbSet<TbItemSentHistory> tbItemSentHistories { get; set; }
+        public DbSet<TbItemsPickUpAllocation> tbItemPickUpAllocations { get; set; }
+        public DbSet<TbItemsPickupHistory> tbItemsPickupHistories { get; set; }
         public DbSet<TbCustomer> tbCustomers { get; set; }
         public DbSet<TbConsolidateList> tbConsolidateLists { get; set; }
         public DbSet<TbConsolidatedItems> tbConsolidatedItems { get; set; }

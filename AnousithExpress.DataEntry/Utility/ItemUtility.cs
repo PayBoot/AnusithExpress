@@ -85,9 +85,9 @@ namespace AnousithExpress.DataEntry.Utility
                 .OrderByDescending(i => i.Id);
         }
 
-        public IQueryable<TbItemAllocation> GetAllAllocation(EntityContext db)
+        public IQueryable<TbItemSentAllocation> GetAllAllocation(EntityContext db)
         {
-            return db.tbItemAllocations
+            return db.tbItemSentAllocations
                 .Include(i => i.Item)
                 .Include(i => i.Item.Customer)
                 .Include(i => i.Route)
@@ -97,7 +97,16 @@ namespace AnousithExpress.DataEntry.Utility
                 .Where(i => i.Item.isDeleted == false)
                 .OrderByDescending(i => i.Id);
         }
-
+        public IQueryable<TbItemsPickUpAllocation> GetAllPickUpAllocation(EntityContext db)
+        {
+            return db.tbItemPickUpAllocations
+                .Include(i => i.Item)
+                .Include(i => i.Item.Customer)
+                .Include(i => i.DeliveryMan)
+                .Include(i => i.Item.Status)
+                .Where(i => i.Item.isDeleted == false)
+                .OrderByDescending(i => i.Id);
+        }
         public List<ItemsModel> AssignItemsList(List<TbItems> items)
         {
             if (items != null)
@@ -166,11 +175,11 @@ namespace AnousithExpress.DataEntry.Utility
             }
 
         }
-        public List<ItemsAllocationModel> AssignItemsAllocation(List<TbItemAllocation> items)
+        public List<ItemsSentAllocationModel> AssignItemsAllocation(List<TbItemSentAllocation> items)
         {
             if (items != null)
             {
-                return items.Select(r => new ItemsAllocationModel
+                return items.Select(r => new ItemsSentAllocationModel
                 {
                     ItemId = r.Item.Id,
                     DateToDeliver = r.DateToDeliver.ToString("dd-MM-yyyy"),
@@ -201,7 +210,35 @@ namespace AnousithExpress.DataEntry.Utility
             }
             else
             {
-                return new List<ItemsAllocationModel>();
+                return new List<ItemsSentAllocationModel>();
+            }
+        }
+
+        public List<ItemsPickUpAllocationModel> AssignItemsPickUpAllocation(List<TbItemsPickUpAllocation> items)
+        {
+            if (items != null)
+            {
+                List<ItemsPickUpAllocationModel> model = new List<ItemsPickUpAllocationModel>();
+                model = items.Select(r => new ItemsPickUpAllocationModel
+                {
+                    Id = r.Id,
+                    DateToDeliver = r.DateToPickUp.ToString("dd/MM/yyyy"),
+                    CustomerId = r.Item.Customer.Id,
+                    CustomerName = r.Item.Customer.Name,
+                    Status = r.Item.Status.Status,
+                    StatusId = r.Item.Status.Id,
+                    CustomerPhonenumber = r.Item.Customer.Phonenumber,
+                    ItemId = r.Item.Id,
+                    ItemName = r.Item.ItemName,
+                    TrackingNumber = r.Item.TrackingNumber,
+                    UserName = r.DeliveryMan.Username,
+                    CustomerAddress = r.Item.Customer.Address
+                }).ToList();
+                return model;
+            }
+            else
+            {
+                return new List<ItemsPickUpAllocationModel>();
             }
         }
         public ItemsModel AssignItem(TbItems item)
@@ -228,6 +265,7 @@ namespace AnousithExpress.DataEntry.Utility
                     ConfrimDate = item.ConfrimDate == null ? "" : item.ConfrimDate?.ToString("dd-MM-yyyy"),
                     CreatedDate = item.CreatedDate == null ? "" : item.CreatedDate?.ToString("dd-MM-yyyy"),
                     SendingDate = item.SendingDate == null ? "" : item.SendingDate?.ToString("dd-MM-yyyy"),
+                    SentDate = item.SentDate == null ? "" : item.SentDate?.ToString("dd-MM-yyyy"),
                     isDeleted = item.isDeleted
                 };
             }
@@ -235,6 +273,26 @@ namespace AnousithExpress.DataEntry.Utility
             {
                 return null;
             }
+
+        }
+
+        public IQueryable<TbItemSentHistory> GetSentHistory(EntityContext db)
+        {
+            return db.tbItemSentHistories
+                    .Include(x => x.DeliveryMan)
+                    .Include(x => x.Item)
+                    .Include(x => x.Item.Status)
+                    .Include(x => x.Item.Customer)
+                    .Where(x => x.Item.isDeleted == false);
+        }
+        public IQueryable<TbItemsPickupHistory> GetPickUpHistory(EntityContext db)
+        {
+            return db.tbItemsPickupHistories
+                .Include(x => x.DeliveryMan)
+                    .Include(x => x.Item)
+                    .Include(x => x.Item.Status)
+                    .Include(x => x.Item.Customer)
+                    .Where(x => x.Item.isDeleted == false);
 
         }
     }

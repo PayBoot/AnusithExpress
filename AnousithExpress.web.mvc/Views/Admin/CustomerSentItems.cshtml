@@ -97,7 +97,7 @@
         function () {
          
             itemCount();
-            itemTable();
+            SentitemTable();
             jQuery("input[name='fromDate']").datepicker({
                 language: 'la'
             });
@@ -108,7 +108,7 @@
         }
     );
 
-    function itemTable() {
+    function SentitemTable() {
         sentItemTable = jQuery("#itemDataTable").DataTable({
             serverSide: true,
             responsive: true,

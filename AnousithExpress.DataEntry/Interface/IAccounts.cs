@@ -20,5 +20,7 @@ namespace AnousithExpress.DataEntry.Interface
         List<TbRole> GetRoles();
         List<TbStatus> GetStatus();
         List<TbUser> GetDeliveryMan();
+
+
     }
 }

@@ -1,6 +1,7 @@
 ﻿using AnousithExpress.DataEntry.Implimentation;
 using AnousithExpress.DataEntry.ViewModels.Admin;
 using AnousithExpress.DataEntry.ViewModels.Customer;
+using AnousithExpress.DataEntry.ViewModels.Delivery;
 using AnousithExpress.web.mvc.Reports;
 using System;
 using System.Collections.Generic;
@@ -120,8 +121,6 @@ namespace AnousithExpress.web.mvc.Controllers
                 recordsFiltered = totalRowAfterFilter,
                 data = AllList
             }, JsonRequestBehavior.AllowGet);
-
-
         }
 
         public ActionResult AccountDelete(int userId)
@@ -302,7 +301,7 @@ namespace AnousithExpress.web.mvc.Controllers
 
         public ActionResult CustomerItemConfirm(int customerId)
         {
-            var model = _product.GetProductToPickUpByCustomerId(customerId);
+            var model = _product.GetProductConfirmByCustomerId(customerId);
             return PartialView("CustomerItemConfirm", model);
         }
 
@@ -431,8 +430,47 @@ namespace AnousithExpress.web.mvc.Controllers
 
         public ActionResult ItemsTransporting(int customerId)
         {
-            var model = _product.GetProductTransportingPerCustomerAdminUser(customerId);
-            return PartialView("ItemsTransporting", model);
+            ViewBag.CustomerId = customerId;
+            return PartialView("ItemsTransporting");
+        }
+
+        public ActionResult ItemTransportingTable(int customerId)
+        {
+            string draw, searchValue, sortColumnName, sortDir;
+            int start, length;
+
+            DatatableInitiator(out draw, out start, out length, out searchValue, out sortColumnName, out sortDir);
+            List<ItemsModel> AllList = new List<ItemsModel>();
+            AllList = _product.GetProductTransportingPerCustomerAdminUser(customerId);
+
+            int totalRecord = AllList.Count;
+            if (!String.IsNullOrEmpty(searchValue)) // filter
+            {
+                AllList = AllList.Where(x =>
+                        x.TrackingNumber.Contains(searchValue) ||
+                        x.ItemName.Contains(searchValue) ||
+                        x.ReceiverName.Contains(searchValue) ||
+                        x.CreatedDate.Contains(searchValue)).ToList();
+            }
+            int totalRowAfterFilter = AllList.Count;
+            //sorting
+
+            if (!String.IsNullOrEmpty(sortColumnName) && !String.IsNullOrEmpty(sortDir))
+            {
+                AllList = AllList.OrderBy(sortColumnName + " " + sortDir).ToList();
+            }
+
+            //paging
+
+            AllList = AllList.Skip(start).Take(length).ToList();
+
+            return Json(new
+            {
+                draw = draw,
+                recordsTotal = totalRecord,
+                recordsFiltered = totalRowAfterFilter,
+                data = AllList
+            }, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult BarCodeReport(int itemId)
@@ -699,6 +737,55 @@ namespace AnousithExpress.web.mvc.Controllers
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 
+        public ActionResult AllocatePickUpMan()
+        {
+            var delivery = _account.GetDeliveryMan();
+            ViewBag.delivery = new SelectList(delivery, "Id", "Username");
+            return View();
+        }
+        public ActionResult AllocationPickUpTable(int? customerId)
+        {
+            string draw, searchValue, sortColumnName, sortDir;
+            int start, length;
+
+
+            DatatableInitiator(out draw, out start, out length, out searchValue, out sortColumnName, out sortDir);
+            List<ItemsPickUpAllocationModel> AllList = new List<ItemsPickUpAllocationModel>();
+            AllList = _allocation.GetItemToPickUp(customerId == null ? 0 : (int)customerId);
+
+            int totalRecord = AllList.Count;
+            if (!String.IsNullOrEmpty(searchValue)) // filter
+            {
+                AllList = AllList.Where(x =>
+                        x.TrackingNumber.Contains(searchValue) ||
+                        x.UserName.Contains(searchValue)).ToList();
+            }
+            int totalRowAfterFilter = AllList.Count;
+            //sorting
+
+            if (!String.IsNullOrEmpty(sortColumnName) && !String.IsNullOrEmpty(sortDir))
+            {
+                AllList = AllList.OrderBy(sortColumnName + " " + sortDir).ToList();
+            }
+
+            //paging
+
+            AllList = AllList.ToList();
+
+            return Json(new
+            {
+                draw = draw,
+                recordsTotal = totalRecord,
+                recordsFiltered = totalRowAfterFilter,
+                data = AllList
+            }, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult AllocationPickUpFunction(int itemId, int deliveryManId)
+        {
+            bool result = _allocation.AllocatePersonToPickUp(itemId, deliveryManId);
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
 
         public ActionResult ConsolidationListPerCustomer(int customerId)
         {
@@ -719,8 +806,7 @@ namespace AnousithExpress.web.mvc.Controllers
             if (!String.IsNullOrEmpty(searchValue)) // filter
             {
                 AllList = AllList.Where(x =>
-                        x.CustomerName.Contains(searchValue) ||
-                        x.CustomerPhonenumber.Contains(searchValue)).ToList();
+                        x.CustomerName.Contains(searchValue)).ToList();
             }
             int totalRowAfterFilter = AllList.Count;
             //sorting
@@ -794,18 +880,23 @@ namespace AnousithExpress.web.mvc.Controllers
             }, JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult GetPrice(double? condition)
+        public ActionResult GetPrice(int[] itemId, int customerId)
         {
-            double fee = 0;
-            if (condition != null)
+            ConsolidateFactorModel Factor = new ConsolidateFactorModel();
+            if (itemId != null)
             {
-                fee = _consolidation.GetPrice((double)condition);
+                Factor = _consolidation.GetConsolidationFactor(itemId, customerId);
+            }
+            if (Factor == null)
+            {
+                return Json(new { price = "0", date = "ວັນທີບໍ່ຕົງກັນ", condition = "ວັນທີບໍ່ຕົງກັນ" }, JsonRequestBehavior.AllowGet);
+
             }
             else
             {
-                fee = 0;
+                return Json(new { price = Factor.PricePerUnit, date = Factor.DateOfReceive, condition = Factor.ConditionUsed }, JsonRequestBehavior.AllowGet);
+
             }
-            return Json(fee, JsonRequestBehavior.AllowGet);
 
         }
 
@@ -885,6 +976,30 @@ namespace AnousithExpress.web.mvc.Controllers
         }
 
 
+
+
+        public ActionResult NeedCustomerConfirm(int consolidationId)
+        {
+            bool result = _consolidation.AddNeedConfirm(consolidationId);
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+        public ActionResult UndoCustomerConfirm(int consolidationId)
+        {
+            bool result = _consolidation.UndoNeedConfirm(consolidationId);
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult ConfirmTransferBalance(int consolidationId)
+        {
+            bool result = _consolidation.ConfirmTransfer(consolidationId);
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+        public ActionResult UndoConfirmTransferBalance(int consolidationId)
+        {
+            bool result = _consolidation.UndoConfirmTransfer(consolidationId);
+            return Json(result, JsonRequestBehavior.AllowGet);
+
+        }
         public ActionResult searchBox(string input)
         {
             if (input.Length == 8)
@@ -929,8 +1044,8 @@ namespace AnousithExpress.web.mvc.Controllers
             if (!String.IsNullOrEmpty(searchValue)) // filter
             {
                 AllList = AllList.Where(x =>
-                        x.CustomerName.Contains(searchValue) ||
-                        x.CustomerPhonenumber.Contains(searchValue)).ToList();
+                        x.CustomerName.Contains(searchValue)
+                       ).ToList();
             }
             int totalRowAfterFilter = AllList.Count;
             //sorting
@@ -965,9 +1080,9 @@ namespace AnousithExpress.web.mvc.Controllers
                 {
                     dataSet.ConsolidationList.AddConsolidationListRow(
                         con.ConsolidateNumber,
-                        con.CustomerIdForShow,
+                        con.CustomerId.ToString().PadLeft(4, '0'),
                         con.CustomerName,
-                        con.CustomerPhonenumber,
+                        con.CustomerPhoneNumber,
                         con.ConsolidatedDate,
                         con.AmountOfItem.ToString(),
                         con.Fee);
@@ -1002,6 +1117,300 @@ namespace AnousithExpress.web.mvc.Controllers
 
             return View();
         }
+
+
+
+        public ActionResult StatisticScanReceive()
+        {
+            return View();
+        }
+        public ActionResult StatisticScanReceiveTable(DateTime? fromDate, DateTime? toDate)
+        {
+            string draw, searchValue, sortColumnName, sortDir;
+            int start, length;
+
+
+            DatatableInitiator(out draw, out start, out length, out searchValue, out sortColumnName, out sortDir);
+            List<ItemsModel> AllList = new List<ItemsModel>();
+            AllList = _product.GetStatisticItemScanIn(fromDate, toDate);
+
+            int totalRecord = AllList.Count;
+            if (!String.IsNullOrEmpty(searchValue)) // filter
+            {
+                AllList = AllList.Where(x =>
+                        x.CustomerName.Contains(searchValue) ||
+                        x.CustomerPhonenumber.Contains(searchValue)).ToList();
+            }
+            int totalRowAfterFilter = AllList.Count;
+            //sorting
+
+            if (!String.IsNullOrEmpty(sortColumnName) && !String.IsNullOrEmpty(sortDir))
+            {
+                AllList = AllList.OrderBy(sortColumnName + " " + sortDir).ToList();
+            }
+
+            //paging
+
+            AllList = AllList.ToList();
+
+            return Json(new
+            {
+                draw = draw,
+                recordsTotal = totalRecord,
+                recordsFiltered = totalRowAfterFilter,
+                data = AllList
+            }, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult StatisticScanReceiveCount(DateTime? fromDate, DateTime? toDate)
+        {
+            double num = _product.GetStatisticItemScanIn(fromDate, toDate).Count();
+            return Json(num, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult StatisticScanSent()
+        {
+            return View();
+        }
+        public ActionResult StatisticScanSentTable(DateTime? fromDate, DateTime? toDate)
+        {
+            string draw, searchValue, sortColumnName, sortDir;
+            int start, length;
+
+
+            DatatableInitiator(out draw, out start, out length, out searchValue, out sortColumnName, out sortDir);
+            List<ItemsModel> AllList = new List<ItemsModel>();
+            AllList = _product.GetStatisticItemScanSent(fromDate, toDate);
+
+            int totalRecord = AllList.Count;
+            if (!String.IsNullOrEmpty(searchValue)) // filter
+            {
+                AllList = AllList.Where(x =>
+                        x.CustomerName.Contains(searchValue) ||
+                        x.CustomerPhonenumber.Contains(searchValue)).ToList();
+            }
+            int totalRowAfterFilter = AllList.Count;
+            //sorting
+
+            if (!String.IsNullOrEmpty(sortColumnName) && !String.IsNullOrEmpty(sortDir))
+            {
+                AllList = AllList.OrderBy(sortColumnName + " " + sortDir).ToList();
+            }
+
+            //paging
+
+            AllList = AllList.ToList();
+
+            return Json(new
+            {
+                draw = draw,
+                recordsTotal = totalRecord,
+                recordsFiltered = totalRowAfterFilter,
+                data = AllList
+            }, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult StatisticScanSentCount(DateTime? fromDate, DateTime? toDate)
+        {
+            var source = _product.GetStatisticItemScanSentCount(fromDate, toDate);
+            double num = source.totalItem;
+            double suc = source.totalSuccess;
+
+            return Json(new { i = num, s = suc }, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult StatisticScanReturn()
+        {
+            return View();
+        }
+        public ActionResult StatisticScanReturnTable(DateTime? fromDate, DateTime? toDate)
+        {
+            string draw, searchValue, sortColumnName, sortDir;
+            int start, length;
+
+
+            DatatableInitiator(out draw, out start, out length, out searchValue, out sortColumnName, out sortDir);
+            List<ItemsModel> AllList = new List<ItemsModel>();
+            AllList = _product.GetStatisticItemSentBack(fromDate, toDate);
+
+            int totalRecord = AllList.Count;
+            if (!String.IsNullOrEmpty(searchValue)) // filter
+            {
+                AllList = AllList.Where(x =>
+                        x.CustomerName.Contains(searchValue) ||
+                        x.CustomerPhonenumber.Contains(searchValue)).ToList();
+            }
+            int totalRowAfterFilter = AllList.Count;
+            //sorting
+
+            if (!String.IsNullOrEmpty(sortColumnName) && !String.IsNullOrEmpty(sortDir))
+            {
+                AllList = AllList.OrderBy(sortColumnName + " " + sortDir).ToList();
+            }
+
+            //paging
+
+            AllList = AllList.ToList();
+
+            return Json(new
+            {
+                draw = draw,
+                recordsTotal = totalRecord,
+                recordsFiltered = totalRowAfterFilter,
+                data = AllList
+            }, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult StatisticScanReturnCount(DateTime? fromDate, DateTime? toDate)
+        {
+            var source = _product.GetStatisticItemScanReturnCount(fromDate, toDate);
+            double num = source.totalItem;
+            double suc = source.totalSuccess;
+            return Json(new { i = num, s = suc }, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult DeliveryHistory()
+        {
+            var deliveryMan = _account.GetDeliveryMan();
+            ViewBag.DeliveryMan = new SelectList(deliveryMan, "Id", "Username");
+            return View();
+        }
+        public ActionResult DeliveryHistoryTable(DateTime? fromDate, DateTime? toDate, int? deliveryId)
+        {
+            string draw, searchValue, sortColumnName, sortDir;
+            int start, length;
+
+
+            DatatableInitiator(out draw, out start, out length, out searchValue, out sortColumnName, out sortDir);
+            List<DeliveryHistoryModel> AllList = new List<DeliveryHistoryModel>();
+            AllList = _product.GetDeliveryHistory(fromDate, toDate, deliveryId);
+
+            int totalRecord = AllList.Count;
+            if (!String.IsNullOrEmpty(searchValue)) // filter
+            {
+                AllList = AllList.Where(x =>
+                        x.DeliveryManName.Contains(searchValue) ||
+                        x.TrackingNumber.Contains(searchValue)).ToList();
+            }
+            int totalRowAfterFilter = AllList.Count;
+            //sorting
+
+            if (!String.IsNullOrEmpty(sortColumnName) && !String.IsNullOrEmpty(sortDir))
+            {
+                AllList = AllList.OrderBy(sortColumnName + " " + sortDir).ToList();
+            }
+
+            //paging
+
+            AllList = AllList.ToList();
+
+            return Json(new
+            {
+                draw = draw,
+                recordsTotal = totalRecord,
+                recordsFiltered = totalRowAfterFilter,
+                data = AllList
+            }, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult DeliveryHistoryCount(DateTime? fromDate, DateTime? toDate, int? deliveryId)
+        {
+            var source = _product.GetDeliveryHistoryCount(fromDate, toDate, deliveryId);
+            return Json(new
+            {
+                count = source.CountItem,
+                kipNYR = source.KipNotYetReceive,
+                bahtNYR = source.BahtNoYetRecieve,
+                dollarNYR = source.DollarNotYetReceive,
+                kipR = source.KipReceived,
+                bahtR = source.BahtReceived,
+                dollarR = source.DollarReceived,
+                kipT = source.KipTotal,
+                bahtT = source.BahtTotal,
+                dollarT = source.DollarTotal
+            },
+                JsonRequestBehavior.AllowGet);
+        }
+
+
+        public ActionResult PickUpHistory()
+        {
+            var deliveryMan = _account.GetDeliveryMan();
+            ViewBag.DeliveryMan = new SelectList(deliveryMan, "Id", "Username");
+            return View();
+        }
+
+
+        public ActionResult PickUpHistoryTable(DateTime? fromDate, DateTime? toDate, int? deliveryId)
+        {
+            string draw, searchValue, sortColumnName, sortDir;
+            int start, length;
+
+
+            DatatableInitiator(out draw, out start, out length, out searchValue, out sortColumnName, out sortDir);
+            List<PickUpHistoryModel> AllList = new List<PickUpHistoryModel>();
+            AllList = _product.GetPickUpHistory(fromDate, toDate, deliveryId);
+
+            int totalRecord = AllList.Count;
+            if (!String.IsNullOrEmpty(searchValue)) // filter
+            {
+                AllList = AllList.Where(x =>
+                        x.DeliveryManName.Contains(searchValue) ||
+                        x.TrackingNumber.Contains(searchValue)).ToList();
+            }
+            int totalRowAfterFilter = AllList.Count;
+            //sorting
+
+            if (!String.IsNullOrEmpty(sortColumnName) && !String.IsNullOrEmpty(sortDir))
+            {
+                AllList = AllList.OrderBy(sortColumnName + " " + sortDir).ToList();
+            }
+
+            //paging
+
+            AllList = AllList.ToList();
+
+            return Json(new
+            {
+                draw = draw,
+                recordsTotal = totalRecord,
+                recordsFiltered = totalRowAfterFilter,
+                data = AllList
+            }, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult PickUpHistoryCount(DateTime? fromDate, DateTime? toDate, int? deliveryId)
+        {
+            double count = _product.GetPickUpHistory(fromDate, toDate, deliveryId).Count();
+            return Json(count, JsonRequestBehavior.AllowGet);
+        }
+        public ActionResult ReceiveMoneyFromDeliveryMan(int historyId)
+        {
+            bool result = _product.ReceiveMoneyFromDeliveryMan(historyId);
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+        public ActionResult UndoReceiveMoneyFromDeliveryMan(int historyId)
+        {
+            bool result = _product.UndoReceiveMoneyFromDeliveryMan(historyId);
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

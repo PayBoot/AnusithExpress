@@ -1872,9 +1872,6 @@
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
-    <Content Include="Views\Home\About.cshtml" />
-    <Content Include="Views\Home\Contact.cshtml" />
-    <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Customer\Index.cshtml" />
     <Content Include="Views\Shared\_Navbar.cshtml" />
     <Content Include="Views\Shared\_NavMenu.cshtml" />
@@ -1892,7 +1889,6 @@
     <Content Include="Views\Admin\Customer.cshtml" />
     <Content Include="Views\Admin\CustomerItems.cshtml" />
     <Content Include="Views\Admin\ItemCreateUpdate.cshtml" />
-    <Content Include="Views\Admin\Allocation.cshtml" />
     <Content Include="Views\Shared\_LayoutTracking.cshtml" />
     <Content Include="Views\Account\CLogin.cshtml" />
     <Content Include="Views\Account\ULogin.cshtml" />
@@ -1952,6 +1948,15 @@
     <Content Include="Views\Times\Details.cshtml" />
     <Content Include="Views\Times\Edit.cshtml" />
     <Content Include="Views\Times\Index.cshtml" />
+    <Content Include="Views\Home\DataInit.cshtml" />
+    <Content Include="Views\Admin\ConsolidateAllConsolidate.cshtml" />
+    <Content Include="Views\Admin\ConsolidationAllReport.cshtml" />
+    <Content Include="Views\Admin\AllocatePickUpMan.cshtml" />
+    <Content Include="Views\Admin\StatisticScanReceive.cshtml" />
+    <Content Include="Views\Admin\StatisticScanSent.cshtml" />
+    <Content Include="Views\Admin\StatisticScanReturn.cshtml" />
+    <Content Include="Views\Admin\DeliveryHistory.cshtml" />
+    <Content Include="Views\Admin\PickUpHistory.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -2003,11 +2008,11 @@
     <VisualStudio>
       <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
         <WebProjectProperties>
-          <UseIIS>False</UseIIS>
+          <UseIIS>True</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>56373</DevelopmentServerPort>
+          <DevelopmentServerPort>0</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost:56373/</IISUrl>
+          <IISUrl>http://localhost:58589/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>

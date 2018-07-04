@@ -3,7 +3,7 @@
     ViewBag.Title = "ສ້າງລາຍການ";
     Layout = "~/Views/Shared/_CustomerLayout.cshtml";
 }
-@model AnousithExpress.DataEntry.ViewModels.Customer.ConsolidationListModel
+
 <div class="breadcrumbs">
     <div class="col-sm-4">
         <div class="page-header float-left">
@@ -17,6 +17,7 @@
             <div class="page-title">
                 <ol class="breadcrumb text-right">
                     <li><a href="@Url.Action("Index","Admin")">ຫນ້າຫລັກ</a></li>
+                    <li><a href="@Url.Action("Customer","Admin")">ລຸກຄ້າ</a></li>
                     <li><a href='@Url.Action("CustomerItemList","Admin", new {customerId=@ViewBag.CustomerId, tabIndex=6 })'>@ViewBag.CustomerId</a></li>
                     <li class="active">ສ້່ງລາຍການ</li>
                 </ol>
@@ -28,20 +29,28 @@
     <div class="content mt-3">
         <div class="animated">
             <div class="row">
-                <div class="col-md-3 form-horizontal">
+                <div class="col-md-4 form-horizontal">
                     <label>ລາຄາຕໍ່ຫົວຫນ່ວຍ</label>
                     <input type="text" id="PricePerUnit" oninput="calculateFee()" class="form-control" />
                 </div>
-                <div class="col-md-3 form-horizontal">
+                <div class="col-md-4 form-horizontal">
+                    <label>ມື້ທີ່ຮັບສີນຄ້າ</label>
+                    <input type="text" id="DateReceive" readonly="readonly"  class="form-control" />
+                </div>
+                <div class="col-md-4 form-horizontal">
+                    <label>ຈຳນວນສີນຄ້າທີ່ຮັບໃນມື້ດັ່ງກ່າວ</label>
+                    <input type="text" id="AmountReceive" readonly="readonly" class="form-control" />
+                </div>
+                <div class="col-md-4 form-horizontal">
                     <label>ຈຳນວນ</label>
                     <input type="text" id="amount" readonly="readonly" class="form-control" />
                 </div>
-                <div class="col-md-3 form-horizontal">
+                <div class="col-md-4 form-horizontal">
                     <label>ຄ່າຂົນສົ່ງທັງຫມົດ</label>
                     <input type="text" id="TotalFee" readonly="readonly" class="form-control" />
                 </div>
-                <div class="col-md-3 form-horizontal">
-                    
+                <div class="col-md-4 form-horizontal">
+
                     <button class="btn btn-warning" onclick="CreateConsolidation()" style="margin-top:30px;">ສ້າງລາຍການ</button>
                 </div>
             </div>
@@ -139,16 +148,23 @@
             });
         }
         function countItem() {
-            var i = 0;
-            i = jQuery("#itemDataTable").find('#checkId:checked').length;
-            jQuery("#amount").val(i);
+            let CheckboxArrayCount = [];
+            jQuery("#checkId:checked").each(function () {
+                CheckboxArrayCount.push(jQuery(this).val());
+            });
+            jQuery("#amount").val(CheckboxArrayCount.length);
             jQuery.ajax({
                 url: "/Admin/GetPrice",
-                data: { condition: i },
+                data: {
+                    customerId: '@ViewBag.CustomerId',
+                    itemId : CheckboxArrayCount
+                },
                 datatype: "json",
-                type: "GET",
+                type: "POST",
                 success: function (r) {
-                    jQuery("#PricePerUnit").val(r);
+                    jQuery("#PricePerUnit").val(r.price);
+                    jQuery("#DateReceive").val(r.date);
+                    jQuery("#AmountReceive").val(r.condition);
                     calculateFee();
                 },
                 error: function () {

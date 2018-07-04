@@ -6,14 +6,14 @@
         <li class="menu-title"></li><!-- /.menu-title -->
         <li>
             @{
-            if (Session["Role"].ToString() == "1")
-            {
-                <a href="@Url.Action("Account", "Admin")" style="font-family:'Phetsarath OT';"> <i class="menu-icon ti-user"></i>ບັນຊີຜູ້ໃຊ້</a>
-        }
-        else
-        {
-            <a href="#" data-toggle="modal" data-target="#modalLayout" style="font-family:'Phetsarath OT';"> <i class="menu-icon ti-user"></i>ບັນຊີຜູ້ໃຊ້</a>
-    }
+                if (Session["Role"].ToString() == "1")
+                {
+                    <a href="@Url.Action("Account", "Admin")" style="font-family:'Phetsarath OT';"> <i class="menu-icon ti-user"></i>ບັນຊີຜູ້ໃຊ້</a>
+                }
+                else
+                {
+                    <a href="#" data-toggle="modal" data-target="#modalLayout" style="font-family:'Phetsarath OT';"> <i class="menu-icon ti-user"></i>ບັນຊີຜູ້ໃຊ້</a>
+                }
 
             }
 
@@ -22,7 +22,10 @@
             <a href="@Url.Action("Customer","Admin")" style="font-family:'Phetsarath OT';"><i class="menu-icon fa fa-table"></i>ລຸກຄ້າ</a>
         </li>
         <li>
-            <a href="@Url.Action("AllocateDeliveryMan","Admin")" style="font-family:'Phetsarath OT';"><i class="menu-icon fa fa-table"></i>ສີນຄ້າທີ່ຈະສົ່ງ</a>
+            <a href="@Url.Action("AllocateDeliveryMan","Admin")" style="font-family:'Phetsarath OT';"><i class="menu-icon fa fa-table"></i>ຈັດຄົນສົ່ງ</a>
+        </li>
+        <li>
+            <a href="@Url.Action("AllocatePickUpMan","Admin")" style="font-family:'Phetsarath OT';"><i class="menu-icon fa fa-table"></i>ຈັດຄົນຮັບ</a>
         </li>
         <li>
             <a href="@Url.Action("ScanBarCode","Admin")" style="font-family:'Phetsarath OT';"><i class="menu-icon fa fa-barcode"></i>ສະແກນສີນຄ້າ</a>

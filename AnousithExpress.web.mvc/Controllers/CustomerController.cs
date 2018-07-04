@@ -1,4 +1,5 @@
 ﻿using AnousithExpress.DataEntry.Implimentation;
+using AnousithExpress.DataEntry.ViewModels.Admin;
 using AnousithExpress.DataEntry.ViewModels.Customer;
 using System;
 using System.Collections.Generic;
@@ -408,7 +409,11 @@ namespace AnousithExpress.web.mvc.Controllers
             }
         }
 
-
+        public ActionResult ConfirmConsolidation(int consolidationId)
+        {
+            bool result = _consolidation.CustomerConfirm(consolidationId);
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
 
 
         private void DatatableInitiator(out string draw, out int start, out int length, out string searchValue, out string sortColumnName, out string sortDir)

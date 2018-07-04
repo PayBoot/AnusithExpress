@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace AnousithExpress.DataEntry.Models
 {
@@ -7,8 +6,9 @@ namespace AnousithExpress.DataEntry.Models
     {
         public int Id { get; set; }
 
-        [Column(TypeName = "varchar")]
-        [StringLength(10)]
+
+        [StringLength(100)]
+        [Display(Name = "ເວລາສົ່ງ")]
         public string Time { get; set; }
     }
 }
