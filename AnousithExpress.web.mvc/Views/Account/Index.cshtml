@@ -37,14 +37,23 @@
                 <div class="login-logo">
                    
                         <img class="align-content" src="~/assets/Image/anoutsithlogo.png" height="70" alt="">
-                   
+           
                 </div>
                 <div class="login-form">
                     <form>
-                        <div class="form-group">
-                            <label style="font-size:larger;">ເລກຕິດຕາມສີນຄ້າ</label>
-
-                            <input type="text" id="TrackingnumberText" class="form-control" placeholder="ເລກຕິດຕາມສີນຄ້າ">
+                        <div class="form-group has-feedback">
+                            <label style="font-size:larger;" class="control-label">ເລກຕິດຕາມສີນຄ້າ</label>
+                            <div class="input-group">
+                                <input type="text" id="TrackingnumberText" class="form-control border-right-0" placeholder="Tracking Number">                               
+                                <span class="input-group-btn">
+                                    <button class="btn btn-default" type="button" onclick="TrackItem()" >
+                                        <i class="fa fa-search"></i>
+                                    </button>
+                                   
+                                </span>
+                                
+                            </div>
+                            
                         </div>
                         <button type="button" onclick="TrackItem()" id="search" class="btn btn-danger btn-flat m-b-15"><strong>ຄົ້ນຫາ</strong></button>
                         <div class="social-login-content">

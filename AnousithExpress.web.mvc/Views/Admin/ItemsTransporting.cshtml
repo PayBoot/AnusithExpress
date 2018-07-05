@@ -1,77 +1,38 @@
-﻿
-<div class="animated fadeIn">
-    <div class="table-responsive">
-        <table id="itemTransferingTable" class="table  table-hover  " style="width:100%;white-space:nowrap;">
-            <thead>
-                <tr>
-                    <th class="control">ເລກຕິດຕາມ</th>
-                    <th class="control">ປະເພດສີນຄ້າ</th>
+﻿@{
+    if (Session["Role"] != null)
+    {
+        if (Session["Role"].ToString() != "1" && Session["Role"].ToString() != "2")
+        {
 
-                    <th class="control">ສະຖານະ</th>
-                    <th class="control">ຊື່ຜູ້ຮັບ</th>
-                    <th class="control">ເບີໂທຜູ້ຮັບ</th>
-                    <th class="control">ທີ່ຢູ່ຜູ້ຮັບ</th>
-<<<<<<< HEAD
-                    <th class="none">ມື້ພະນັກງານຮັບສີນຄ້າ</th>            
-                    <th class="none">ມື້ພະນັກງານສົ່ງສີນຄ້າ</th>
-                    <th class="none">ເກັບເງິນປາຍທາງ</th>
-                    <th class="none">ລາຍລະອຽດ</th>
-                    <th class="none"></th>
-=======
+        }
+        else
+        {
+            <div class="animated fadeIn">
+                <div class="table-responsive">
+                    <table id="itemTransferingTable" class="table  table-hover  " style="width:100%;white-space:nowrap;">
+                        <thead>
+                            <tr>
+                                <th class="control">ເລກຕິດຕາມ</th>
+                                <th class="control">ປະເພດສີນຄ້າ</th>
 
-                    <th class="none">ມື້ພະນັກງານຮັບສີນຄ້າ</th>
-                    <th class="none">ມື້ພະນັກງານສົ່ງສີນຄ້າ</th>
-                    <th class="none">ເກັບເງິນປາຍທາງ</th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var item in Model)
-                {
-                <tr>
-                    <td>@item.ItemName</td>
-                    <td>@item.TrackingNumber</td>
-                    <td>@item.Status</td>
-                    <td>@item.ReceiverName</td>
-                    <td>@item.ReceipverPhone</td>
-                    <td>@item.ReceiverAddress</td>
-           
-                    <td><button class="btn btn-warning" onclick="barcodeDialog(@item.Id)">ບາໂຄດ</button></td>
-                    <td>@item.ReceiveDate</td>
-                    <td>@item.SendingDate</td>
-                    <td>
-                        @{
-                            <b>: </b>
-                            if (item.ItemValue_Kip != null)
-                            {
-                                <b>@item.ItemValue_Kip ກີບ </b>
-                            }
-                            if (item.ItemValue_Baht != null)
-                            {
-                                <b>@item.ItemValue_Baht ບາດ </b>
-                            }
-                            if (item.ItemValue_Dollar != null)
-                            {
-                                <b>@item.ItemValue_Dollar ໂດລ້າ</b>
-                            }
-                            if (item.ItemValue_Kip == null && item.ItemValue_Baht == null && item.ItemValue_Dollar == null)
-                            {
-                                <b>ບໍ່ມີ</b>
-                            }
-                        }
-                    </td>
-                    <td>
-                       <button type="button" onclick="itemDetail(@item.Id)" class="btn btn-flat btn-warning btn-sm">ລາຍລະອຽດ</button>
->>>>>>> a32bb966037a2081915297a83978fae6f32d92dd
+                                <th class="control">ສະຖານະ</th>
+                                <th class="control">ຊື່ຜູ້ຮັບ</th>
+                                <th class="control">ເບີໂທຜູ້ຮັບ</th>
+                                <th class="control">ທີ່ຢູ່ຜູ້ຮັບ</th>
+                                <th class="none">ມື້ພະນັກງານຮັບສີນຄ້າ</th>
+                                <th class="none">ມື້ພະນັກງານສົ່ງສີນຄ້າ</th>
+                                <th class="none">ເກັບເງິນປາຍທາງ</th>
+                                <th class="none">ລາຍລະອຽດ</th>
+                                <th class="none"></th>
 
-                </tr>
-            </thead>
-       
-        </table>
-    </div>
-</div>
+                            </tr>
+                        </thead>
 
-<script>
+                    </table>
+                </div>
+            </div>
+
+            <script>
     var itemTransferingTable;
     jQuery(document).ready(function () {
             jQuery("#itemConfirmTable").DataTable({
@@ -144,12 +105,12 @@
         let itemId = id;
         jQuery.ajax({
             url: "/Admin/BarCodeReport",
-            type: "Post",
+            type: "GET",
             data: { itemId: itemId },
             datatype: "json",
             success: function (r) {
                 let htmlButton = '';
-                htmlButton += '<button class="btn btn-warning btn-flat mb-1 w-100 mr-1 ml-1" onclick="PrintBarcodes()">ພີມບາໂຄດ</button>';
+                htmlButton += '<button class="btn btn-warning btn-flat mb-1 w-100 mr-1 ml-1" onclick="PrintBarcode()">ພີມບາໂຄດ</button>';
                 htmlButton += '<button class="btn btn-primary btn-flat mb-1 w-100 mr-1 ml-1" data-dismiss="modal">ອອກ</button>';
                 jQuery("#content3").html(r);
                 jQuery("#modalButton3").html(htmlButton);
@@ -157,16 +118,20 @@
             }
         });
     }
-    function PrintBarcodes() {
-    
+    function PrintBarcode() {
+
         window.print();
-     
+
     }
      function itemDetail(id) {
-       
+
         window.location = "@Url.Action("ItemsDetail","Admin")?itemId="+id;
-       
+
     }
-</script>
+            </script>
+        }
+    }
+}
+
 
 

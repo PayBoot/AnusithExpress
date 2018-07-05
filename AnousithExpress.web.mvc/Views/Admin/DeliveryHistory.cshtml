@@ -225,6 +225,7 @@
                             htmlbutton += '<button class="btn btn-danger " onclick="ConfirmUnReceiveMoneyDialog(' + data + ')">ກົດປ່ຽນເປັນບໍ່ໄດ້ຮັບເງີນ</button>';
                         } else {
                             htmlbutton += '<button class="btn btn-danger" onclick="ConfirmReceiveMoneyDialog(' + data + ')">ກົດຢືນຢັນຮັບເງີນ</button>';
+
                         }
                         return htmlbutton;
                     }
@@ -257,7 +258,8 @@
                         jQuery("#resultModalFooter").html(htmlbutton);
                         jQuery("#resultModal").modal("show");
                         jQuery("#sentHistoryModal").modal("hide");
-                        SentHistoryTable.ajax.reload(null,false);
+                        SentHistoryTable.ajax.reload(null, false);
+                        itemSentHistoryCount();
                     }
                     else {
                         let htmlbutton = '';
@@ -299,6 +301,7 @@
                         jQuery("#resultModal").modal("show");
                         jQuery("#sentHistoryModal").modal("hide");
                         SentHistoryTable.ajax.reload(null, false);
+                        itemSentHistoryCount();
                     }
                     else {
                         let htmlbutton = '';
@@ -332,13 +335,13 @@
                 jQuery("#totalBahtNotYetReceive").html(r.bahtNYR + "ບາດ");
                 jQuery("#totalDollarNotYetRecieve").html(r.dollarNYR + "ໂດລາ");
 
-                jQuery("#totalKip").html(r.kipR + "ກີບ");
-                jQuery("#totalBaht").html(r.bahtR + "ບາດ");
-                jQuery("#totalDollar").html(r.dollarR + "ໂດລາ");
+                jQuery("#totalKip").html(r.kipT + "ກີບ");
+                jQuery("#totalBaht").html(r.bahtT + "ບາດ");
+                jQuery("#totalDollar").html(r.dollarT + "ໂດລາ");
 
-                jQuery("#totalKipReceive").html(r.kipT + "ກີບ");
-                jQuery("#totalBahtReceive").html(r.bahtT + "ບາດ");
-                jQuery("#totalDollarReceive").html(r.dollarT + "ໂດລາ");
+                jQuery("#totalKipReceive").html(r.kipR + "ກີບ");
+                jQuery("#totalBahtReceive").html(r.bahtR + "ບາດ");
+                jQuery("#totalDollarReceive").html(r.dollarR + "ໂດລາ");
             },
             error: function () {
                 alert("Server error");

@@ -104,5 +104,7 @@ namespace AnousithExpress.DataEntry.Interface
         bool ReceiveMoneyFromDeliveryMan(int historyId);
         bool UndoReceiveMoneyFromDeliveryMan(int historyId);
 
+        List<NewConfirmItemModel> GetNewConfirmItem();
+
     }
 }

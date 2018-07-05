@@ -43,7 +43,9 @@ namespace AnousithExpress.web.mvc.Controllers
         {
             if (Session["Role"] != null)
             {
-                if (Session["Role"].ToString() == "1" || Session["Role"].ToString() == "2")
+                if (Session["Role"].ToString() == "1" || Session["Role"].ToString() == "2"
+                    || Session["Role"].ToString() == "4" || Session["Role"].ToString() == "5"
+                    || Session["Role"].ToString() == "6")
                 {
                     return View();
                 }
@@ -187,24 +189,95 @@ namespace AnousithExpress.web.mvc.Controllers
 
         public ActionResult ScanBarCode()
         {
-            return View();
+            if (Session["Role"] != null)
+            {
+                if (Session["Role"].ToString() == "5" || Session["Role"].ToString() == "1")
+                {
+                    return View();
+                }
+                else
+                {
+                    return RedirectToAction("Index", "Admin");
+                }
+            }
+            else
+            {
+                return RedirectToAction("ULogin", "Account");
+            }
+
         }
 
         public ActionResult ScanBarCodeReceiveItem()
         {
-            return View();
+            if (Session["Role"] != null)
+            {
+                if (Session["Role"].ToString() == "5" || Session["Role"].ToString() == "1")
+                {
+                    return View();
+                }
+                else
+                {
+                    return RedirectToAction("Index", "Admin");
+                }
+            }
+            else
+            {
+                return RedirectToAction("ULogin", "Account");
+            }
         }
         public ActionResult ScanBarCodeSendingItem()
         {
-            return View();
+            if (Session["Role"] != null)
+            {
+                if (Session["Role"].ToString() == "5" || Session["Role"].ToString() == "1")
+                {
+                    return View();
+                }
+                else
+                {
+                    return RedirectToAction("Index", "Admin");
+                }
+            }
+            else
+            {
+                return RedirectToAction("ULogin", "Account");
+            }
         }
         public ActionResult ScanBarCodeItemUnableToSend()
         {
-            return View();
+            if (Session["Role"] != null)
+            {
+                if (Session["Role"].ToString() == "5" || Session["Role"].ToString() == "1")
+                {
+                    return View();
+                }
+                else
+                {
+                    return RedirectToAction("Index", "Admin");
+                }
+            }
+            else
+            {
+                return RedirectToAction("ULogin", "Account");
+            }
         }
         public ActionResult ScanBarCodeItemReturn()
         {
-            return View();
+            if (Session["Role"] != null)
+            {
+                if (Session["Role"].ToString() == "5" || Session["Role"].ToString() == "1")
+                {
+                    return View();
+                }
+                else
+                {
+                    return RedirectToAction("Index", "Admin");
+                }
+            }
+            else
+            {
+                return RedirectToAction("ULogin", "Account");
+            }
         }
         public ActionResult ScanBarCodeItemIn(string itemTrackingNumber)
         {
@@ -269,8 +342,21 @@ namespace AnousithExpress.web.mvc.Controllers
 
         public ActionResult Customer()
         {
-
-            return View();
+            if (Session["Role"] != null)
+            {
+                if (Session["Role"].ToString() == "2" || Session["Role"].ToString() == "1" || Session["Role"].ToString() == "6")
+                {
+                    return View();
+                }
+                else
+                {
+                    return RedirectToAction("Index", "Admin");
+                }
+            }
+            else
+            {
+                return RedirectToAction("ULogin", "Account");
+            }
         }
 
         public ActionResult CustomerList(string sortBy)
@@ -496,7 +582,7 @@ namespace AnousithExpress.web.mvc.Controllers
                     model.Barcode);
                 }
                 HttpContext.Session["barcodeModel"] = barcodeDS;
-              
+
             }
             else
             {
@@ -1068,6 +1154,18 @@ namespace AnousithExpress.web.mvc.Controllers
             }, JsonRequestBehavior.AllowGet);
         }
 
+        public ActionResult ConsolidationAllCount(DateTime? fromDate, DateTime? toDate)
+        {
+            List<ConsolidationListModel> AllList = new List<ConsolidationListModel>();
+            AllList = _consolidation.GetAllConsolidationByDate(fromDate, toDate);
+            double fee = AllList.Sum(x => x.Fee);
+            double kip = AllList.Sum(x => x.IncomingBalanceInKip);
+            double bath = AllList.Sum(x => x.IncomingBalanceInBaht);
+            double dollar = AllList.Sum(x => x.IncomingBalanceInDollar);
+            return Json(new { fee = fee, kip = kip, baht = bath, dollar = dollar }, JsonRequestBehavior.AllowGet);
+
+        }
+
         public ActionResult ConsolidationAllReport(DateTime? fromDate, DateTime? toDate)
         {
             List<ConsolidationListModel> AllList = new List<ConsolidationListModel>();
@@ -1400,13 +1498,27 @@ namespace AnousithExpress.web.mvc.Controllers
 
 
 
+        public ActionResult NewConfirmItemsList()
+        {
+            List<NewConfirmItemModel> model = _product.GetNewConfirmItem();
+            return Json(model, JsonRequestBehavior.AllowGet);
+        }
 
 
 
 
+        public ActionResult NewConsolidateConfirm()
+        {
+            List<ConsolidationListModel> model = _consolidation.GetConsolidationNotification();
+            return Json(model, JsonRequestBehavior.AllowGet);
+        }
 
 
-
+        public ActionResult CountConfirmConsolidation()
+        {
+            double result = _consolidation.CountConfirmConsolidation();
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
 
 
 

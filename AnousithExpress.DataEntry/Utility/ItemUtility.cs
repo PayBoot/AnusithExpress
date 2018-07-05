@@ -266,7 +266,8 @@ namespace AnousithExpress.DataEntry.Utility
                     CreatedDate = item.CreatedDate == null ? "" : item.CreatedDate?.ToString("dd-MM-yyyy"),
                     SendingDate = item.SendingDate == null ? "" : item.SendingDate?.ToString("dd-MM-yyyy"),
                     SentDate = item.SentDate == null ? "" : item.SentDate?.ToString("dd-MM-yyyy"),
-                    isDeleted = item.isDeleted
+                    isDeleted = item.isDeleted,
+
                 };
             }
             else

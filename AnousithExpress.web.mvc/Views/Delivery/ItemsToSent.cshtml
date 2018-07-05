@@ -237,11 +237,11 @@
             let statusId = status;
             let kip = jQuery("#kiptext").val() || 0;
             let baht = jQuery("#bahttext").val() || 0;
-            let dollar = jQuery("#dollarval").val() ||0;
+            let dollar = jQuery("#dollartext").val() ||0;
             
            
-            let htmlButton = ' <button class="btn btn-warning btn-flat mb-2 w-75" onclick="UpdateItemSent(' + itemId + ',' + statusId +')">ຢືນຢັນ</button>';
-            htmlButton += ' <button class="btn btn-primary btn-flat mb-1 w-75" data-dismiss="modal" data-target="#modal2">ອອກ</button>';
+            let htmlButton = ' <button class="btn btn-danger btn-flat mb-2 w-75" onclick="UpdateItemSent(' + itemId + ',' + statusId +')">ຢືນຢັນ</button>';
+            htmlButton += ' <button class="btn btn-danger btn-flat mb-1 w-75" data-dismiss="modal" data-target="#modal2">ອອກ</button>';
             jQuery("#messageOutput").html("ກະລຸນາກົດຍືນຢັນ<br/> ຈຳນວນເງີນທີ່ທ່ານຈ່າຍໃຫ້ພະນັກງານແມ່ນ <br/> "+ kip + "ກີບ<br/>" + baht +"ບາດ<br/>"+dollar+"ໂດລ້າ");
             jQuery("#modalButton2").html(htmlButton);
             jQuery("#modal2").modal("show");         
@@ -256,14 +256,14 @@
                     statusId: statusId,
                     kip: jQuery("#kiptext").val(),
                     baht: jQuery("#bahttext").val(),
-                    dollar: jQuery("#dollarval").val()
+                    dollar: jQuery("#dollartext").val()
 
                 },
                 type: "POST",
                 datatype: "json",
                 success: function (r) {
                     if (r === true) {
-                        let htmlButton = ' <button class="btn btn-primary btn-flat mb-1 w-75" data-dismiss="modal" data-target="#modal2">ອອກ</button>';
+                        let htmlButton = ' <button class="btn btn-danger btn-flat mb-1 w-75" data-dismiss="modal" data-target="#modal2">ອອກ</button>';
                         jQuery("#modal1").modal("hide"); 
                         jQuery("#modal2").modal("hide"); 
                         sentItemTable.ajax.reload(null,false);
@@ -277,9 +277,9 @@
         function UnWantedItemDialog(id) {
             let itemId = id;
             let statusId = status;
-            let htmlButton = ' <button class="btn btn-warning btn-flat mb-2 w-75" onclick="UpdateItemUnwanted(' + itemId + ')">ຢືນຢັນ</button>';
-            htmlButton += ' <button class="btn btn-primary btn-flat mb-1 w-75" data-dismiss="modal" data-target="#modal2">ອອກ</button>';
-            jQuery("#messageOutput").html("ກະລຸນາກົດຍືນຢັນ");
+            let htmlButton = ' <button class="btn btn-danger btn-flat mb-2 w-75" onclick="UpdateItemUnwanted(' + itemId + ')">ຢືນຢັນ</button>';
+            htmlButton += ' <button class="btn btn-danger btn-flat mb-1 w-75" data-dismiss="modal" data-target="#modal2">ອອກ</button>';
+            jQuery("#messageOutput").html("ກະລຸນາກົດຍືນຢັນວ່າບໍຕ້ອງການຮັບເຄື່ອງ");
             jQuery("#modalButton2").html(htmlButton);
             jQuery("#modal2").modal("show");    
         }
@@ -291,13 +291,13 @@
                     itemId: itemId,
                     kip: jQuery("#kiptext").val(),
                     baht: jQuery("#bahttext").val(),
-                    dollar: jQuery("#dollarval").val()
+                    dollar: jQuery("#dollartext").val()
                 },
                 type: "POST",
                 datatype: "json",
                 success: function (r) {
                     if (r === true) {
-                        let htmlButton = ' <button class="btn btn-primary btn-flat mb-1 w-75" data-dismiss="modal" data-target="#modal2">ອອກ</button>';
+                        let htmlButton = ' <button class="btn btn-danger btn-flat mb-1 w-75" data-dismiss="modal" data-target="#modal2">ອອກ</button>';
                         jQuery("#modal1").modal("hide");
                         jQuery("#modal2").modal("hide");
                         sentItemTable.ajax.reload(null, false);

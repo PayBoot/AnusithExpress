@@ -1,65 +1,79 @@
 ﻿@model List<AnousithExpress.DataEntry.ViewModels.Customer.ItemsModel>
-<div class="animated fadeIn">
-    <div class="table-responsive">
-        <table id="itemConfirmTable" class="table  table-hover  " style="width:100%;white-space:nowrap;">
-            <thead>
-                <tr>
+@{
+    if (Session["Role"] != null)
+    {
+        if (Session["Role"].ToString() != "1" && Session["Role"].ToString() != "2")
+        {
 
-                    <th>ປະເພດສີນຄ້າ</th>
-                    <th>ເລກຕິດຕາມ</th>
-                    <th>ສະຖານະ</th>
-                    <th>ຊື່ຜູ້ຮັບ</th>
-                    <th>ເບີໂທຜູ້ຮັບ</th>
-                    <th>ທີ່ຢູ່ຜູ້ຮັບ</th>
-                    <th>ເກັບເງິນປາຍທາງ</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var item in Model)
-                {
-                    <tr>
-                        <td>@item.ItemName</td>
-                        <td>@item.TrackingNumber</td>
-                        <td>@item.Status</td>
-                        <td>@item.ReceiverName</td>
-                        <td>@item.ReceipverPhone</td>
-                        <td>@item.ReceiverAddress</td>
-                        <td>
-                            @{
-                                if (item.ItemValue_Kip != null)
-                                {
-                                    <div>@item.ItemValue_Kip ກີບ </div>
-                                }
-                                if (item.ItemValue_Baht != null)
-                                {
-                                    <div>@item.ItemValue_Baht ບາດ </div>
-                                }
-                                if (item.ItemValue_Dollar != null)
-                                {
-                                    <div>@item.ItemValue_Dollar ໂດລ້າ</div>
-                                }
-                                if (item.ItemValue_Kip == null && item.ItemValue_Baht == null && item.ItemValue_Dollar == null)
-                                {
-                                    <div>ບໍ່ມີ</div>
-                                }
-                        }
-                    </td>
-                </tr>
-            }
-            </tbody>
-        </table>
-    </div>
-</div>
+        }
+        else
+        {
+            <div class="animated fadeIn">
+                <div class="table-responsive">
+                    <table id="itemConfirmTable" class="table  table-hover  " style="width:100%;white-space:nowrap;">
+                        <thead>
+                            <tr>
 
-    <script>
-        jQuery(document).ready(function () {
-            jQuery("#itemConfirmTable").DataTable({
-                lengthChange: false,               
-                paging: true,
-                pageLength: 25,
-                serverSide: false,
-                language:LaoLangage
-            });
-        });
-    </script>
-    
+                                <th>ປະເພດສີນຄ້າ</th>
+                                <th>ເລກຕິດຕາມ</th>
+                                <th>ສະຖານະ</th>
+                                <th>ຊື່ຜູ້ຮັບ</th>
+                                <th>ເບີໂທຜູ້ຮັບ</th>
+                                <th>ທີ່ຢູ່ຜູ້ຮັບ</th>
+                                <th>ເກັບເງິນປາຍທາງ</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td>@item.ItemName</td>
+                                    <td>@item.TrackingNumber</td>
+                                    <td>@item.Status</td>
+                                    <td>@item.ReceiverName</td>
+                                    <td>@item.ReceipverPhone</td>
+                                    <td>@item.ReceiverAddress</td>
+                                    <td>
+                                        @{
+                                            if (item.ItemValue_Kip != null)
+                                            {
+                                                <div>@item.ItemValue_Kip ກີບ </div>
+                                            }
+                                            if (item.ItemValue_Baht != null)
+                                            {
+                                                <div>@item.ItemValue_Baht ບາດ </div>
+                                            }
+                                            if (item.ItemValue_Dollar != null)
+                                            {
+                                                <div>@item.ItemValue_Dollar ໂດລ້າ</div>
+                                            }
+                                            if (item.ItemValue_Kip == null && item.ItemValue_Baht == null && item.ItemValue_Dollar == null)
+                                            {
+                                                <div>ບໍ່ມີ</div>
+                                            }
+                                        }
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <script>
+                jQuery(document).ready(function () {
+                    jQuery("#itemConfirmTable").DataTable({
+                        lengthChange: false,
+                        paging: true,
+                        pageLength: 25,
+                        serverSide: false,
+                        language: LaoLangage
+                    });
+                });
+            </script>
+        }
+    }
+}
+
+
+
+

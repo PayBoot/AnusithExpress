@@ -4,89 +4,100 @@
     Layout = "~/Views/Shared/_CustomerLayout.cshtml";
 }
 
+@{
+    if (Session["Role"] != null)
+    {
+        if (Session["Role"].ToString() != "1" && Session["Role"].ToString() != "5")
+        {
 
-<div class="breadcrumbs">
-    <div class="col-sm-4">
-        <div class="page-header float-left">
-            <div class="page-title">
+        }
+        else
+        {
+            <div class="breadcrumbs">
+                <div class="col-sm-4">
+                    <div class="page-header float-left">
+                        <div class="page-title">
 
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-8">
+                    <div class="page-header float-right">
+                        <div class="page-title">
+                            <ol class="breadcrumb text-right">
+                                <li><a href="@Url.Action("Index","Admin")">ຫນ້າຫລັກ</a></li>
+                                <li class="active">ສະແກນບາໂຄດ</li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
             </div>
-        </div>
-    </div>
-    <div class="col-sm-8">
-        <div class="page-header float-right">
-            <div class="page-title">
-                <ol class="breadcrumb text-right">
-                    <li><a href="@Url.Action("Index","Admin")">ຫນ້າຫລັກ</a></li>
-                    <li class="active">ສະແກນບາໂຄດ</li>
-                </ol>
+            <div class="container">
+                <div class="content mt-3">
+                    <div class="animated">
+                        <a href="@Url.Action("ScanBarCodeReceiveItem","Admin")">
+                            <div class="col-sm-6 col-lg-3">
+                                <div class="card text-white bg-flat-color-5">
+                                    <div class="card-body pb-0">
+                                        <div class="dropdown float-right">
+                                            <i class="fa fa-cog"></i>
+                                        </div>
+                                        <h4 class="mb-0">
+                                            <span class="count"> </span>
+                                        </h4>
+                                        <p class="text-light">ສະແກນເຄື່ອງເຂົ້າ</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                        <a href="@Url.Action("ScanBarCodeSendingItem","Admin")">
+                            <div class="col-sm-6 col-lg-3">
+                                <div class="card text-white bg-flat-color-2">
+                                    <div class="card-body pb-0">
+                                        <div class="dropdown float-right">
+                                            <i class="fa fa-cog"></i>
+                                        </div>
+                                        <h4 class="mb-0">
+                                            <span class="count"> </span>
+                                        </h4>
+                                        <p class="text-light">ສະແກນເຄື່ອງອອກ</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                        <a href="@Url.Action("ScanBarCodeItemUnableToSend","Admin")">
+                            <div class="col-sm-6 col-lg-3">
+                                <div class="card text-white bg-flat-color-4">
+                                    <div class="card-body pb-0">
+                                        <div class="dropdown float-right">
+                                            <i class="fa fa-cog"></i>
+                                        </div>
+                                        <h4 class="mb-0">
+                                            <span class="count"> </span>
+                                        </h4>
+                                        <p class="text-light">ສະແກນເຄື່ອງສົ່ງບ່ໍໄດ້</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                        <a href="@Url.Action("ScanBarCodeItemReturn","Admin")">
+                            <div class="col-sm-6 col-lg-3">
+                                <div class="card text-white bg-flat-color-3">
+                                    <div class="card-body pb-0">
+                                        <div class="dropdown float-right">
+                                            <i class="fa fa-cog"></i>
+                                        </div>
+                                        <h4 class="mb-0">
+                                            <span class="count"> </span>
+                                        </h4>
+                                        <p class="text-light">ສະແກນເຄື່ອງສົ່ງກັບ</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                    </div><!-- .animated -->
+                </div>
             </div>
-        </div>
-    </div>
-</div>
-<div class="container">
-    <div class="content mt-3">
-        <div class="animated">
-            <a href="@Url.Action("ScanBarCodeReceiveItem","Admin")">
-                <div class="col-sm-6 col-lg-3">
-                    <div class="card text-white bg-flat-color-5">
-                        <div class="card-body pb-0">
-                            <div class="dropdown float-right">
-                                <i class="fa fa-cog"></i>
-                            </div>
-                            <h4 class="mb-0">
-                                <span class="count"> </span>
-                            </h4>
-                            <p class="text-light">ສະແກນເຄື່ອງເຂົ້າ</p>
-                        </div>
-                    </div>
-                </div>
-            </a>
-            <a href="@Url.Action("ScanBarCodeSendingItem","Admin")">
-                <div class="col-sm-6 col-lg-3">
-                    <div class="card text-white bg-flat-color-2">
-                        <div class="card-body pb-0">
-                            <div class="dropdown float-right">
-                                <i class="fa fa-cog"></i>
-                            </div>
-                            <h4 class="mb-0">
-                                <span class="count"> </span>
-                            </h4>
-                            <p class="text-light">ສະແກນເຄື່ອງອອກ</p>
-                        </div>
-                    </div>
-                </div>
-            </a>
-            <a href="@Url.Action("ScanBarCodeItemUnableToSend","Admin")">
-                <div class="col-sm-6 col-lg-3">
-                    <div class="card text-white bg-flat-color-4">
-                        <div class="card-body pb-0">
-                            <div class="dropdown float-right">
-                                <i class="fa fa-cog"></i>
-                            </div>
-                            <h4 class="mb-0">
-                                <span class="count"> </span>
-                            </h4>
-                            <p class="text-light">ສະແກນເຄື່ອງສົ່ງບ່ໍໄດ້</p>
-                        </div>
-                    </div>
-                </div>
-            </a>
-            <a href="@Url.Action("ScanBarCodeItemReturn","Admin")">
-                <div class="col-sm-6 col-lg-3">
-                    <div class="card text-white bg-flat-color-3">
-                        <div class="card-body pb-0">
-                            <div class="dropdown float-right">
-                                <i class="fa fa-cog"></i>
-                            </div>
-                            <h4 class="mb-0">
-                                <span class="count"> </span>
-                            </h4>
-                            <p class="text-light">ສະແກນເຄື່ອງສົ່ງກັບ</p>
-                        </div>
-                    </div>
-                </div>
-            </a>
-        </div><!-- .animated -->
-    </div>
-</div>
+        }
+    }
+}

@@ -83,11 +83,14 @@ namespace AnousithExpress.web.mvc.Controllers
                 {
                     return Json("Officer", JsonRequestBehavior.AllowGet);
                 }
-                else
+                else if (user.Role.Id == 3)
                 {
                     return Json("Delivery", JsonRequestBehavior.AllowGet);
                 }
-
+                else
+                {
+                    return Json("Officer", JsonRequestBehavior.AllowGet);
+                }
             }
             else
             {

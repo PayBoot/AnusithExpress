@@ -58,7 +58,7 @@
         </div><!-- .animated -->
     </div><!-- .content -->
 </div>
-<div class="modal fade" id="modal3" role="dialog" data-backdrop="static">
+<div class="modal fade" id="modal3" role="dialog" >
     <div class="modal-dialog  modal-lg">
         <div class="modal-content">
             <div class="modal-body">
@@ -106,34 +106,41 @@
 
         let TabIndex = '@ViewBag.TabIndex';
         jQuery(document).ready(function (e) {
-            if (TabIndex === "1") {
-                jQuery("#ConfirmItemTab").tab('show');
-                ConfirmItemList();
-            }
-            else if (TabIndex ==="2") {
-                jQuery("#InProcessItemTab").tab('show');
-                InProcessItemList();
-            }
-            else if(TabIndex ==="3") {
-                jQuery("#SendingItemTab").tab('show');
-                TransportingItemList();
-            }
-            else if (TabIndex === "4") {
-                jQuery("#ProcessedItemTab").tab('show');
-                SentItemList();
-            }
-            else if (TabIndex === "5") {
-                jQuery("#CustomerProfileTab").tab('show');
-                CustomerProfile();
-            }
-            else if (TabIndex === "6") {
+            if ('@Session["Role"].ToString()' === "6") {
                 jQuery("#ConsolidateTab").tab('show');
                 CustomerConsolidationList();
             }
             else {
-                jQuery("#ConsolidateTab").tab('show');
-                CustomerConsolidationList();
+                if (TabIndex === "1") {
+                    jQuery("#ConfirmItemTab").tab('show');
+                    ConfirmItemList();
+                }
+                else if (TabIndex === "2") {
+                    jQuery("#InProcessItemTab").tab('show');
+                    InProcessItemList();
+                }
+                else if (TabIndex === "3") {
+                    jQuery("#SendingItemTab").tab('show');
+                    TransportingItemList();
+                }
+                else if (TabIndex === "4") {
+                    jQuery("#ProcessedItemTab").tab('show');
+                    SentItemList();
+                }
+                else if (TabIndex === "5") {
+                    jQuery("#CustomerProfileTab").tab('show');
+                    CustomerProfile();
+                }
+                else if (TabIndex === "6") {
+                    jQuery("#ConsolidateTab").tab('show');
+                    CustomerConsolidationList();
+                }
+                else {
+                    jQuery("#ConsolidateTab").tab('show');
+                    CustomerConsolidationList();
+                }
             }
+         
 
         });
         function ConfirmItemList() {
@@ -260,7 +267,12 @@
                         jQuery("#modalButton2").html(htmlButton);
                         jQuery("#modal2").modal('show');
                         jQuery("#modal1").modal("hide");
-                        inProcesstable.ajax.reload(null, false);
+                        try {
+                            inProcesstable.ajax.reload(null, false);
+                        } catch (e) {
+                            console.log('inProcesstable is not updated on this page');
+                        }
+                       
                         try {
                             itemTransferingTable.ajax.reload(null,false);
                         } catch (e){

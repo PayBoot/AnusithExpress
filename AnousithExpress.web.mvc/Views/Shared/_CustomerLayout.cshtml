@@ -37,7 +37,7 @@ else
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#main-menu" aria-controls="main-menu" aria-expanded="false" aria-label="Toggle navigation">
                     <i class="fa fa-bars"></i>
                 </button>
-                <a class="navbar-brand" href="./">
+                <a class="navbar-brand">
 
                     <img src="~/assets/Image/anoutsithlogo.png" alt="Logo" height="35" />
                 </a>
@@ -52,7 +52,8 @@ else
             {
                 @Html.Partial("_DeliveryMenu")
             }
-            else if (Session["Role"].ToString() == "1" || Session["Role"].ToString() == "2")
+            else if (Session["Role"].ToString() == "1" || Session["Role"].ToString() == "2" || Session["Role"].ToString() == "4" || Session["Role"].ToString() == "5"
+                    || Session["Role"].ToString() == "6")
             {
                 @Html.Partial("_AdminMenu")
             }
@@ -73,7 +74,7 @@ else
                     <a id="menuToggle" class="menutoggle pull-left"><i class="fa fa fa-tasks"></i></a>
                     <div class="header-left">
                         @{
-                            if (Session["Role"].ToString() == "9")
+                            if (Session["Role"].ToString() == "9" || Session["Role"].ToString()=="3")
                             {
 
                             }
@@ -96,73 +97,45 @@ else
 
                                     <button class="btn btn-secondary dropdown-toggle" type="button" id="notification" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                         <i class="fa fa-bell"></i>
-                                        <span class="count bg-danger" id="notificationNumber"></span>
+                                        <span class="count bg-danger" id="notificationNumber">0</span>
                                     </button>
-                                    @*<div class="dropdown-menu" aria-labelledby="notification">
-                        <p class="red">You have 3 Notification</p>
-                        <a class="dropdown-item media bg-flat-color-1" href="#">
-                            <i class="fa fa-check"></i>
-                            <p>Server #1 overloaded.</p>
-                        </a>
-                        <a class="dropdown-item media bg-flat-color-4" href="#">
-                            <i class="fa fa-info"></i>
-                            <p>Server #2 overloaded.</p>
-                        </a>
-                        <a class="dropdown-item media bg-flat-color-5" href="#">
-                            <i class="fa fa-warning"></i>
-                            <p>Server #3 overloaded.</p>
-                        </a>
-                    </div>*@
+                                    <div class="dropdown-menu" id="NewConfirmNotification" aria-labelledby="notification">
+
+                                        <a class="dropdown-item media bg-flat-color-1" href="#">
+                                            <i class="fa fa-check"></i>
+                                            <p>Server #1 overloaded.</p>
+                                        </a>
+                                        <a class="dropdown-item media bg-flat-color-4" href="#">
+                                            <i class="fa fa-info"></i>
+                                            <p>Server #2 overloaded.</p>
+                                        </a>
+                                        <a class="dropdown-item media bg-flat-color-5" href="#">
+                                            <i class="fa fa-warning"></i>
+                                            <p>Server #3 overloaded.</p>
+                                        </a>
+                                    </div>
                                 </div>
+
+
+
+
+                            <div class="dropdown for-message">
+                                <button class="btn btn-secondary dropdown-toggle" type="button"
+                                        id="message"
+                                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <i class="ti-email"></i>
+                                    <span class="count bg-primary" id="consolidationNumber">0</span>
+                                </button>
+                                <div class="dropdown-menu" aria-labelledby="message" id="consolidationConfirmList">
+                                   
+                                   
+                                </div>
+                            </div> 
                             }
-
                         }
-
-                        @*<div class="dropdown for-message">
-            <button class="btn btn-secondary dropdown-toggle" type="button"
-                    id="message"
-                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <i class="ti-email"></i>
-                <span class="count bg-primary">9</span>
-            </button>
-            <div class="dropdown-menu" aria-labelledby="message">
-                <p class="red">You have 4 Mails</p>
-                <a class="dropdown-item media bg-flat-color-1" href="#">
-                    <span class="photo media-left"><img alt="avatar" src="images/avatar/1.jpg"></span>
-                    <span class="message media-body">
-                        <span class="name float-left">Jonathan Smith</span>
-                        <span class="time float-right">Just now</span>
-                        <p>Hello, this is an example msg</p>
-                    </span>
-                </a>
-                <a class="dropdown-item media bg-flat-color-4" href="#">
-                    <span class="photo media-left"><img alt="avatar" src="images/avatar/2.jpg"></span>
-                    <span class="message media-body">
-                        <span class="name float-left">Jack Sanders</span>
-                        <span class="time float-right">5 minutes ago</span>
-                        <p>Lorem ipsum dolor sit amet, consectetur</p>
-                    </span>
-                </a>
-                <a class="dropdown-item media bg-flat-color-5" href="#">
-                    <span class="photo media-left"><img alt="avatar" src="images/avatar/3.jpg"></span>
-                    <span class="message media-body">
-                        <span class="name float-left">Cheryl Wheeler</span>
-                        <span class="time float-right">10 minutes ago</span>
-                        <p>Hello, this is an example msg</p>
-                    </span>
-                </a>
-                <a class="dropdown-item media bg-flat-color-3" href="#">
-                    <span class="photo media-left"><img alt="avatar" src="images/avatar/4.jpg"></span>
-                    <span class="message media-body">
-                        <span class="name float-left">Rachel Santos</span>
-                        <span class="time float-right">15 minutes ago</span>
-                        <p>Lorem ipsum dolor sit amet, consectetur</p>
-                    </span>
-                </a>
-            </div>
-        </div>*@
                     </div>
-                </div>
+                       
+                    </div>
                 <div class="col-sm-5">
                     <div class="user-area dropdown float-right">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -237,7 +210,15 @@ else
         var itemNum = 0;
         jQuery(document).ready(function () {
             notificationNum();
-            setInterval(notificationNum, 10000);
+            GetNewConfirmItemList();
+            GetConsolidateConfirmList();
+            GetCountConsolidation();
+            setInterval(function () {
+                notificationNum();
+                GetNewConfirmItemList();
+                GetConsolidateConfirmList();
+                GetCountConsolidation();
+            }, 10000);
             jQuery("#searchTextBox").keypress(function (e) {
                 if (event.which==13) {
                     jQuery.ajax({
@@ -270,6 +251,57 @@ else
                 success: function (r) {
                     jQuery("#notificationNumber").html(r);
                     itemNum = r;
+                }
+            });
+        }
+        function GetNewConfirmItemList() {
+            jQuery.ajax({
+                url: "/Admin/NewConfirmItemsList",
+                type: "GET",
+                dataType: "json",
+                success: function (r) {
+                    var htmls = '';
+                    jQuery.each(r, function (index) {
+
+                        htmls += '  <a class="dropdown-item media bg-flat-color-3" href="@Url.Action("CustomerItemList", "Admin")?customerId=' + r[index].CustomerId+'&tabIndex=1">';
+                        htmls += '    <i class="fa fa-check"></i>';
+                        htmls += '    <p> ເລກຕິດຕາມທີ ' + r[index].TrackingNumber+' ຈາກທ່ານ '+r[index].CustomerName+'</p>';
+                        htmls += '</a>';
+                    })
+                    jQuery("#NewConfirmNotification").html(htmls);
+                }
+            });
+        }
+        function GetConsolidateConfirmList() {
+            jQuery.ajax({
+                url: "/Admin/NewConsolidateConfirm",
+                type: "GET",
+                dataType: "json",
+                success: function (r) {
+                    var htmls = '';
+                    jQuery.each(r, function (index) {
+                        htmls += '   <a class="dropdown-item media bg-flat-color-3" href="@Url.Action("CustomerItemList", "Admin")?customerId=' + r[index].CustomerId+'&tabIndex=6">';
+                        htmls += '      <span class="photo media-left"></span>';
+                        htmls += '       <span class="message media-body">';
+                        htmls += '            <p> ທ່ານ ' + r[index].CustomerName+'';
+                        htmls += '            ເລກສັງລວມທີ ' + r[index].ConsolidateNumber+'</p>';
+                        htmls += '            <p>ໄດ້ຢືນຢັນຄວາມຖືກຕ້ອງແລ້ວ</p>';
+                        htmls += '        </span>';
+                        htmls += '           </a>';
+                       
+                    })
+                    jQuery("#consolidationConfirmList").html(htmls);
+                }
+            });
+        }
+        function GetCountConsolidation() {
+            jQuery.ajax({
+                url: "/Admin/CountConfirmConsolidation",
+                type: "GET",
+                dataType: "json",
+                success: function (r) {
+                    jQuery("#consolidationNumber").html(r);
+                
                 }
             });
         }

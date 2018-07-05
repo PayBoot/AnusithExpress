@@ -129,6 +129,7 @@
     <Compile Include="ViewModels\Admin\ItemBarCodeModel.cs" />
     <Compile Include="ViewModels\Admin\ItemHistoryModel.cs" />
     <Compile Include="ViewModels\Admin\ItemsAllocationModelWithDelivery.cs" />
+    <Compile Include="ViewModels\Admin\NewConfirmItemModel.cs" />
     <Compile Include="ViewModels\Admin\PickUpHistoryModel.cs" />
     <Compile Include="ViewModels\Admin\SentHistoryCountModel.cs" />
     <Compile Include="ViewModels\Customer\CustomerProfileItemsModel.cs" />

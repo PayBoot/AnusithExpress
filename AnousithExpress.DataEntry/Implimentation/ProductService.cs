@@ -92,6 +92,35 @@ namespace AnousithExpress.DataEntry.Implimentation
             {
                 var source = _item.GetSingle(db, itemId);
                 var result = _item.AssignItem(source);
+                string pickupby = "";
+                string sentby = "";
+                if (itemId > 0)
+                {
+                    if (db.tbItemsPickupHistories
+                   .Include(x => x.Item)
+                   .Include(x => x.DeliveryMan)
+                   .FirstOrDefault(x => x.Item.Id == itemId) != null)
+                    {
+                        pickupby = db.tbItemsPickupHistories
+                       .Include(x => x.Item)
+                       .Include(x => x.DeliveryMan)
+                       .FirstOrDefault(x => x.Item.Id == itemId).DeliveryMan.Username;
+                    }
+                    if (db.tbItemSentHistories
+                        .Include(x => x.Item)
+                        .Include(x => x.DeliveryMan)
+                        .FirstOrDefault(x => x.Item.Id == itemId) != null)
+                    {
+                        sentby = db.tbItemSentHistories
+                        .Include(x => x.Item)
+                        .Include(x => x.DeliveryMan)
+                        .FirstOrDefault(x => x.Item.Id == itemId).DeliveryMan.Username;
+                    }
+
+                    result.PickUpBy = pickupby;
+                    result.SentBy = sentby;
+                }
+
                 return result;
             }
         }
@@ -262,16 +291,31 @@ namespace AnousithExpress.DataEntry.Implimentation
                 db.Entry(item).State = EntityState.Modified;
                 item.Status = db.tbItemStatuses.FirstOrDefault(s => s.Id == status);
                 item.SentDate = DateTime.Now.Date;
-                TbItemSentHistory sentHistory = new TbItemSentHistory
+                if (db.tbItemSentHistories.Include(x => x.Item).FirstOrDefault(x => x.Item.Id == itemId) != null)
                 {
-                    DeliveryMan = db.tbUsers.FirstOrDefault(u => u.Id == deliveryManId),
-                    Item = db.TbItems.FirstOrDefault(i => i.Id == itemId),
-                    TransactionDate = DateTime.Now.Date,
-                    IncomingBalanceInKip = kip == null ? 0 : (double)kip,
-                    IncomingBalanceInBaht = baht == null ? 0 : (double)baht,
-                    IncomingBalanceInDollar = dollar == null ? 0 : (double)dollar
-                };
-                db.tbItemSentHistories.Add(sentHistory);
+                    var history = db.tbItemSentHistories.Include(x => x.Item).FirstOrDefault(x => x.Item.Id == itemId);
+                    db.Entry(history).State = EntityState.Modified;
+                    history.DeliveryMan = db.tbUsers.FirstOrDefault(u => u.Id == deliveryManId);
+                    history.TransactionDate = DateTime.Now.Date;
+                    history.IncomingBalanceInKip = kip == null ? 0 : (double)kip;
+                    history.IncomingBalanceInBaht = baht == null ? 0 : (double)baht;
+                    history.IncomingBalanceInDollar = dollar == null ? 0 : (double)dollar;
+
+                }
+                else
+                {
+                    TbItemSentHistory sentHistory = new TbItemSentHistory
+                    {
+                        DeliveryMan = db.tbUsers.FirstOrDefault(u => u.Id == deliveryManId),
+                        Item = db.TbItems.FirstOrDefault(i => i.Id == itemId),
+                        TransactionDate = DateTime.Now.Date,
+                        IncomingBalanceInKip = kip == null ? 0 : (double)kip,
+                        IncomingBalanceInBaht = baht == null ? 0 : (double)baht,
+                        IncomingBalanceInDollar = dollar == null ? 0 : (double)dollar
+                    };
+                    db.tbItemSentHistories.Add(sentHistory);
+                }
+
                 db.SaveChanges();
                 return true;
             }
@@ -289,16 +333,30 @@ namespace AnousithExpress.DataEntry.Implimentation
                 db.Entry(item).State = EntityState.Modified;
                 item.Status = db.tbItemStatuses.FirstOrDefault(s => s.Id == status);
                 item.SentDate = DateTime.Now.Date;
-                TbItemSentHistory sentHistory = new TbItemSentHistory
+                if (db.tbItemSentHistories.Include(x => x.Item).FirstOrDefault(x => x.Item.Id == itemId) != null)
                 {
-                    DeliveryMan = db.tbUsers.FirstOrDefault(u => u.Id == deliveryManId),
-                    Item = db.TbItems.FirstOrDefault(i => i.Id == itemId),
-                    TransactionDate = DateTime.Now.Date,
-                    IncomingBalanceInKip = kip == null ? 0 : (double)kip,
-                    IncomingBalanceInBaht = baht == null ? 0 : (double)baht,
-                    IncomingBalanceInDollar = dollar == null ? 0 : (double)dollar
-                };
-                db.tbItemSentHistories.Add(sentHistory);
+                    var history = db.tbItemSentHistories.Include(x => x.Item).FirstOrDefault(x => x.Item.Id == itemId);
+                    db.Entry(history).State = EntityState.Modified;
+                    history.DeliveryMan = db.tbUsers.FirstOrDefault(u => u.Id == deliveryManId);
+                    history.TransactionDate = DateTime.Now.Date;
+                    history.IncomingBalanceInKip = kip == null ? 0 : (double)kip;
+                    history.IncomingBalanceInBaht = baht == null ? 0 : (double)baht;
+                    history.IncomingBalanceInDollar = dollar == null ? 0 : (double)dollar;
+
+                }
+                else
+                {
+                    TbItemSentHistory sentHistory = new TbItemSentHistory
+                    {
+                        DeliveryMan = db.tbUsers.FirstOrDefault(u => u.Id == deliveryManId),
+                        Item = db.TbItems.FirstOrDefault(i => i.Id == itemId),
+                        TransactionDate = DateTime.Now.Date,
+                        IncomingBalanceInKip = kip == null ? 0 : (double)kip,
+                        IncomingBalanceInBaht = baht == null ? 0 : (double)baht,
+                        IncomingBalanceInDollar = dollar == null ? 0 : (double)dollar
+                    };
+                    db.tbItemSentHistories.Add(sentHistory);
+                }
                 db.SaveChanges();
                 return true;
             }
@@ -1062,6 +1120,21 @@ namespace AnousithExpress.DataEntry.Implimentation
                 itemHistory.GiveMoney = false;
                 db.SaveChanges();
                 return true;
+            }
+        }
+
+        public List<NewConfirmItemModel> GetNewConfirmItem()
+        {
+            using (var db = new EntityContext())
+            {
+                var items = _item.GetAll(db).Where(i => i.Status.Id == 2).Select(r => new NewConfirmItemModel
+                {
+                    CustomerId = r.Customer.Id,
+                    CustomerName = r.Customer.Name,
+                    Id = r.Id,
+                    TrackingNumber = r.TrackingNumber
+                }).ToList();
+                return items;
             }
         }
     }

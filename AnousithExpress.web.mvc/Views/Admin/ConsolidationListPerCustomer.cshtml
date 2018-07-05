@@ -1,49 +1,61 @@
-﻿<div class="container" id="containerResize">
-    <div class="content mt-3">
-        <div class="animated fadeIn">
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="card">
-                        <div class="card-header">
-                            <strong class="card-title"><button class="btn btn-block" onclick='window.location = "@Url.Action("ConsolidationCreate","Admin", new {customerId = ViewBag.CustomerId })"'>ສ້າງລາຍການ</button></strong>
-                        </div>
-                        <div class="card-body ">
-                            <div class="row">
-                                <div class="col-6">
-                                    <label>ຈາກວັນທີ</label>
-                                    <input type="text" class="w-100" placeholder="ວັນ-ເດືອນ-ປີ" name="fromDate" onchange="searchByDate(this)" />
+﻿@{
+    if (Session["Role"] != null)
+    {
+        if (Session["Role"].ToString() != "1" && Session["Role"].ToString() != "6")
+        {
+
+        }
+        else
+        {
+            <div class="container" id="containerResize">
+                <div class="content mt-3">
+                    <div class="animated fadeIn">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <strong class="card-title"><button class="btn btn-block" onclick='window.location = "@Url.Action("ConsolidationCreate","Admin", new {customerId = ViewBag.CustomerId })"'>ສ້າງລາຍການ</button></strong>
+                                    </div>
+                                    <div class="card-body ">
+                                        <div class="row">
+                                            <div class="col-6">
+                                                <label>ຈາກວັນທີ</label>
+                                                <input type="text" class="w-100" placeholder="ວັນ-ເດືອນ-ປີ" name="fromDate" onchange="searchByDate(this)" />
 
 
-                                </div>
-                                <div class="col-6 horizontal">
+                                            </div>
+                                            <div class="col-6 horizontal">
 
-                                    <label>ຫາວັນທີ</label>
-                                    <input type="text" class="w-100" placeholder="ວັນ-ເດືອນ-ປີ" name="toDate" onchange="searchByDate(this)" />
+                                                <label>ຫາວັນທີ</label>
+                                                <input type="text" class="w-100" placeholder="ວັນ-ເດືອນ-ປີ" name="toDate" onchange="searchByDate(this)" />
 
+                                            </div>
+                                        </div>
+
+                                        <table id="itemDataTable" class="table table-striped table-bordered" style="width:100%;white-space:nowrap;">
+                                            <thead>
+                                                <tr>
+                                                    <th>ເລກສັງລວມ</th>
+                                                    <th>ຈຳນວນສີນຄ້າ</th>
+                                                    <th>ວັນທີສັງລວມ</th>
+                                                    <th>ຄ່າບໍລິການ</th>
+                                                    <th>ຂໍການຢືນຢັນ</th>
+                                                    <th>ລຸກຄ້າຢືນຢັນ</th>
+                                                    <th>ໂອນເງີນແລ້ວ</th>
+                                                    <th></th>
+                                                </tr>
+                                            </thead>
+                                        </table>
+                                    </div>
                                 </div>
                             </div>
-                            
-                            <table id="itemDataTable" class="table table-striped table-bordered" style="width:100%;white-space:nowrap;">
-                                <thead>
-                                    <tr>
-                                        <th>ເລກສັງລວມ</th>
-                                        <th>ຈຳນວນສີນຄ້າ</th>
-                                        <th>ວັນທີສັງລວມ</th>
-                                        <th>ຄ່າບໍລິການ</th>
-                                        <th></th>
-                                    </tr>
-                                </thead>
-                            </table>
+
                         </div>
-                    </div>
-                </div>
-
+                    </div><!-- .animated -->
+                </div><!-- .content -->
             </div>
-        </div><!-- .animated -->
-    </div><!-- .content -->
-</div>
 
-<script>
+            <script>
     var consolidateTable;
     jQuery(document).ready(function () {
         jQuery("input[name='fromDate']").datepicker({
@@ -79,6 +91,36 @@
                 { data: "ConsolidatedDate", name: "ConsolidatedDate" },
                 { data: "Fee", name: "Fee" },
                 {
+                    data: "needConfirm", render: function (data,type,full, meta) {
+                        if (data === true) {
+                            return 'ຂໍແລ້ວ';
+                        }
+                        else {
+                            return 'ບໍ່ໄດ້ຂໍ';
+                        }
+                    }
+                },
+                {
+                    data: "isCustomerConfirmed", render: function (data,type,full,meta) {
+                        if (data === true) {
+                            return 'ຢືນຢັນແລ້ວ';
+                        }
+                        else {
+                            return 'ຢັງບໍ່ໄດ້ຢືນຢັນ';
+                        }
+                    }
+                },
+                {
+                    data: "isBalanceTransfer", render: function (data,type,full,meta) {
+                        if (data === true) {
+                            return 'ໂອນແລ້ວ';
+                        }
+                        else {
+                            return 'ຍັງບໍ່ໄດ້ໂອນ';
+                        }
+                    }
+                },
+                {
                     data: "Id", render: function (data, type, full, meta) {
                         return '<button class="btn btn-warning btn-sm" onclick="openDetail(' + data + ')">ລາຍລະອຽດ</button>';
                     }
@@ -101,7 +143,9 @@
             type: "POST",
             datatype: "json",
             success: function (r) {
+                let button = '<button class="btn btn-danger w-100" data-dismiss="modal" data-target="#modal3">ອອກ</button>';
                 jQuery("#content3").html(r);
+                jQuery("#modalButton3").html(button);
                 jQuery("#modal3").modal('show');
             }
         });
@@ -110,4 +154,9 @@
 
 
 
-</script>
+            </script>
+        }
+    }
+
+}
+

@@ -28,5 +28,8 @@ namespace AnousithExpress.DataEntry.Interface
 
         bool ConfirmTransfer(int consolidationId);
         bool UndoConfirmTransfer(int consolidationId);
+
+        List<ConsolidationListModel> GetConsolidationNotification();
+        double CountConfirmConsolidation();
     }
 }

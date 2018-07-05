@@ -238,6 +238,7 @@
                     jQuery("#modalConsolidateFooter").html(htmlbutton);
                     jQuery("#modalConsolidated").modal("show");
                     jQuery("#isConfirm").html("ຢັງບໍ່ໄດ້ໂອນເງີນໃຫ້ລຸກຄ້າ");
+                    consolidateTable.ajax.reload(null, false);
                 }
                 else {
                     let htmlbutton = '';
@@ -269,6 +270,7 @@
                     jQuery("#modalConsolidateFooter").html(htmlbutton);
                     jQuery("#modalConsolidated").modal("show");
                     jQuery("#isConfirm").html("ບໍ່ຕ້ອງການການໂອນເງີນ");
+                    consolidateTable.ajax.reload(null, false);
                 }
                 else {
                     let htmlbutton = '';
@@ -293,12 +295,24 @@
             datatype: "json",
             type: "POST",
             success: function (r) {
-                jQuery("#modalConsolidateSuccessMessage").html("ສຳເລັດ");       
-                let htmlbutton = '';
-                htmlbutton += '<button class = "btn btn-danger w-25" data-dismiss="modal" data-target="#modalConsolidatedSuccess">ອອກ</button>';
-                jQuery("#modalConsolidateSuccessFooter").html(htmlbutton);
-                jQuery("#modalConsolidatedSuccess").modal("show");
-                jQuery("#isConfirm").html("ໂອນເງີນໃຫ້ລຸກຄ້າແລ້ວ");
+                if (r===true) {
+                    jQuery("#modalConsolidateSuccessMessage").html("ສຳເລັດ");
+                    let htmlbutton = '';
+                    htmlbutton += '<button class = "btn btn-danger w-25" data-dismiss="modal" data-target="#modalConsolidatedSuccess">ອອກ</button>';
+                    jQuery("#modalConsolidateSuccessFooter").html(htmlbutton);
+                    jQuery("#modalConsolidatedSuccess").modal("show");
+                    jQuery("#isConfirm").html("ໂອນເງີນໃຫ້ລຸກຄ້າແລ້ວ");
+                    consolidateTable.ajax.reload(null, false);
+                }
+                else {
+                    jQuery("#modalConsolidateSuccessMessage").html("ບໍ່ສຳເລັດ ກະລຸນາລອງໃຫທ່");
+                    let htmlbutton = '';
+                    htmlbutton += '<button class = "btn btn-danger w-25" data-dismiss="modal" data-target="#modalConsolidatedSuccess">ອອກ</button>';
+                    jQuery("#modalConsolidateSuccessFooter").html(htmlbutton);
+                    jQuery("#modalConsolidatedSuccess").modal("show");                    
+                    consolidateTable.ajax.reload(null, false);
+                }
+              
             }
         });
     }
@@ -311,12 +325,25 @@
             datatype: "json",
             type: "POST",
             success: function (r) {
-                jQuery("#modalConsolidateSuccessMessage").html("ສຳເລັດ");
-                let htmlbutton = '';
-                htmlbutton += '<button class = "btn btn-danger w-25" data-dismiss="modal" data-target="#modalConsolidatedSuccess">ອອກ</button>';
-                jQuery("#modalConsolidateSuccessFooter").html(htmlbutton);
-                jQuery("#modalConsolidatedSuccess").modal("show");
-                jQuery("#isConfirm").html("ຢັງບໍ່ໄດ້ໂອນເງີນໃຫ້ລຸກຄ້າ");
+                if (r===true) {
+                    jQuery("#modalConsolidateSuccessMessage").html("ສຳເລັດ");
+                    let htmlbutton = '';
+                    htmlbutton += '<button class = "btn btn-danger w-25" data-dismiss="modal" data-target="#modalConsolidatedSuccess">ອອກ</button>';
+                    jQuery("#modalConsolidateSuccessFooter").html(htmlbutton);
+                    jQuery("#modalConsolidatedSuccess").modal("show");
+                    jQuery("#isConfirm").html("ຢັງບໍ່ໄດ້ໂອນເງີນໃຫ້ລຸກຄ້າ");
+                    consolidateTable.ajax.reload(null, false);
+                }
+                else {
+                    jQuery("#modalConsolidateSuccessMessage").html("ບໍ່ສຳເລັດ");
+                    let htmlbutton = '';
+                    htmlbutton += '<button class = "btn btn-danger w-25" data-dismiss="modal" data-target="#modalConsolidatedSuccess">ອອກ</button>';
+                    jQuery("#modalConsolidateSuccessFooter").html(htmlbutton);
+                    jQuery("#modalConsolidatedSuccess").modal("show");
+                    
+                    consolidateTable.ajax.reload(null, false);
+                }
+                
             }
         });
     }

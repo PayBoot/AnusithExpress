@@ -50,5 +50,9 @@ namespace AnousithExpress.DataEntry.ViewModels.Customer
         public string SendingDate { get; set; }
 
         public string SentDate { get; set; }
+
+        public string PickUpBy { get; set; }
+
+        public string SentBy { get; set; }
     }
 }

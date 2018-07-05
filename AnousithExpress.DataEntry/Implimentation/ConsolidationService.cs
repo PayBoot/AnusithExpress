@@ -414,5 +414,25 @@ namespace AnousithExpress.DataEntry.Implimentation
                 return true;
             }
         }
+
+        public List<ConsolidationListModel> GetConsolidationNotification()
+        {
+            using (var db = new EntityContext())
+            {
+                var source = _consolidate.GetAll(db).Where(x => x.needConfirm == true && x.isCustomerConfirmed == true && x.isBalanceTransfer == false);
+                var result = _consolidate.AssignConsolidationList(source.ToList());
+                return result;
+            }
+        }
+
+        public double CountConfirmConsolidation()
+        {
+            using (var db = new EntityContext())
+            {
+                double number = _consolidate.GetAll(db).Where(x => x.needConfirm == true && x.isCustomerConfirmed == true && x.isBalanceTransfer == false).Count();
+
+                return number;
+            }
+        }
     }
 }

@@ -33,7 +33,7 @@ namespace AnousithExpress.DataEntry.Implimentation
                         new TbRole { Id= 1, Role= "ແອດມີນ"},
                         new TbRole { Id= 2, Role= "Call Center"},
                         new TbRole { Id= 3, Role= "ພະນັກງານຮັບສົ່ງ"},
-                        new TbRole { Id= 4, Role= "ຄົນສັງລວມ"},
+                        new TbRole { Id= 4, Role= "ຄົນຈັດຄົນ"},
                         new TbRole { Id= 5, Role= "ນາຍສາງ"},
                         new TbRole { Id= 6, Role= "ພະນັກງານບັນຊີ"}
 

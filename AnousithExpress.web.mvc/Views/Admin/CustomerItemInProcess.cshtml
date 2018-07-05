@@ -1,28 +1,37 @@
 ﻿@model AnousithExpress.DataEntry.ViewModels.Customer.ItemsModel
-<div class="animated fadeIn">
-    <div class="table-responsive">
-        <table id="itemInProcessDataTable" class="table table-hover " style="width:100%;white-space:nowrap;">
-            <thead>
-                <tr>
-                    <th class="control">ເລກຕິດຕາມ</th>
-                    <th class="control">ປະເພດສີນຄ້າ</th>
-                    <th class="control">ສະຖານະ</th>
-                    <th class="control">ຊື່ຜູ້ຮັບ</th>
-                    <th class="control">ເບີໂທຜູ້ຮັບ</th>
-                    <th class="control">ທີ່ຢູ່ຜູ້ຮັບ</th>
-                    <th class="none">ມື້ທີ່ຈະສົ່ງ</th>
-                    <th class="none">ລາຍລະອຽດ</th>
-                    <th class="none">ເກັບເງິນປາຍທາງ</th>    
-                    <th class="none">ຈັດການ</th>
-                </tr>
-            </thead>
+@{
+    if (Session["Role"] != null)
+    {
+        if (Session["Role"].ToString() != "1" && Session["Role"].ToString() != "2")
+        {
 
-        </table>
-    </div>
+        }
+        else
+        {
+            <div class="animated fadeIn">
+                <div class="table-responsive">
+                    <table id="itemInProcessDataTable" class="table table-hover " style="width:100%;white-space:nowrap;">
+                        <thead>
+                            <tr>
+                                <th class="control">ເລກຕິດຕາມ</th>
+                                <th class="control">ປະເພດສີນຄ້າ</th>
+                                <th class="control">ສະຖານະ</th>
+                                <th class="control">ຊື່ຜູ້ຮັບ</th>
+                                <th class="control">ເບີໂທຜູ້ຮັບ</th>
+                                <th class="control">ທີ່ຢູ່ຜູ້ຮັບ</th>
+                                <th class="none">ມື້ທີ່ຈະສົ່ງ</th>
+                                <th class="none">ລາຍລະອຽດ</th>
+                                <th class="none">ເກັບເງິນປາຍທາງ</th>
+                                <th class="none">ຈັດການ</th>
+                            </tr>
+                        </thead>
 
-</div>
+                    </table>
+                </div>
 
-<script>
+            </div>
+
+            <script>
     var inProcesstable;
         jQuery(document).ready(function () {
 
@@ -72,7 +81,7 @@
                             }
                             return '<p>' + html + '</p>';
                         }
-                    },       
+                    },
                     {
                         data: "Id", render: function (data, type, full, meta) {
                             let html = '';
@@ -97,7 +106,7 @@
             jQuery(source).datepicker('hide');
         }
 
-   
+
     function updateItemDialog(id) {
         let itemId = id;
         jQuery.ajax({
@@ -116,10 +125,10 @@
         });
     }
     function saveItem() {
-      
+
          jQuery.ajax({
              url: "/Admin/CreateUpdateItemFunction",
-             
+
              data: jQuery("#itemAdminForm").serialize() + '&customerId= ' + jQuery("#customerId").val(),
              datatype: "json",
              type: "POST",
@@ -152,7 +161,7 @@
         html += '<button class="btn btn-primary btn-flat mb-1 w-100" data-dismiss="modal">ອອກ</button>';
         jQuery("#content2").html("ຢືນຢັນທີ່ຈະລືບ");
         jQuery("#modalButton2").html(html);
-        jQuery("#modal2").modal('show');            
+        jQuery("#modal2").modal('show');
     }
     function deleteItem(id) {
         let itemId = id;
@@ -164,7 +173,7 @@
             datatype: "json",
             success: function (r) {
                 if (r === true) {
-                    inProcesstable.ajax.reload(null, false);   
+                    inProcesstable.ajax.reload(null, false);
                 }
                 else {
                     alert("Cannot perform this operation");
@@ -178,8 +187,11 @@
 
     }
      function itemDetail(id) {
-       
+
         window.location = "@Url.Action("ItemsDetail","Admin")?itemId="+id;
-       
+
     }
-</script>
+            </script>
+        }
+    }
+}

@@ -12,43 +12,113 @@
                 }
                 else
                 {
-                    <a href="#" data-toggle="modal" data-target="#modalLayout" style="font-family:'Phetsarath OT';"> <i class="menu-icon ti-user"></i>ບັນຊີຜູ້ໃຊ້</a>
+
                 }
 
             }
 
         </li>
         <li>
-            <a href="@Url.Action("Customer","Admin")" style="font-family:'Phetsarath OT';"><i class="menu-icon fa fa-table"></i>ລຸກຄ້າ</a>
-        </li>
-        <li>
-            <a href="@Url.Action("AllocateDeliveryMan","Admin")" style="font-family:'Phetsarath OT';"><i class="menu-icon fa fa-table"></i>ຈັດຄົນສົ່ງ</a>
-        </li>
-        <li>
-            <a href="@Url.Action("AllocatePickUpMan","Admin")" style="font-family:'Phetsarath OT';"><i class="menu-icon fa fa-table"></i>ຈັດຄົນຮັບ</a>
-        </li>
-        <li>
-            <a href="@Url.Action("ScanBarCode","Admin")" style="font-family:'Phetsarath OT';"><i class="menu-icon fa fa-barcode"></i>ສະແກນສີນຄ້າ</a>
-        </li>
-        <li>
-            <a href="@Url.Action("ItemHistoryListOfCustomer","Admin")" style="font-family:'Phetsarath OT';"><i class="menu-icon fa fa-book"></i>ຈຳນວນເຄື່ອງສົ່ງ</a>
+            <a href="@Url.Action("Customer", "Admin")" style="font-family:'Phetsarath OT';"><i class="menu-icon fa fa-table"></i>ລຸກຄ້າ</a>
         </li>
 
-        <li>
-            <a href="@Url.Action("Index","Routes")" style="font-family:'Phetsarath OT';"><i class="menu-icon fa fa-book"></i>ເພີ້ມເສັ້ນທາງ</a>
-        </li>
-        <li>
-            <a href="@Url.Action("Index","Times")" style="font-family:'Phetsarath OT';"><i class="menu-icon fa fa-book"></i>ເພີ້ມເວລາ</a>
-        </li>
-        <li>
-            <a href="@Url.Action("Index","Prices")" style="font-family:'Phetsarath OT';"><i class="menu-icon fa fa-book"></i>ເພີ້ມລາຄາ</a>
-        </li>
-        <li>
-            <a href="@Url.Action("ItemHistory","Admin")" style="font-family:'Phetsarath OT';"><i class="menu-icon fa fa-book"></i>ປະຫວັດການສົ່ງເຄື່ອງ</a>
-        </li>
-        <li>
-            <a href="@Url.Action("ConsolidateAllConsolidate","Admin")" style="font-family:'Phetsarath OT';"><i class="menu-icon fa fa-book"></i>ສັງລວມທັງຫມົດ</a>
-        </li>
+        @{
+            if (Session["Role"].ToString() == "1" || Session["Role"].ToString() == "4")
+            {
+                <li class="menu-item-has-children dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="font-family:'Phetsarath OT';">  <i class="menu-icon fa fa-table"></i>ຈັດຄົນ</a>
+                    <ul class="sub-menu children dropdown-menu">
+                        <li>
+                            <a href="@Url.Action("AllocateDeliveryMan", "Admin")" style="font-family:'Phetsarath OT';"><i class=" fa fa-table"></i>ຈັດຄົນສົ່ງ</a>
+                        </li>
+                        <li>
+                            <a href="@Url.Action("AllocatePickUpMan", "Admin")" style="font-family:'Phetsarath OT';"><i class=" fa fa-table"></i>ຈັດຄົນຮັບ</a>
+                        </li>
+                    </ul>
+                </li>
+            }
+        }
+
+
+        @{
+            if (Session["Role"].ToString() == "1" || Session["Role"].ToString() == "5")
+            {
+                <li class="menu-item-has-children dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="font-family:'Phetsarath OT';"> <i class="menu-icon fa fa-barcode"></i>ສະແກນບາໂຄດ</a>
+                    <ul class="sub-menu children dropdown-menu">
+                        <li>
+                            <a href="@Url.Action("ScanBarCode", "Admin")" style="font-family:'Phetsarath OT';"><i class="fa fa-barcode"></i>ສະແກນສີນຄ້າ</a>
+                        </li>
+                        <li>
+                            <a href="@Url.Action("StatisticScanReceive", "Admin")" style="font-family:'Phetsarath OT';"><i class=" fa fa-barcode"></i>ສະທິຕິສະແກນສີນຄ້າເຂົ້າ</a>
+                        </li>
+                        <li>
+                            <a href="@Url.Action("StatisticScanSent", "Admin")" style="font-family:'Phetsarath OT';"><i class=" fa fa-barcode"></i>ສະທິຕິສະແກນສີນຄ້າສົ່ງອອກ</a>
+                        </li>
+                        <li>
+                            <a href="@Url.Action("StatisticScanReturn", "Admin")" style="font-family:'Phetsarath OT';"><i class=" fa fa-barcode"></i>ສະທິຕິສະແກນສີນຄ້າສົ່ງກັບ</a>
+                        </li>
+
+                    </ul>
+                </li>
+            }
+        }
+
+        @{
+            if (Session["Role"].ToString() == "1" || Session["Role"].ToString() == "6")
+            {
+                <li class="menu-item-has-children dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="font-family:'Phetsarath OT';"> <i class="menu-icon fa fa-bar-chart"></i>ສະທິຕິເຄື່ອງ</a>
+                    <ul class="sub-menu children dropdown-menu">
+                        <li>
+                            <a href="@Url.Action("ItemHistoryListOfCustomer","Admin")" style="font-family:'Phetsarath OT';"><i class="fa fa-book"></i>ຈຳນວນເຄື່ອງສົ່ງ</a>
+                        </li>
+                        <li>
+                            <a href="@Url.Action("ItemHistory","Admin")" style="font-family:'Phetsarath OT';"><i class="fa fa-book"></i>ປະຫວັດການສົ່ງເຄື່ອງ</a>
+                        </li>
+                        <li>
+                            <a href="@Url.Action("ConsolidateAllConsolidate","Admin")" style="font-family:'Phetsarath OT';"><i class=" fa fa-book"></i>ສັງລວມທັງຫມົດ</a>
+                        </li>
+                        <li>
+                            <a href="@Url.Action("DeliveryHistory","Admin")" style="font-family:'Phetsarath OT';"><i class=" fa fa-book"></i>ສະທິຕິພະນັກງານສົ່ງ</a>
+                        </li>
+                        <li>
+                            <a href="@Url.Action("PickUpHistory","Admin")" style="font-family:'Phetsarath OT';"><i class=" fa fa-book"></i>ສະທິຕິພະນັກງານຮັບ</a>
+                        </li>
+                    </ul>
+                </li>
+            }
+        }
+
+        @{
+            if (Session["Role"].ToString() == "1")
+            {
+                <li class="menu-item-has-children dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="font-family:'Phetsarath OT';"> <i class="menu-icon fa fa-bar-chart"></i>ຂໍ້ມູນພື້ນຖານ</a>
+                    <ul class="sub-menu children dropdown-menu">
+                        <li>
+                            <a href="@Url.Action("Index","Routes")" style="font-family:'Phetsarath OT';"><i class=" fa fa-book"></i>ເພີ້ມເສັ້ນທາງ</a>
+                        </li>
+                        <li>
+                            <a href="@Url.Action("Index","Times")" style="font-family:'Phetsarath OT';"><i class=" fa fa-book"></i>ເພີ້ມເວລາ</a>
+                        </li>
+                        <li>
+                            <a href="@Url.Action("Index","Prices")" style="font-family:'Phetsarath OT';"><i class=" fa fa-book"></i>ເພີ້ມລາຄາ</a>
+                        </li>
+                    </ul>
+                </li>
+            }
+            else
+            {
+
+            }
+
+        }
+
+
+
+
+
         <li><a href="@Url.Action("ULogout","Account")" style="font-family:'Phetsarath OT';"><i class="menu-icon fa fa-sign-out"></i>ອອກຈາກລະບົບ</a></li>
     </ul>
 </div>
